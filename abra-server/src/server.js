@@ -43,10 +43,9 @@ app.get('/stdio.html', proxy({
 
 const ws = proxy({
   ws: true,
-  target: 'ws://pidgeot:8000/ws',
-  changeOrigin: true,
+  target: 'http://pidgeot:8000/',
   pathRewrite: {
-    '^/socket': '/ws',
+    '^/socket': '',
   },
 });
 app.use('/socket', ws);
