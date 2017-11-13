@@ -1,0 +1,112 @@
+Components
+    = (preprocessorLine / __ )+
+      components:Component+
+      (__)*
+      '#endif'
+      _?
+    {
+        return components
+    }
+    
+
+Component
+    = !__ component:(ComponentDef) __*
+    {
+         return component
+    }
+
+ComponentDef
+    = "struct" _? name:($(!(':' / ' ').)*) _? ": public Component {" _*
+            members:((!'};') memberList _*)*
+        "};"
+    {
+            return {
+                    name: name,
+                    members: members
+                            .map(_ => _[1])
+                            .filter(member => { return member.type !== "IGNORE" })
+                            .reduce((prev, member) => {
+                              return Object.assign({}, prev, {
+                                [member.name]: member,
+                              });
+                            }, {}),
+            }
+    }
+
+preprocessorLine
+    = ('#' (!__.)* __)
+    / ('typedef' (!';' .)* ';' __)
+    / ('using' (!';' .)* ';' __)
+    {
+        return {
+            type: 'IGNORE',
+        }
+    }    
+
+memberList
+    = (property / comment / method)
+
+propertyTypes = 
+  "int" /
+  "script" /
+  "point" /
+  "TextureSource" /
+  "ResolverType" /
+  "TileLayer" /
+  "string" /
+  "EID" /
+  "bool"
+
+property
+= property:propertyTypes
+  " "
+  pointer:"*"?
+  name:($(!(';' / ' = ').)*)
+  value:(' = ' ($(!';'.)*))?
+  ';'
+  isSupposedToBeNull:(_ '//private')?
+{
+  const v = (function() {
+    if (!value) {
+      if (['int', 'ResolverType'].includes(property)) return 0;
+      if (property === 'string') return '';
+      if (property === 'point') return {x: 0, y: 0};
+      if (property === 'bool') return false;
+    }
+    else {
+      if (['int', 'ResolverType'].includes(property)) return parseInt(value[1]);
+      if (property === 'string') return value[1];
+      if (property === 'bool') return value[1] === 'true';
+    }
+    return null;
+  })();
+
+  return {
+    type: (!!isSupposedToBeNull) ? 'IGNORE' : property,
+    pointer: !!(pointer),
+    value: v,
+    name: name,
+  }
+}
+
+comment
+    = "//" comment:($(!__.)*) __?
+    {
+         return {
+                type: "IGNORE",
+                line: comment,
+        }
+    }
+
+method
+    = line:($(!'}'.)*) '}' ';'?
+    {
+         return {
+                type: "IGNORE",
+                line: line,
+        }
+    }
+
+_ = ' ' / __
+
+__ = '\n' / '\t'

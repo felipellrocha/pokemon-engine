@@ -1,0 +1,269 @@
+{
+  "filename": "/Users/fllr/Development/game/targaryen/assets/metroidvania/game.targ",
+  "basepath": "/Users/fllr/Development/game/targaryen/assets/metroidvania",
+  "componentFilename": "/Users/fllr/Development/game/targaryen/src/game/components.h",
+  "zoom": "1",
+  "selectingShape": false,
+  "selectedMap": 0,
+  "selectedAction": "put",
+  "selectedTerrainType": "6-tile",
+  "selectedTile": [
+    -1,
+    0
+  ],
+  "selectedLayer": 5,
+  "selectedAnimation": "player-idle",
+  "selectedFrame": 0,
+  "selectedShape": {
+    "columns": 1,
+    "rows": 1
+  },
+  "components": [
+    {
+      "name": "HealthComponent",
+      "members": {
+        "currentHearts": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "currentHearts"
+        },
+        "maxHearts": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "maxHearts"
+        },
+        "currentEnergy": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "currentEnergy"
+        },
+        "maxEnergy": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "maxEnergy"
+        }
+      }
+    },
+    {
+      "name": "AbilityComponent",
+      "members": {}
+    },
+    {
+      "name": "PositionComponent",
+      "members": {}
+    },
+    {
+      "name": "DimensionComponent",
+      "members": {
+        "w": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "w"
+        },
+        "h": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "h"
+        }
+      }
+    },
+    {
+      "name": "SpriteComponent",
+      "members": {
+        "x": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "x"
+        },
+        "y": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "y"
+        },
+        "w": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "w"
+        },
+        "h": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "h"
+        },
+        "src": {
+          "type": "TextureSource",
+          "pointer": false,
+          "value": null,
+          "name": "src"
+        }
+      }
+    },
+    {
+      "name": "InputComponent",
+      "members": {}
+    },
+    {
+      "name": "MovementComponent",
+      "members": {
+        "slow": {
+          "type": "point",
+          "pointer": false,
+          "value": {
+            "x": 0,
+            "y": 0
+          },
+          "name": "slow"
+        },
+        "fast": {
+          "type": "point",
+          "pointer": false,
+          "value": {
+            "x": 0,
+            "y": 0
+          },
+          "name": "fast"
+        }
+      }
+    },
+    {
+      "name": "RenderComponent",
+      "members": {
+        "shouldTileX": {
+          "type": "bool",
+          "pointer": false,
+          "value": false,
+          "name": "shouldTileX"
+        },
+        "shouldTileY": {
+          "type": "bool",
+          "pointer": false,
+          "value": false,
+          "name": "shouldTileY"
+        }
+      }
+    },
+    {
+      "name": "CenteredCameraComponent",
+      "members": {}
+    },
+    {
+      "name": "CollisionComponent",
+      "members": {
+        "isStatic": {
+          "type": "bool",
+          "pointer": false,
+          "value": false,
+          "name": "isStatic"
+        },
+        "resolver": {
+          "type": "ResolverType",
+          "pointer": false,
+          "value": 0,
+          "name": "resolver"
+        },
+        "x": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "x"
+        },
+        "y": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "y"
+        },
+        "w": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "w"
+        },
+        "h": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "h"
+        },
+        "onCollision": {
+          "type": "script",
+          "pointer": false,
+          "value": null,
+          "name": "onCollision"
+        }
+      }
+    },
+    {
+      "name": "ProjectileComponent",
+      "members": {
+        "vec": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "vec"
+        }
+      }
+    },
+    {
+      "name": "WalkComponent",
+      "members": {}
+    },
+    {
+      "name": "ColorComponent",
+      "members": {
+        "r": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "r"
+        },
+        "g": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "g"
+        },
+        "b": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "b"
+        },
+        "a": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "a"
+        }
+      }
+    },
+    {
+      "name": "ScriptComponent",
+      "members": {
+        "onCollision": {
+          "type": "bool",
+          "pointer": false,
+          "value": false,
+          "name": "onCollision"
+        }
+      }
+    },
+    {
+      "name": "AIComponent",
+      "members": {}
+    }
+  ],
+  "initialTileIndex": 60,
+  "hideGrid": true,
+  "selectedObject": "7b6fa69c-b24a-44d1-8418-74c80ae96acb"
+}

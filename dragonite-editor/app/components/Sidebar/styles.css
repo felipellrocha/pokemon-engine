@@ -1,0 +1,130 @@
+:local(.component) {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  padding: 15px;
+  background: #fff;
+  font-family: Helvetica Neue;
+  box-sizing: border-box;
+  box-shadow: 0 0 7px #808080;
+  z-index: 5000;
+
+  h1 {
+    font-weight: 100;
+    padding: 0;
+    margin: 0;
+  }
+
+  h2 {
+    font-weight: 100;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  .separator {
+    padding: 10px 0;
+  }
+
+  .tilesets {
+    overflow-y: auto;
+    overflow-x: auto;
+    max-height: 300px;
+  }
+
+  > .actions {
+    border-top: 1px solid #eee;
+  }
+
+  .layer {
+    padding: 5px 5px;
+    font-size: 12px;
+    font-weight: 100;
+    justify-content: space-between;
+    border-bottom: 1px dotted #eee;
+
+    .actions {
+      display: flex;
+      width: 50%;
+      padding-top: 5px;
+
+      .action {
+        padding: 0 10px 0 0;
+        flex: 0 1 25%;
+      }
+    }
+
+    input {
+      background: transparent;
+      border: 0;
+      font-family: Helvetica Neue;
+    }
+
+    .icon {
+      padding: 0 5px;
+
+      svg {
+        height: 16px;
+      }
+
+      path {
+        fill: #000;
+      }
+    }
+  }
+
+  .add {
+    border-top: 1px dotted #aaa;
+
+    &:hover {
+      background: #f4cdce;
+    }
+  }
+
+  .selected {
+    background: #D33E43;
+    color: #fff;
+
+    input {
+      color: #fff;
+    }
+
+    .actions .icon path {
+      fill: #fff;
+    }
+  }
+
+  .not-visible {
+    .actions .icon path {
+      fill: #aaa;
+    }
+  }
+
+  .preview {
+    background: #fff;
+    border-top: 1px solid #eee;
+    position: fixed;
+    height: 100px;
+    width: 300px;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+
+    > div {
+      position: absolute;
+    }
+  }
+}
+
+:local(.cancelEvents) {
+  .row {
+    cursor: pointer;
+    pointer-events: none;
+  }
+}

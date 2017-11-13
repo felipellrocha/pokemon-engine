@@ -1,0 +1,23 @@
+{
+  "name": "abra-server",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "start:watch": "nodemon src/main.js"
+  },
+  "dependencies": {
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "ejs": "^2.5.7",
+    "es6-promise": "^4.1.1",
+    "express": "^4.16.1",
+    "http-proxy-middleware": "^0.17.4",
+    "isomorphic-fetch": "^2.2.1",
+    "nodemon": "^1.12.1"
+  }
+}

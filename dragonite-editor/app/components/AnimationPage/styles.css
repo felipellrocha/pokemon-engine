@@ -1,0 +1,13 @@
+:local(.component) {
+  font-family: Helvetica Neue;
+  margin: 15px 15px 100px 315px;
+
+  h3 {
+    font-family: Helvetica Neue;
+    font-weight: 200;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+  }
+}

@@ -1,0 +1,81 @@
+:local(.component) {
+  font-family: Helvetica Neue;
+  margin: 15px 15px 100px 315px;
+
+  h3 {
+    font-family: Helvetica Neue;
+    font-weight: 200;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .input-row {
+    display: flex;
+  }
+
+  .input {
+    font-family: Helvetica Neue;
+    color: #333;
+    border-bottom: 1px solid #aaa;
+    display: flex;
+    flex-grow: 1;
+
+    label {
+      padding: 5px;
+      font-size: 16px;
+      font-weight: 100;
+      width: 150px;
+      text-align: right;
+    }
+
+    input {
+      font-size: 16px;
+      border: 0;
+      padding: 5px;
+      background: #fff;
+      border-left: 1px dotted #aaa;
+      font-weight: 100;
+      width: 100%;
+    }
+  }
+
+  .list {
+    background: #fff;
+    display: block;
+    width: 75%;
+    border-left: 1px dotted #aaa;
+    font-weight: 200;
+
+    .map {
+      padding: 5px;
+
+      input {
+        background: transparent;
+        border: 0;
+        padding: 0;
+      }
+
+      &.add {
+        border-top: 1px dotted #aaa;
+        font-size: 11px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      &:hover {
+        background: #f4cdce;
+      }
+
+      &.selected {
+        background: #d33e43;
+        color: #fff;
+
+        input {
+          color: #fff;
+        }
+      }
+    }
+  }
+}

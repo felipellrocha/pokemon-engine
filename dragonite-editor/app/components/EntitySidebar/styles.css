@@ -1,0 +1,30 @@
+:local(.component) {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  padding: 15px;
+  background: #fff;
+  font-family: Helvetica Neue;
+  box-sizing: border-box;
+  box-shadow: 0 0 7px #808080;
+
+  .components {
+    font-weight: 200;
+    padding: 10px 0;
+    max-height: 230px;
+    overflow: auto;
+
+    .component {
+      padding: 5px 0;
+      border-bottom: 1px dotted #aaa;
+
+      .members {
+        background: #eee;
+        padding: 5px;
+        margin-top: 5px;
+      }
+    }
+  }
+}

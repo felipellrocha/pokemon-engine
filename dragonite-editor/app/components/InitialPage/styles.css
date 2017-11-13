@@ -1,0 +1,19 @@
+body {
+  //background: url('images/stark.jpg');
+  background-size: cover;
+}
+
+:local(.component) {
+  font-family: Helvetica Neue;
+  margin: 15px;
+  display: flex;
+
+  .column {
+    width: 33%;
+  }
+
+  h2 {
+    text-shadow: 1px 1px 0 #fff;
+    font-size: 36px;
+  }
+}

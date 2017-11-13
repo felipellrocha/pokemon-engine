@@ -1,0 +1,31 @@
+version: "3"
+services:
+  abra:
+    build: ./abra-server
+    volumes:
+      - ./abra-server:/app
+      - /app/node_modules
+    ports:
+      - 9000:8000
+
+  pidgeot:
+    build:
+      context: .
+      dockerfile: pidgeot-socket/Dockerfile
+    ports:
+      - 9001:8000
+
+  pikachu:
+    build: ./pikachu-engine
+    volumes:
+      - ./pikachu-engine/build:/src
+    expose:
+      - 8000
+
+  charmander:
+    build: ./charmander-client
+    volumes:
+      - ./charmander-client:/app
+      - /app/node_modules
+    expose:
+      - 8000

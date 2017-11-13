@@ -1,0 +1,23 @@
+:local(.component) {
+  .selection {
+    position: absolute;
+    border: 1px dashed #000;
+    pointer-events: none;
+  }
+
+  .object {
+    position: absolute;
+    border: 1px solid #000;
+    background: rgba(0, 0, 0, .1);
+    font-size: 9px;
+    text-shadow: 1px 1px 0 #fff;
+
+    &:hover {
+      border: 1px solid #D33E43;
+    }
+  }
+
+  .selected {
+    border: 2px solid #D33E43;
+  }
+}

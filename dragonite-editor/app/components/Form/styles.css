@@ -1,0 +1,12 @@
+:local(.component) {
+  input {
+    border-bottom: 1px solid #aaa;
+    padding: 3px;
+    font-size: 14px;
+    width: auto;
+  }
+
+  .value {
+    width: 50%;
+  }
+}

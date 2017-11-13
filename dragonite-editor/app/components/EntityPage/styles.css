@@ -1,0 +1,17 @@
+:local(.component) {
+  font-family: Helvetica Neue;
+  margin: 15px 15px 15px 315px;
+
+
+  .add {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    cursor: pointer;
+    padding: 20px;
+
+    &:hover {
+      color: #d33e43;
+    }
+  }
+}

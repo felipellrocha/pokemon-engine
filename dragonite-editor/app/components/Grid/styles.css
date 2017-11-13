@@ -1,0 +1,19 @@
+:local(.component) {
+  font-family: Helvetica Neue;
+  overflow: hidden;
+
+  .row {
+    pointer-events: none;
+    display: flex;
+    flex-wrap: wrap;
+
+    &:last-child {
+      border-bottom: 0px;
+    }
+  }
+}
+
+:local(.disableEvents) {
+  .row {
+  }
+}

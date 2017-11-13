@@ -1,0 +1,29 @@
+:local(.component) {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .5);
+  z-index: 7000;
+
+  .dialog {
+    width: 300px;
+    height: 100px;
+    //display: none;
+    margin: 0 auto; 
+    background: #fff;
+    padding: 15px;
+
+    input {
+      width: 100%;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+  }
+
+  &.visible {
+    display: block;
+  }
+}

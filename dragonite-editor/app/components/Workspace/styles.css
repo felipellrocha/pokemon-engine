@@ -1,0 +1,17 @@
+:local(.component) {
+  position: relative;
+  user-select: none;
+  background: #000;
+}
+
+:local(.stack) {
+  position: absolute;
+}
+
+:local(.disableEvents) {
+  pointer-events: none;
+}
+
+:local(.selectedObject) {
+  border: 1px solid #f00;
+}

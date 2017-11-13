@@ -1,0 +1,59 @@
+:local(.component) {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  padding: 15px;
+  background: #fff;
+  font-family: Helvetica Neue;
+  box-sizing: border-box;
+  box-shadow: 0 0 7px #808080;
+
+  h1 {
+    font-weight: 100;
+    padding: 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  .separator {
+    padding: 10px 0;
+  }
+
+  .sheets img {
+    max-width: 100%;
+  }
+
+  .animation {
+    padding: 5px 5px;
+    font-size: 12px;
+    font-weight: 100;
+    border-top: 1px dotted #aaa; 
+
+    &:first-child {
+      border: none;
+    }
+
+    &.selected {
+      background: #f4cdce;
+    }
+
+    select {
+      width: 100%;
+    }
+  }
+
+  .add {
+    border-top: 1px solid #aaa;
+    display: flex;
+    justify-content: space-between;
+
+    &:hover {
+      background: #f4cdce;
+    }
+  }
+}

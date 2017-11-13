@@ -1,0 +1,40 @@
+:local(.component) {
+  .work-area {
+    font-family: Helvetica Neue;
+    margin: 15px 100px 100px 315px;
+    display: inline-block;
+  }
+
+  > .action {
+    position: fixed;
+    width: 16px;
+
+    path {
+      fill: #ccc;
+    }
+
+    &:hover path {
+      fill: #aaa;
+    }
+  }
+
+  .rows-remove {
+    top: 15px;
+    right: 15px;
+  }
+
+  .rows-add {
+    bottom: 90px;
+    right: 15px;
+  }
+
+  .columns-remove {
+    bottom: 75px;
+    left: 315px;
+  }
+
+  .columns-add {
+    bottom: 75px;
+    right: 30px;
+  }
+}

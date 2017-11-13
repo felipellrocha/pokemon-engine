@@ -1,0 +1,198 @@
+expressions
+= expressions:expression+
+	ws*
+{
+	return expressions;
+}
+
+expression
+= name:$(!'(' .)*
+	open:openExpression
+	parameters:parameter*
+	close:closeExpression
+	ws*
+{
+	const p = parameters.reduce((prev, par) => {
+		prev[par.key] = par.value;
+    if (options.includeLocation) {
+      prev[par.key]['info'] = par.info;
+      prev[par.key]['info'].shift({
+        start: par.start,
+        end: par.end,
+        type: par.type,
+      });
+    }
+		return prev;
+	}, {});
+
+  const data = {
+    type: 'expression',
+		name,
+		parameters: p,
+  };
+
+  if (options.includeLocation) {
+    const loc = location();
+    const info = [
+      open,
+      close,
+    ];
+    Object.assign(data, {
+      start: loc.start.offset,
+      end: loc.end.offset,
+      info,
+    });
+  }
+
+  return data;
+}
+
+parameter
+= !closeExpression
+	key:$(!(sp / equal) .)*
+	sp* equal:equal sp*
+	value:(bool / float / integer / string)
+	separator:valueStopper? sp?
+{
+  const data = {
+    type: 'parameter',
+		key,
+		value,
+	};
+
+  if (options.includeLocation) {
+    const loc = location();
+    const info = [
+      equal,
+    ];
+    if (separator) info.push(separator);
+
+    Object.assign(data, {
+      start: loc.start.offset,
+      end: loc.end.offset,
+      info,
+    });
+  }
+
+  return data;
+}
+
+equal = '='
+{
+  const loc = location();
+  return {
+    type: 'equal',
+    start: loc.start.offset,
+    end: loc.end.offset,
+  }
+}
+
+openExpression = '('
+{
+  const loc = location();
+  return {
+    type: 'open',
+    start: loc.start.offset,
+    end: loc.end.offset,
+  }
+}
+closeExpression = ')' (';')?
+{
+  const loc = location();
+  return {
+    type: 'close',
+    start: loc.start.offset,
+    end: loc.end.offset,
+  }
+}
+valueStopper = ','  (' ')?
+{
+  const loc = location();
+  return {
+    type: 'separator',
+    start: loc.start.offset,
+    end: loc.end.offset,
+  }
+}
+
+bool
+= value:("true" / "false")
+{
+  const data = {
+    type: 'bool',
+    value: value === "true",
+  };
+
+  if (options.includeLocation) {
+    const loc = location();
+    Object.assign(data, {
+      start: loc.start.offset,
+      end: loc.end.offset,
+    });
+  }
+
+  return data;
+}
+
+string
+= quote value:$(!quote .)* quote
+{
+  const data = {
+    type: 'string',
+    value: value,
+  };
+
+  if (options.includeLocation) {
+    const loc = location();
+    Object.assign(data, {
+      start: loc.start.offset,
+      end: loc.end.offset,
+    });
+  }
+
+  return data;
+}
+
+integer
+= [0-9]+
+{
+  const data = {
+    type: 'int',
+    value: parseInt(text(), 10),
+  };
+
+  if (options.includeLocation) {
+    const loc = location();
+    Object.assign(data, {
+      start: loc.start.offset,
+      end: loc.end.offset,
+    });
+  }
+
+  return data;
+}
+
+float
+= value:($([0-9]+ "." [0-9]+)) "f"?
+{ 
+  const data = {
+    type: 'float',
+    value: parseFloat(value, 10),
+  };
+
+  if (options.includeLocation) {
+    const loc = location();
+    Object.assign(data, {
+      start: loc.start.offset,
+      end: loc.end.offset,
+    });
+  }
+
+  return data;
+}
+
+
+quote = '"' / "'"
+ws = sp / nl
+sp = ' ' / '\t'
+nl = '\n'      

@@ -1,0 +1,22 @@
+:local(.component) {
+  width: 500px;
+  height: 300px;
+  background: #ddd;
+  border-radius: 2px;
+
+  .command {
+    color: #717171;
+  }
+
+  .parameter {
+    color: #d33e43;
+  }
+
+  .value {
+    color: #d33e43;
+  }
+
+  .info {
+    color: #aaa;
+  }
+}

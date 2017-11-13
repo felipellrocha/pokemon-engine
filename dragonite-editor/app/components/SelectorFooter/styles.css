@@ -1,0 +1,100 @@
+:local(.component) {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 300px;
+  padding: 10px;
+  background: #fff;
+  font-family: Helvetica Neue;
+  box-sizing: border-box;
+  overflow: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .left, .right, .middle {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .tiling {
+    display: flex;
+  }
+
+  .middle {
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .clear {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+  }
+
+  select {
+    margin-left: 5px;
+  }
+}
+
+:local(.icon) {
+  .icon {
+    height: 16px;
+  }
+
+  path {
+    fill: #555;
+  }
+}
+
+:local(.selectedIcon) {
+  path {
+    fill: #D33E43;
+  }
+}
+
+:local(.buttonIcon) {
+  padding: 0 5px;
+
+  svg {
+    height: 32px;
+  }
+
+  path {
+    fill: #fff;
+    //stroke-width: .25px;
+  }
+
+  &:hover {
+    path {
+      fill: #ddd;
+    }
+  }
+}
+
+:local(.tile) {
+  border: 1px solid #808080;
+  border-right: 1px solid #808080 !important;
+}
+
+:local(.button) {
+  display: flex;
+  align-items: center;
+}
+
+:local(.unsaved) {
+  path {
+    stroke: #D33E43;
+  }
+}
+
+:local(.fullLength) {
+  left: 0;
+}
