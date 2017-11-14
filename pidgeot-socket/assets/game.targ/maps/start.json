@@ -20197,38 +20197,6 @@
       ]
     },
     {
-      "id": "35428f02-e7fc-4ffa-b2bc-801fe4794bf9",
-      "type": "object",
-      "name": "action",
-      "visible": true,
-      "data": {
-        "efcf196c-36c0-4e7e-aae6-576956ef385f": {
-          "id": "efcf196c-36c0-4e7e-aae6-576956ef385f",
-          "rect": {
-            "x": 210,
-            "y": 239,
-            "w": 80,
-            "h": 25,
-            "pointerEvents": "none"
-          },
-          "components": [],
-          "entity": "6d7ffb40-784d-473c-8819-7d147e28c28d"
-        },
-        "7b6fa69c-b24a-44d1-8418-74c80ae96acb": {
-          "id": "7b6fa69c-b24a-44d1-8418-74c80ae96acb",
-          "rect": {
-            "x": 549,
-            "y": 256,
-            "w": 76,
-            "h": 27,
-            "pointerEvents": "none"
-          },
-          "components": [],
-          "entity": "6d7ffb40-784d-473c-8819-7d147e28c28d"
-        }
-      }
-    },
-    {
       "id": "14d3fcfc-79ab-4a7d-9bd8-2b77cb2800e9",
       "type": "tile",
       "name": "foreground",

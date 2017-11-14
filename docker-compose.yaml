@@ -5,15 +5,15 @@ services:
     volumes:
       - ./abra-server:/app
       - /app/node_modules
-    expose:
-      - 8000
+    ports:
+      - 9000:8000
 
   pidgeot:
     build:
       context: .
       dockerfile: pidgeot-socket/Dockerfile
-    ports:
-      - 9001:8000
+    expose:
+      - 8000
 
   pikachu:
     build: ./pikachu-engine
