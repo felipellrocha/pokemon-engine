@@ -1,4 +1,4 @@
-package service
+package resources
 
 import (
 	"fmt"
@@ -10,15 +10,6 @@ import (
   "github.com/gorilla/websocket"
 )
 
-
-var upgrader = websocket.Upgrader{
-  ReadBufferSize:  1024,
-  WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		// permissive for now
-		return true
-	},
-}
 
 const (
   // Time allowed to write a message to the peer.
@@ -57,11 +48,9 @@ func (c *Client) ReadPump() {
 
   for {
     _, message, err := c.conn.ReadMessage()
-	 fmt.Println(message)
     if err != nil {
       if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
-        fmt.Println(message, err)
-				//panic(err)
+        fmt.Printf("%+v\n", err)
       }
       break
     }
@@ -108,6 +97,20 @@ func (c *Client) WritePump() {
 }
 
 func ServeWS(hub *Hub, w http.ResponseWriter, r *http.Request) {
+
+  protocol := make([]string, 1)
+  protocol[0] = "binary"
+
+  var upgrader = websocket.Upgrader{
+    ReadBufferSize:  1024,
+    WriteBufferSize: 1024,
+    Subprotocols: protocol,
+    CheckOrigin: func(r *http.Request) bool {
+      // permissive for now
+      return true
+    },
+  }
+
   conn, err := upgrader.Upgrade(w, r, nil)
   if err != nil {
     panic(err)

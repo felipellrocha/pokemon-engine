@@ -68,7 +68,6 @@
     #define SOCKET_EAGAIN_EINPROGRESS EAGAIN
     #define SOCKET_EWOULDBLOCK EWOULDBLOCK
 #endif
-
 #include <vector>
 #include <string>
 
@@ -424,6 +423,21 @@ class _RealWebSocket : public easywsclient::WebSocket
 
 };
 
+easywsclient::WebSocket::pointer simple_socket() {
+  struct sockaddr_in addr;
+  addr.sin_family = AF_INET;
+
+  socket_t sockfd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+  if (sockfd == INVALID_SOCKET) {
+    closesocket(sockfd);
+  }
+  int res = connect(sockfd, (struct sockaddr *)&addr, sizeof(addr));
+  int flag = 1;
+  setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char*) &flag, sizeof(flag)); // Disable Nagle's algorithm
+
+  return easywsclient::WebSocket::pointer(new _RealWebSocket(sockfd, false));
+}
+
 
 easywsclient::WebSocket::pointer from_url(const std::string& url, bool useMask, const std::string& origin) {
     char host[128];
@@ -511,6 +525,10 @@ namespace easywsclient {
 WebSocket::pointer WebSocket::create_dummy() {
     static pointer dummy = pointer(new _DummyWebSocket);
     return dummy;
+}
+
+WebSocket::pointer WebSocket::simple_socket() {
+    return ::simple_socket();
 }
 
 

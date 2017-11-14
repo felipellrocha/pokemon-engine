@@ -9,7 +9,7 @@ function createDiv(text) {
   return div;
 }
 
-var conn = new WebSocket(`ws://localhost:9001/ws`);
+var conn = new WebSocket(`ws://localhost:9000/socket/game/908b440b-f387-4941-9d0e-880388fde6fd`);
 
 conn.onclose = (event) => {
   chat.appendChild(createDiv("Connection closed"));

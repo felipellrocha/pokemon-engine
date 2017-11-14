@@ -1,7 +1,7 @@
 #include "networking.h"
 
 void NetworkingSystem::update(float dt) {
-  if (game->socket->getReadyState() != WebSocket::CLOSED) {
+  if (game->socket && game->socket->getReadyState() != WebSocket::CLOSED) {
     WebSocket::pointer wsp = game->socket;
 
     game->socket->poll();

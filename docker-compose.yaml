@@ -5,8 +5,8 @@ services:
     volumes:
       - ./abra-server:/app
       - /app/node_modules
-    ports:
-      - 9000:8000
+    expose:
+      - 8000
 
   pidgeot:
     build:

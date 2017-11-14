@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
-import { Fragment } from 'redux-little-router';
+import {
+  BrowserRouter,
+  Route,
+} from 'react-router-dom';
 
 import {
   HomePage,
+  GamePage,
 } from 'components';
 
 class Router extends Component {
   render() {
     return (
-      <div>
-        <Fragment forRoute='/'><HomePage /></Fragment>
-      </div>
+      <BrowserRouter>
+        <div>
+          <Route path='/' exact component={HomePage} />
+          <Route path='/game/:gameId' component={GamePage} />
+        </div>
+      </BrowserRouter>
     );
   }
 }

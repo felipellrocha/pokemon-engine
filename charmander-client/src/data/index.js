@@ -20,10 +20,10 @@ export default initialState => {
   middlewares.push(routesMiddleware);
   middlewares.push(thunk);
 
-  if (window.__REDUX_DEVTOOLS_EXTENSION__) enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__());
-
   enhancers.push(routesEnhancer);
   enhancers.push(applyMiddleware(...middlewares));
+
+  if (window.__REDUX_DEVTOOLS_EXTENSION__) enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__());
 
   const enhancer = compose(...enhancers);
 

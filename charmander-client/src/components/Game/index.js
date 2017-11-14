@@ -17,6 +17,9 @@ class Game extends Component {
   }
 
   componentDidMount() {
+    const {
+      gameId,
+    } = this.props;
     const context = this;
 
     fetch('engine/main.wasm')
@@ -32,6 +35,10 @@ class Game extends Component {
             print: console.log.bind(console),
             printErr: console.error.bind(console),
             canvas: document.querySelector('canvas'),
+            websocket: {
+              url: `ws://localhost:9000/socket/game/${gameId}`,
+              subprotocol: 'text, base64, binary',
+            },
             locateFile: function (file) {
               return `/engine/${file}`;
             },
@@ -67,7 +74,7 @@ class Game extends Component {
         document.body.appendChild(script);
       })
       .catch(err => {
-        console.log('ERROR!', err);
+        console.err('ERROR!', err);
         this.setState({
           loading: 'error',
         });
@@ -78,8 +85,6 @@ class Game extends Component {
     const {
       loading,
     } = this.state;
-
-    console.log(loading);
 
     if (loading === 'error') return <div className='error'>There was an error loading the game</div>;
     else if (loading) return <div className='loading'>

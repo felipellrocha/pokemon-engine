@@ -1,8 +1,4 @@
-package service
-
-import (
-	"fmt"
-)
+package resources
 
 type Hub struct {
   clients map[*Client]bool
@@ -24,23 +20,15 @@ func (h *Hub) Run() {
   for {
     select {
     case client := <-h.register:
-			fmt.Println("registering")
       h.clients[client] = true
     case client := <-h.unregister:
-			fmt.Println("unregistering")
       if _, ok := h.clients[client]; ok {
         delete(h.clients, client)
         close(client.send)
       }
     case message := <-h.broadcast:
-			fmt.Println("messaging")
       for client := range h.clients {
-        select {
-        case client.send <- message:
-        default:
-          close(client.send)
-          delete(h.clients, client)
-        }
+        client.send <- message
       }
     }
   }

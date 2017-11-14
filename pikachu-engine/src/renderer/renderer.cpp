@@ -4,10 +4,8 @@ Renderer::Renderer(string _assetPath, string _gamePackage, EntityManager* _manag
   : assetPath(_assetPath), gamePackage(_gamePackage), manager(_manager), windowWidth(_windowWidth), windowHeight(_windowHeight) {
   this->running = true;
 
-  socket = WebSocket::from_url("ws://localhost:9000/socket/ws");
+  socket = WebSocket::simple_socket();
   socket->poll();
-  char hallow[] = "hallow world!";
-  socket->send(hallow);
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     std::cout << "SDL: " << SDL_GetError() << std::endl;

@@ -4,6 +4,9 @@ const routes = {
   '/': {
     title: 'Home',
   },
+  '/game/:gameId': {
+    title: 'Game!!!',
+  }
 };
 
 const {

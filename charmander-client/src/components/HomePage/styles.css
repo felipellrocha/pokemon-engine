@@ -1,4 +1,28 @@
 :local(.component) {
   display: flex;
   justify-content: center;
+
+  .games {
+    background: #fff;
+    width: 60%;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, .3);
+
+    .game {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      font-family: Helvetica;
+      font-size: 12px;
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+
+        a {
+          color: #ec7100;
+          text-decoration: none;
+        }
+      }
+    }
+  }
 }

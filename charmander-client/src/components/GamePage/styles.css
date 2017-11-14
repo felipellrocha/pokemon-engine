@@ -1,0 +1,4 @@
+:local(.component) {
+  display: flex;
+  justify-content: center;
+}
