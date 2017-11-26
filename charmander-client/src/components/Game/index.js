@@ -37,7 +37,7 @@ class Game extends Component {
             canvas: document.querySelector('canvas'),
             websocket: {
               url: `ws://localhost:9000/socket/game/${gameId}`,
-              subprotocol: 'text, base64, binary',
+              subprotocol: 'json, binary',
             },
             locateFile: function (file) {
               return `/engine/${file}`;

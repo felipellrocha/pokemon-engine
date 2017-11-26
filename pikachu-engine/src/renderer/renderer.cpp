@@ -1,11 +1,8 @@
 #include "renderer.h"
 
-Renderer::Renderer(string _assetPath, string _gamePackage, EntityManager* _manager, int _windowWidth, int _windowHeight)
-  : assetPath(_assetPath), gamePackage(_gamePackage), manager(_manager), windowWidth(_windowWidth), windowHeight(_windowHeight) {
+Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _socket, EntityManager* _manager, int _windowWidth, int _windowHeight)
+  : socket(_socket), assetPath(_assetPath), manager(_manager), windowWidth(_windowWidth), windowHeight(_windowHeight) {
   this->running = true;
-
-  socket = WebSocket::simple_socket();
-  socket->poll();
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     std::cout << "SDL: " << SDL_GetError() << std::endl;
@@ -57,25 +54,113 @@ Renderer::Renderer(string _assetPath, string _gamePackage, EntityManager* _manag
     SDL_Quit();
     throw renderer_error();
   }
-
+  
   //Initialize SDL_ttf
   if(TTF_Init() == -1) {
     printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
     SDL_Quit();
     throw renderer_error();
   }
-
+  
   if (glewInit() == -1) {
     printf( "GLEW could not initialize!" );
     SDL_Quit();
     throw renderer_error();
   }
-
+  
   SDL_SetRenderDrawBlendMode(this->ren, SDL_BLENDMODE_BLEND);
+  /*Buffer buffer = Buffer{
+    initialData.c_str(),
+    initialData.size(),
+  };*/
 
-  string gameFile = getAssetPath(gamePackage + "/app.json");
-  cout << gameFile << endl;
-  json game_data = readFile(gameFile.c_str());
+  this->getMessages(initialData.c_str(), initialData.length());
+  //this->initGame(initialData);
+};
+
+/*
+ *
+ *  Message types:
+ *  --------------
+ *
+ *  0. Init Game
+ *  1+. Component
+ *
+ */
+
+void Renderer::getMessages(const char* buf, size_t size) {
+  int index = 0;
+
+  while (index < size) {
+    uint16_t msgType = ReadBytesOfString<uint16_t>(buf, &index, size);
+
+    switch (msgType) {
+      case MessageDef::INIT: {
+        // read message length
+        auto length = ReadBytesOfString<uint64_t>(buf, &index, size);
+        char* msg = new char[length];
+        strncpy(msg, buf + index, length);
+
+        printf("init! %s\n", msg);
+        this->initGame(msg);
+
+        delete [] msg;
+        index += length + 1;
+
+        break;
+      }
+      case MessageDef::POSITION: {
+        auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        auto x = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto y = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto position = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        manager->addComponent<PositionComponent>(eid, x, y, position);
+        printf("Position(%d): %d, %d, %d\n", eid, x, y, position);
+        break;
+      }
+      case MessageDef::RENDER: {
+        auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        auto layer = ReadBytesOfString<uint8_t>(buf, &index, size);
+        auto shouldTileX = ReadBytesOfString<bool>(buf, &index, size);
+        auto shouldTileY = ReadBytesOfString<bool>(buf, &index, size);
+
+        manager->addComponent<RenderComponent>(eid, layer, shouldTileX, shouldTileY);
+        printf("Render(%d): %d, %d, %d\n", eid, layer, shouldTileX, shouldTileY);
+        break;
+      }
+      case MessageDef::DIMENSION: {
+        auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        auto w = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto h = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        manager->addComponent<DimensionComponent>(eid, w, h);
+        printf("Dimension(%d): %d, %d\n", eid, w, h);
+
+        break;
+      }
+      case MessageDef::SPRITE: {
+        auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        auto x = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto y = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto w = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto h = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto textureIndex = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        manager->addComponent<SpriteComponent>(eid, x, y, w, h, textureIndex);
+        printf("Sprite(%d): %d, %d, %d, %d, %d\n", eid, x, y, w, h, textureIndex);
+        break;
+      }
+    }
+  }
+}
+
+void Renderer::initGame(char* initialData) {
+  json game_data = json::parse(initialData);
   json maps = game_data.at("maps");
 
   for (auto& element : json::iterator_wrapper(maps)) {
@@ -105,15 +190,15 @@ Renderer::Renderer(string _assetPath, string _gamePackage, EntityManager* _manag
     this->textures[name] = loadTexture(this->ren, src);
   }
 
-
   this->grid.tile_w = game_data.at("tile").at("width").get<int>();
   this->grid.tile_h = game_data.at("tile").at("height").get<int>();
+  //this->grid.columns = game_data.at("grid").at("columns").get<int>();
+  //this->grid.rows = game_data.at("grid").at("rows").get<int>();
+
 
   int mapIndex = game_data.at("initialMap").get<int>();
   json currentMap = game_data.at("maps").at(mapIndex);
   string levelId = currentMap.at("id").get<string>();
-
-  //textures["flame"] = loadTexture(this->ren, getAssetPath("flame.png"));
 
   auto tileset_data = game_data.at("tilesets");
   for (uint i = 0; i < tileset_data.size(); i++) {
@@ -166,73 +251,72 @@ Renderer::Renderer(string _assetPath, string _gamePackage, EntityManager* _manag
     this->animations[key] = anim;
   }
 
-  this->loadStage(levelId);
-
-  this->registerSystem<InputSystem>(manager);
-  this->registerSystem<NetworkingSystem>(manager);
-  this->registerSystem<CameraSystem>(manager);
-  this->registerSystem<RenderSystem>(manager);
-
-};
-
-void Renderer::loadStage(string level) {
-  string gameFile = getAssetPath(gamePackage + "/app.json");
-  cout << gameFile << endl;
-  json game_data = readFile(gameFile.c_str());
-
-  this->loadStage(game_data, level);
-}
-
-void Renderer::loadStage(json game_data, string level) {
-  string mapFile = getAssetPath(gamePackage + "/maps/" + level + ".json");
-
-  cout << "Loading file: " << mapFile << endl;
-
-  json map_data = readFile(mapFile.c_str());
-
-  this->grid.columns = map_data.at("grid").at("columns").get<int>();
-  this->grid.rows = map_data.at("grid").at("rows").get<int>();
-
   EID camera = manager->createEntity();
   manager->addComponent<DimensionComponent>(camera, this->windowWidth, this->windowHeight);
   manager->addComponent<PositionComponent>(camera, 0, 0);
   manager->saveSpecial("camera", camera);
 
-  for (uint i = 0; i < map_data.at("layers").size(); i++) {
-    json layer = map_data.at("layers").at(i);
-    json data = layer.at("data");
+  //string initialPayload = game_data.at("InitialPayload").dump();
+  //int len = initialPayload.size();
+  //for (int i = 0; i < len; i++) printf("%d", initialPayload[i]);
 
-    string type = layer.at("type").get<string>();
-    string name = layer.at("name").get<string>();
+  //this->loadStage(initialPayload);
 
-    cout << "Loading layer: " << name << endl;
+  //this->getComponentsFromBinary(initialPayload);
+  this->resize(1200, 800);
 
-    if (type == "tile") {
-      for (int j = 0; j < data.size(); j++) {
-        int setIndex = data.at(j).at(0).get<int>();
-        
-        if (setIndex >= 0) createTile(data, i, j);
-        // only continue if it's a action entity
-        else if (setIndex == -2) createEntityByData(data, i, j);
-      }
-    } else if (type == "object") {
-      for (auto item : json::iterator_wrapper(data)) {
-        auto entity = item.value();
-        string entityId = entity.at("entity").get<string>();
-        int x = entity.at("rect").at("x").get<int>();
-        int y = entity.at("rect").at("y").get<int>();
-        int w = entity.at("rect").at("w").get<int>();
-        int h = entity.at("rect").at("h").get<int>();
 
-        createEntityByID(entityId, i, x, y, w, h);
-      }
-    }
-  }
+  this->registerSystem<InputSystem>(manager);
+  this->registerSystem<NetworkingSystem>(manager);
+  this->registerSystem<CameraSystem>(manager);
+  this->registerSystem<RenderSystem>(manager);
 }
+
+void Renderer::loadStage(string initialPayload) {
+
+}
+
+void Renderer::getComponentsFromBinary(string d) {
+  /*
+  const char* data = d.c_str();
+  Buffer buffer = Buffer{
+    data,
+    d.size(),
+  };
+  
+  int CID = ReadBytes<uint8_t>(buffer);
+  printf("CID: %d\n", CID);
+
+  int EID = ReadBytes<uint64_t>(buffer);
+  printf("EID: %d\n", EID);
+
+  if (CID == ComponentDef::HEALTH) {
+    int ch = ReadBytes<uint8_t>(buffer);
+    int mh = ReadBytes<uint8_t>(buffer);
+    int ce = ReadBytes<uint8_t>(buffer);
+    int me = ReadBytes<uint8_t>(buffer);
+
+    printf("ch: %d, mh: %d, ce: %d, me: %d\n", ch, mh, ce, me);
+  }
+  else if (CID == ComponentDef::POSITION) {
+    int x = ReadBytes<uint32_t>(buffer);
+    int y = ReadBytes<uint32_t>(buffer);
+    int position = ReadBytes<uint32_t>(buffer);
+
+    printf("x: %d, y: %d, position: %d\n", x, y, position);
+  }
+
+  for (int i = 0; i < 100; i++) {
+    printf("%d ", buffer.data[i]);
+  }
+  printf("\n");
+   */
+}
+
 
 void Renderer::loop(float dt) {
   SDL_Event event;
-  
+  //printf("loop");
   // extract input information so that all systems can use it
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) {
@@ -332,7 +416,7 @@ void Renderer::createTile(json& data, int layer, int index) {
 
     EID entity = manager->createEntity();
 
-    manager->addComponent<SpriteComponent>(entity, src.x, src.y, src.w, src.h, tileset->texture);
+    //manager->addComponent<SpriteComponent>(entity, src.x, src.y, src.w, src.h, tileset->texture);
     manager->addComponent<PositionComponent>(entity, dst.x, dst.y);
     manager->addComponent<RenderComponent>(entity, layer);
   }
@@ -442,7 +526,7 @@ void Renderer::createEntity(string entityId, int layer, int x, int y, int w, int
 
       SDL_Texture *texture = this->textures[source];
 
-      manager->addComponent<SpriteComponent>(entity, x, y, (w_v) ? w_v : w, (h_v) ? h_v : h, texture);
+      //manager->addComponent<SpriteComponent>(entity, x, y, (w_v) ? w_v : w, (h_v) ? h_v : h, texture);
     }
     else if (name == "AbilityComponent") {
       auto component = manager->addComponent<AbilityComponent>(entity);
@@ -492,13 +576,16 @@ void Renderer::resize(int w, int h) {
     w, h
   );
   auto camera = manager->getSpecial("camera");
-  auto dim = manager->getComponent<DimensionComponent>(camera);
-  dim->w = w;
-  dim->h = h;
+  if (camera >= 0) {
+    auto dim = manager->getComponent<DimensionComponent>(camera);
+    dim->w = w;
+    dim->h = h;
+  }
 }
 
 
 Renderer::~Renderer() {
+  socket->close();
   SDL_DestroyTexture(this->texture);
   SDL_DestroyRenderer(this->ren);
   SDL_DestroyWindow(this->win);

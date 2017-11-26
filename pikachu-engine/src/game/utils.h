@@ -2,8 +2,10 @@
 #define GAMEUTILS_H
 
 #include <math.h>
-#include "entity/entity.h"
 #include <string>
+#include <cstring>
+#include <assert.h>
+#include "entity/entity.h"
 #include "sdl2image.h"
 #include "exceptions.h"
 
@@ -37,5 +39,16 @@ bool isOverlapping(int min1, int max1, int min2, int max2);
 int calculateOverlap(int min1, int max1, int min2, int max2);
 
 SDL_Texture* loadTexture(SDL_Renderer *ren, string src);
+
+template<typename Type>
+Type ReadBytesOfString(const char* buffer, int* index, int totalSize) {
+  int size = sizeof(Type);
+  assert(*index + size <= totalSize);
+
+  Type value;
+  value = *((Type*)(buffer + *index));
+  *index += size;
+  return value;
+}
 
 #endif

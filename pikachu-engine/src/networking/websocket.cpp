@@ -426,12 +426,38 @@ class _RealWebSocket : public easywsclient::WebSocket
 easywsclient::WebSocket::pointer simple_socket() {
   struct sockaddr_in addr;
   addr.sin_family = AF_INET;
+  fd_set fdr;
 
   socket_t sockfd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (sockfd == INVALID_SOCKET) {
     closesocket(sockfd);
   }
+  fcntl(sockfd, F_SETFL, O_NONBLOCK);
+  char line[1024];
+  int i;
+  
   int res = connect(sockfd, (struct sockaddr *)&addr, sizeof(addr));
+	FD_ZERO(&fdr);
+  FD_SET(sockfd, &fdr);
+	res = select(64, &fdr, NULL, NULL, NULL);
+  for (i = 0; i < 2 || (i < 255 && line[i-2] != '\r' && line[i-1] != '\n'); ++i) {
+		if (recv(sockfd, line+i, 1, 0) == 0) { return NULL; }
+	}
+  //printf(line);
+	//printf("\n\n\n\n\n\n\n\n\n\n\\n\n\n\n\n\n\n\\n\n\n\n\n\n\n\n\n\n\\n");
+
+/*
+  while (true) {
+    for (i = 0; i < 2 || (i < 255 && line[i-2] != '\r' && line[i-1] != '\n'); ++i) {
+        if (recv(sockfd, line+i, 1, 0) == 0) { return NULL; }
+		}
+		printf("line: ");
+		printf("%d", line, len(line));
+		printf("\n");
+    if (line[0] == '\r' && line[1] == '\n' || line == NULL) { break; }
+  }
+	*/
+
   int flag = 1;
   setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char*) &flag, sizeof(flag)); // Disable Nagle's algorithm
 
@@ -510,6 +536,7 @@ easywsclient::WebSocket::pointer from_url(const std::string& url, bool useMask, 
     u_long on = 1;
     ioctlsocket(sockfd, FIONBIO, &on);
 #else
+  setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char*) &flag, sizeof(flag)); // Disable Nagle's algorithm
     fcntl(sockfd, F_SETFL, O_NONBLOCK);
 #endif
     fprintf(stderr, "Connected to: %s\n", url.c_str());

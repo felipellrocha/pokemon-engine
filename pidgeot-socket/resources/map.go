@@ -2,14 +2,28 @@ package resources
 
 import (
   "fmt"
+  "strings"
   "strconv"
   "io/ioutil"
   "encoding/json"
 )
 
+const (
+  EMPTY_SET = -1
+  ENTITY_SET = -2
+)
+
 type Grid struct {
   Columns int `json:"columns"`
   Rows int `json:"rows"`
+}
+
+func (g *Grid) X(index int) int {
+  return index % g.Columns;
+}
+
+func (g *Grid) Y(index int) int {
+  return index / g.Columns;
 }
 
 type Layer struct {
@@ -47,9 +61,9 @@ func (r *Tile) UnmarshalJSON(data []byte) error {
 
     r.SetIndex = i
     r.TileIndex = j
-  } else if i == -2 {
+  } else if i == ENTITY_SET {
     r.SetIndex = i
-    r.EntityId = string(values[1])
+    r.EntityId = strings.Trim(string(values[1]), "\"")
   }
 
   return nil

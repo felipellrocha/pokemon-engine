@@ -13,7 +13,7 @@
 
 using namespace std;
 
-typedef uint32_t EID;
+typedef int32_t EID;
 
 struct Entity {
   EID eid;

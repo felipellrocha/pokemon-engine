@@ -10,6 +10,8 @@
 #include "exceptions.h"
 #include "entity/entity.h"
 
+#include "networking/websocket.hpp"
+
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
@@ -33,31 +35,65 @@ void loop(Renderer &renderer) {
 }
 
 #ifdef __EMSCRIPTEN__
-EntityManager *manager = new EntityManager();
-Renderer game = Renderer("assets/metroidvania/", "game.targ", manager, 100, 100);
-
 extern "C" {
   void resize(int width, int height) {
-    game.resize(width, height);
+    //game.resize(width, height);
   }
 
   int initialize() {
     fpsTimer.start();
 
-    emscripten_set_main_loop_arg((em_arg_callback_func)loop, &game, -1, 1);
+    WebSocket::pointer socket = WebSocket::simple_socket();
+    string response;
+    //printf("connecting...\n");
+    //socket->poll(0);
+    socket->dispatch([&response](const string& message) {
+      printf("connected!\n");
+      response = message;
+      printf("Waiting for response...\n");
 
-    SDL_Quit();
-    return 0;
+      printf("message: %s\n", message.c_str());
+    });
+
+    //emscripten_async_call((em_arg_callback_func)getFromSocket, socket, 0);
+
+    //EntityManager *manager = new EntityManager();
+    //Renderer game = Renderer(response, "assets/metroidvania/", socket, manager, 100, 100);
+
+    //emscripten_set_main_loop_arg((em_arg_callback_func)loop, &game, -1, 1);
+
+    //SDL_Quit();
+    //return 0;
   }
 }
 #else
 
 int main() {
-  fpsTimer.start();
+  //string id;
+  //printf("What is the game id?\n");
+  //getline(cin, id);
 
+  //string url = "ws://localhost:8000/game/" + string(id);
+  string url = "ws://localhost:8000/game/test";
+
+  WebSocket::pointer socket = WebSocket::from_url(url);
+
+  string data;
+  for (int hasResponded = 0; socket->getReadyState() != WebSocket::CLOSED && hasResponded < 1; hasResponded++) {
+    socket->poll(-1);
+    socket->dispatch([socket, &hasResponded, &data](const string& message) {
+      printf("received!\n");
+
+      data = message;
+    });
+    printf("Waiting for responses...\n");
+  }
+  //printf("message: %s", components.c_str());
+
+  fpsTimer.start();
+  
   EntityManager *manager = new EntityManager();
-  Renderer game = Renderer("assets/metroidvania/", "game.targ", manager, 100, 100);
-  game.resize(1200, 800);
+  Renderer game = Renderer(data, "assets/metroidvania/", socket, manager, 100, 100);
 
   while (game.isRunning()) {
     loop(game);

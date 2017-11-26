@@ -20,8 +20,11 @@ class GamePage extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  gameId: state.router.params.gameId,
-});
+const mapStateToProps = (state, props) => {
+  console.log(state);
+  return {
+    gameId: props.match.params.gameId,
+  }
+};
 
 export default connect(mapStateToProps)(GamePage);

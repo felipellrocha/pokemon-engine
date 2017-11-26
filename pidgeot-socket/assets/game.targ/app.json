@@ -16,15 +16,15 @@
     {
       "src": "far-grounds.png",
       "name": "far-grounds.png",
-      "rows": 6.875,
-      "columns": 38.5,
+      "rows": 6,
+      "columns": 38,
       "type": "image",
       "terrains": {}
     },
     {
       "src": "clouds.png",
       "name": "clouds.png",
-      "rows": 14.75,
+      "rows": 14,
       "columns": 34,
       "type": "image",
       "terrains": {}
@@ -184,7 +184,7 @@
             "src": {
               "type": "TextureSource",
               "pointer": false,
-              "value": "far-grounds.png",
+              "value": 1,
               "name": "src"
             }
           }
@@ -246,7 +246,7 @@
             "src": {
               "type": "TextureSource",
               "pointer": false,
-              "value": "sky.png",
+              "value": 4,
               "name": "src"
             }
           }
@@ -325,7 +325,7 @@
             "src": {
               "type": "TextureSource",
               "pointer": false,
-              "value": "clouds.png",
+              "value": 2,
               "name": "src"
             }
           }
@@ -404,7 +404,7 @@
             "src": {
               "type": "TextureSource",
               "pointer": false,
-              "value": "sea.png",
+              "value": 3,
               "name": "src"
             }
           }
@@ -578,7 +578,7 @@
             "src": {
               "type": "TextureSource",
               "pointer": false,
-              "value": "character.png",
+              "value": 5,
               "name": "src"
             }
           }

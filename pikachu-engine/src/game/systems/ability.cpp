@@ -51,11 +51,13 @@ void AbilitySystem::update(float dt) {
           position->y + yOffset,
           direction
         );
-        manager->addComponent<SpriteComponent>(
+        /*
+         manager->addComponent<SpriteComponent>(
           attack,
           0, 0, 48, 48,
           this->game->textures["flame"]
         );
+         */
         if (ability->type == AbilityType::RANGE) manager->addComponent<ProjectileComponent>(attack, 8);
 
         ability->delay = 0.f;

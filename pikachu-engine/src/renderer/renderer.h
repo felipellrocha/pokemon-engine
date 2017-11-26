@@ -10,6 +10,8 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <climits>
+
 #include "sdl2image.h"
 #include "exceptions.h"
 #include "json/json.h"
@@ -50,6 +52,12 @@ using easywsclient::WebSocket;
 using json = nlohmann::json;
 using namespace std;
 
+struct Buffer {
+  const char* data;
+  unsigned long size;
+  int index = 0;
+};
+
 class Node;
 class Transition;
 class Renderer {
@@ -62,6 +70,8 @@ public:
   SDL_Texture *texture = nullptr;
   SDL_GLContext context = nullptr;
 
+  WebSocket::pointer socket;
+
   map<string, string> mapsByName;
   map<EID, Node*> behaviors;
   map<string, string> entitiesByName;
@@ -69,8 +79,6 @@ public:
   string gamePackage;
   string assetPath;
   EntityManager* manager;
-
-  WebSocket::pointer socket;
 
   json entities;
   map<string, Animation> animations;
@@ -90,11 +98,18 @@ public:
 
   int numTransitions = 0;
 
+
+  void initSocket();
+  void initGame(char* message);
+  void getMessages(const char* buf, size_t size);
+
   string getAssetPath(string asset) {
     return assetPath + asset;
   }
 
   void resize(int w, int h);
+  void getComponentsFromBinary(string d);
+
 
   void loop(float dt);
   bool isRunning() { return running; };
@@ -121,8 +136,7 @@ public:
     incoming.push_front(transition);
   }
 
-  void loadStage(string level);
-  void loadStage(json game_data, string level);
+  void loadStage(string initialPayload);
   void runScript(json commands);
 
   void createTile(json& data, int layer, int index);
@@ -135,7 +149,7 @@ public:
     return entitiesByName[name];
   }
 
-  Renderer(string assetPath, string _gamePackage, EntityManager* _manager, int width, int height);
+  Renderer(string initialData, string _assetPath, WebSocket::pointer socket, EntityManager* _manager, int width, int height);
   ~Renderer();
 };
 

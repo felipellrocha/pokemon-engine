@@ -1,7 +1,9 @@
 #include "entity.h"
 
 EID EntityManager::getSpecial(string key) {
-  return this->special[key];
+  if (special.find(key) == special.end()) return -1;
+  
+  return special[key];
 }
 
 void EntityManager::saveSpecial(string key, EID entity) {

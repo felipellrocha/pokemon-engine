@@ -18,10 +18,20 @@
 
 using json = nlohmann::json;
 
-typedef string TextureSource;
+typedef int TextureSource;
 typedef json script;
 typedef int ResolverType;
 typedef map<Actions, Ability*> AbilityList;
+
+enum MessageDef {
+  INIT = 0,
+  HEALTH = 1,
+  POSITION = 2,
+  DIMENSION = 3,
+  SPRITE = 4,
+  INPUT = 5,
+  RENDER = 6,
+};
 
 struct HealthComponent : public Component {
   int currentHearts;
@@ -66,6 +76,7 @@ struct PositionComponent : public Component {
     : x(_x), y(_y), nextX(_x), nextY(_y) { }
   PositionComponent(int _x, int _y, int _direction)
     : x(_x), y(_y), nextX(_x), nextY(_y), direction(_direction) { }
+
 };
 
 struct DimensionComponent : public Component {
@@ -80,10 +91,9 @@ struct SpriteComponent : public Component {
   int y;
   int w;
   int h;
-  TextureSource src;
-  SDL_Texture *texture; //private
+  TextureSource texture;
 
-  SpriteComponent(int _x, int _y, int _w, int _h, SDL_Texture* _texture)
+  SpriteComponent(int _x, int _y, int _w, int _h, TextureSource _texture)
       : x(_x), y(_y), w(_w), h(_h), texture(_texture) {
   }
 };

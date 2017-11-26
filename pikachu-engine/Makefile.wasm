@@ -14,11 +14,13 @@ CXX_FLAGS = \
 	-std=c++11 \
 	-std=c++14 \
   -Wall \
-  -Wno-missing-braces \
 	-Wextra \
-	-Wshadow \
+	-Wno-missing-braces \
+	-Wno-shadow \
+	-Wsign-compare \
 	-pedantic \
-	-Oz \
+	-O2 \
+	-s SOCKET_DEBUG=1 \
 	-s USE_SDL=2 \
 	-s USE_SDL_IMAGE=2 \
 	-s USE_SDL_TTF=2 \
@@ -28,8 +30,11 @@ CXX_FLAGS = \
 	-s WASM=1 \
 	-s "BINARYEN_METHOD='native-wasm'" \
   -s ASSERTIONS=1 \
-	-s TOTAL_MEMORY=160MB \
+	-s TOTAL_MEMORY=1024MB \
 	-D DRAW_COLLISION 
+	#-s SAFE_HEAP=1
+	#--profiling-funcs
+	#--emit-symbol-map
 	#-D DRAW_FPS 
 EXEC_FLAGS = \
 	--preload-file assets \
