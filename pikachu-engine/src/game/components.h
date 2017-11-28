@@ -19,6 +19,7 @@
 using json = nlohmann::json;
 
 typedef int TextureSource;
+typedef int AnimationType;
 typedef json script;
 typedef int ResolverType;
 typedef map<Actions, Ability*> AbilityList;
@@ -31,6 +32,7 @@ enum MessageDef {
   SPRITE = 4,
   INPUT = 5,
   RENDER = 6,
+  ANIMATION = 7,
 };
 
 struct HealthComponent : public Component {
@@ -171,6 +173,15 @@ struct WalkComponent : public Component {
   WalkComponent(int _direction, int _frame) : direction(_direction), frame(_frame) { };
   WalkComponent(int _direction) : WalkComponent(_direction, 0) { };
   WalkComponent() : WalkComponent(0, 0) { };
+};
+
+struct AnimationComponent : public Component {
+  AnimationType animation;
+  int frame; //private
+  bool animating = false; //private
+
+  AnimationComponent(AnimationType _animation, int _frame) : animation(_animation), frame(_frame) { };
+  AnimationComponent() : AnimationComponent(0, 0) { };
 };
 
 struct ColorComponent : public Component {

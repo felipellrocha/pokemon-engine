@@ -63,8 +63,9 @@
       "name": "start"
     }
   ],
-  "animations": {
-    "player-idle": {
+  "animations": [
+    {
+      "name": "player-idle",
       "id": "80fcadd9-b686-4188-9d96-5cc59ce771ee",
       "numberOfFrames": 42,
       "sheet": 0,
@@ -108,7 +109,7 @@
         }
       }
     }
-  },
+  ],
   "entities": {
     "4f436517-dfe3-4b20-bf2f-069a4750ca6b": {
       "name": "hills",
@@ -597,6 +598,17 @@
               "pointer": false,
               "value": false,
               "name": "shouldTileY"
+            }
+          }
+        },
+        {
+          "name": "AnimationComponent",
+          "members": {
+            "animation": {
+              "type": "AnimationType",
+              "pointer": false,
+              "value": 0,
+              "name": "animation"
             }
           }
         }

@@ -1,4 +1,4 @@
-package resources
+package ecs
 
 import (
   "io/ioutil"
@@ -43,7 +43,7 @@ type Keyframe struct {
   H int `json:"h"`
 }
 
-type Animation struct {
+type AnimationDefinition struct {
   Id string `json:"id"`
   NumberOfFrames int `json:"numberOfFrames"`
   SpriteSheet int `json:"spritesheet"`
@@ -73,7 +73,7 @@ type App struct {
   Name string `json:"name"`
   Tilesets []Tileset `json:"tilesets"`
   Maps []MapDescription `json:"maps"`
-  Animations map[string]Animation `json:"animations"`
+  Animations []AnimationDefinition `json:"animations"`
   Entities map[string]Entity `json:"entities"`
 }
 
@@ -85,7 +85,7 @@ func (w *App) GetMapById(index int) string {
   return w.Maps[index].Id
 }
 
-func getApp() (*App, error) {
+func GetApp() (*App, error) {
   file, err := ioutil.ReadFile("./assets/game.targ/app.json")
 
   if err != nil {

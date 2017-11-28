@@ -115,7 +115,7 @@ class component extends PureComponent {
     const layer = layers[selectedLayer];
 
     const leftSide = (() => {
-      if (layer.type === 'object') {
+      if (layer && layer.type === 'object') {
         if (selectedObject) return this.renderObject();
         else (<div className="actions" />);
       } else {

@@ -16,6 +16,7 @@ const (
   SpriteComponent = 4
   InputComponent = 5
   RenderComponent = 6
+  AnimationComponent = 7
 )
 
 type Component interface {
@@ -30,13 +31,13 @@ type Health struct {
   CurrentEnergy int
   MaxEnergy int
 }
-func (c Health) ID() CID {
+func (c *Health) ID() CID {
   return HealthComponent
 }
-func (c Health) IsRenderable() bool {
-  return true
+func (c *Health) IsRenderable() bool {
+  return false
 }
-func (c Health) ToBinary() []byte {
+func (c *Health) ToBinary() []byte {
   buffer := new(bytes.Buffer)
   if err := binary.Write(buffer, binary.LittleEndian, uint8(c.CurrentHearts)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint8(c.CurrentHearts)); err != nil { fmt.Println("error!", err) }
@@ -55,13 +56,13 @@ type Position struct {
 
   Direction int
 }
-func (c Position) ID() CID {
+func (c *Position) ID() CID {
   return PositionComponent
 }
-func (c Position) IsRenderable() bool {
+func (c *Position) IsRenderable() bool {
   return true
 }
-func (c Position) ToBinary() []byte {
+func (c *Position) ToBinary() []byte {
   buffer := new(bytes.Buffer)
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.X)); err != nil { fmt.Println("Error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.Y)); err != nil { fmt.Println("error!", err) }
@@ -73,13 +74,13 @@ type Dimension struct {
   W int
   H int
 }
-func (c Dimension) ID() CID {
+func (c *Dimension) ID() CID {
   return DimensionComponent
 }
-func (c Dimension) IsRenderable() bool {
+func (c *Dimension) IsRenderable() bool {
   return true
 }
-func (c Dimension) ToBinary() []byte {
+func (c *Dimension) ToBinary() []byte {
   buffer := new(bytes.Buffer)
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.W)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.H)); err != nil { fmt.Println("error!", err) }
@@ -93,13 +94,13 @@ type Sprite struct {
   H int
   SetIndex int
 }
-func (c Sprite) ID() CID {
+func (c *Sprite) ID() CID {
   return SpriteComponent
 }
-func (c Sprite) IsRenderable() bool {
+func (c *Sprite) IsRenderable() bool {
   return true
 }
-func (c Sprite) ToBinary() []byte {
+func (c *Sprite) ToBinary() []byte {
   buffer := new(bytes.Buffer)
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.X)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.Y)); err != nil { fmt.Println("error!", err) }
@@ -111,13 +112,13 @@ func (c Sprite) ToBinary() []byte {
 
 type Input struct {
 }
-func (c Input) ID() CID {
+func (c *Input) ID() CID {
   return InputComponent
 }
-func (c Input) IsRenderable() bool {
-  return true
+func (c *Input) IsRenderable() bool {
+  return false
 }
-func (c Input) ToBinary() []byte {
+func (c *Input) ToBinary() []byte {
   buffer := new(bytes.Buffer)
   return buffer.Bytes()
 }
@@ -127,16 +128,34 @@ type Render struct {
   ShouldTileX bool
   ShouldTileY bool
 }
-func (c Render) ID() CID {
+func (c *Render) ID() CID {
   return RenderComponent
 }
-func (c Render) IsRenderable() bool {
+func (c *Render) IsRenderable() bool {
   return true
 }
-func (c Render) ToBinary() []byte {
+func (c *Render) ToBinary() []byte {
   buffer := new(bytes.Buffer)
   if err := binary.Write(buffer, binary.LittleEndian, uint8(c.Layer)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, c.ShouldTileX); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, c.ShouldTileY); err != nil { fmt.Println("error!", err) }
+  return buffer.Bytes()
+}
+
+type Animation struct {
+  Type int
+  Frame int
+  IsAnimating bool
+}
+func (c *Animation) ID() CID {
+  return AnimationComponent
+}
+func (c *Animation) IsRenderable() bool {
+  return false
+}
+func (c *Animation) ToBinary() []byte {
+  buffer := new(bytes.Buffer)
+  if err := binary.Write(buffer, binary.LittleEndian, uint32(c.Type)); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, uint8(c.Frame)); err != nil { fmt.Println("error!", err) }
   return buffer.Bytes()
 }

@@ -69,13 +69,8 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
   }
   
   SDL_SetRenderDrawBlendMode(this->ren, SDL_BLENDMODE_BLEND);
-  /*Buffer buffer = Buffer{
-    initialData.c_str(),
-    initialData.size(),
-  };*/
 
   this->getMessages(initialData.c_str(), initialData.length());
-  //this->initGame(initialData);
 };
 
 /*
@@ -84,7 +79,7 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
  *  --------------
  *
  *  0. Init Game
- *  1+. Component
+ *  1-7. Component
  *
  */
 
@@ -101,7 +96,8 @@ void Renderer::getMessages(const char* buf, size_t size) {
         char* msg = new char[length];
         strncpy(msg, buf + index, length);
 
-        printf("init! %s\n", msg);
+        //printf(msg, "\n");
+
         this->initGame(msg);
 
         delete [] msg;
@@ -114,10 +110,9 @@ void Renderer::getMessages(const char* buf, size_t size) {
 
         auto x = ReadBytesOfString<uint32_t>(buf, &index, size);
         auto y = ReadBytesOfString<uint32_t>(buf, &index, size);
-        auto position = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto direction = ReadBytesOfString<uint32_t>(buf, &index, size);
 
-        manager->addComponent<PositionComponent>(eid, x, y, position);
-        printf("Position(%d): %d, %d, %d\n", eid, x, y, position);
+        manager->addComponent<PositionComponent>(eid, x, y, direction);
         break;
       }
       case MessageDef::RENDER: {
@@ -128,7 +123,6 @@ void Renderer::getMessages(const char* buf, size_t size) {
         auto shouldTileY = ReadBytesOfString<bool>(buf, &index, size);
 
         manager->addComponent<RenderComponent>(eid, layer, shouldTileX, shouldTileY);
-        printf("Render(%d): %d, %d, %d\n", eid, layer, shouldTileX, shouldTileY);
         break;
       }
       case MessageDef::DIMENSION: {
@@ -138,8 +132,16 @@ void Renderer::getMessages(const char* buf, size_t size) {
         auto h = ReadBytesOfString<uint32_t>(buf, &index, size);
 
         manager->addComponent<DimensionComponent>(eid, w, h);
-        printf("Dimension(%d): %d, %d\n", eid, w, h);
 
+        break;
+      }
+      case MessageDef::ANIMATION: {
+        auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        auto type = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto frame = ReadBytesOfString<uint8_t>(buf, &index, size);
+
+        manager->addComponent<AnimationComponent>(eid, type, frame);
         break;
       }
       case MessageDef::SPRITE: {
@@ -152,7 +154,10 @@ void Renderer::getMessages(const char* buf, size_t size) {
         auto textureIndex = ReadBytesOfString<uint32_t>(buf, &index, size);
 
         manager->addComponent<SpriteComponent>(eid, x, y, w, h, textureIndex);
-        printf("Sprite(%d): %d, %d, %d, %d, %d\n", eid, x, y, w, h, textureIndex);
+        break;
+      }
+      default: {
+        printf("Error!!!");
         break;
       }
     }
@@ -256,63 +261,16 @@ void Renderer::initGame(char* initialData) {
   manager->addComponent<PositionComponent>(camera, 0, 0);
   manager->saveSpecial("camera", camera);
 
-  //string initialPayload = game_data.at("InitialPayload").dump();
-  //int len = initialPayload.size();
-  //for (int i = 0; i < len; i++) printf("%d", initialPayload[i]);
-
-  //this->loadStage(initialPayload);
-
-  //this->getComponentsFromBinary(initialPayload);
   this->resize(1200, 800);
 
-
-  this->registerSystem<InputSystem>(manager);
   this->registerSystem<NetworkingSystem>(manager);
+  this->registerSystem<InputSystem>(manager);
   this->registerSystem<CameraSystem>(manager);
   this->registerSystem<RenderSystem>(manager);
 }
 
 void Renderer::loadStage(string initialPayload) {
-
 }
-
-void Renderer::getComponentsFromBinary(string d) {
-  /*
-  const char* data = d.c_str();
-  Buffer buffer = Buffer{
-    data,
-    d.size(),
-  };
-  
-  int CID = ReadBytes<uint8_t>(buffer);
-  printf("CID: %d\n", CID);
-
-  int EID = ReadBytes<uint64_t>(buffer);
-  printf("EID: %d\n", EID);
-
-  if (CID == ComponentDef::HEALTH) {
-    int ch = ReadBytes<uint8_t>(buffer);
-    int mh = ReadBytes<uint8_t>(buffer);
-    int ce = ReadBytes<uint8_t>(buffer);
-    int me = ReadBytes<uint8_t>(buffer);
-
-    printf("ch: %d, mh: %d, ce: %d, me: %d\n", ch, mh, ce, me);
-  }
-  else if (CID == ComponentDef::POSITION) {
-    int x = ReadBytes<uint32_t>(buffer);
-    int y = ReadBytes<uint32_t>(buffer);
-    int position = ReadBytes<uint32_t>(buffer);
-
-    printf("x: %d, y: %d, position: %d\n", x, y, position);
-  }
-
-  for (int i = 0; i < 100; i++) {
-    printf("%d ", buffer.data[i]);
-  }
-  printf("\n");
-   */
-}
-
 
 void Renderer::loop(float dt) {
   SDL_Event event;

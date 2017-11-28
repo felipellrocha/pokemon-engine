@@ -1,6 +1,10 @@
 import { handleActions } from 'redux-actions';
 
 import {
+  setIn,
+} from 'timm';
+
+import {
   EMPTY,
 } from 'utils/constants';
 
@@ -91,10 +95,7 @@ export default handleActions({
     };
   },
   SELECT_ANIMATION: (state, action) => {
-    return {
-      ...state,
-      selectedAnimation: action.name,
-    };
+    return setIn(state, ['selectedAnimation'], action.index);
   },
   SELECT_LAYER: (state, action) => {
     return Object.assign({}, state, { selectedLayer: action.layer });

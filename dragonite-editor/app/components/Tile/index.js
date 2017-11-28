@@ -159,6 +159,7 @@ class component extends PureComponent {
       tile,
       grid,
       basepath,
+      tilesets,
       tileIndex: id,
       entities,
       className,
@@ -188,7 +189,9 @@ class component extends PureComponent {
 
       switch (component.name) {
         case 'SpriteComponent':
-          const src = path.resolve(basepath, member('src'));
+          const tileset = tilesets[member('src')];
+          const src = path.resolve(basepath, tileset['src']);
+
           style.height = (member('h') > 0) ? member('h') : style.height;
           style.width = (member('w') > 0) ? member('w') : style.width;
           style.backgroundImage = `url('file://${src}')`;

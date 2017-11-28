@@ -99,25 +99,23 @@ class AnimationSidebar extends PureComponent {
         <h1>Animations</h1>
         <div className="animations separator">
           <h3>Animations</h3>
-          {Object.keys(animations).map((key, i) => {
-            const animation = animations[key];
-
+          {animations.map((animation, i) => {
             const classes = classnames('animation', {
-              selected: selectedAnimation === key,
+              selected: selectedAnimation === i,
             });
 
             return (
               <div
                 className={classes}
                 key={animation.id}
-                onClick={() => selectAnimation(key)}
+                onClick={() => selectAnimation(i)}
               >
                 <div>
                   <label>Name:</label>
                   <input
                     type="text"
-                    value={key}
-                    onChange={event => changeAnimationName(key, event.target.value)}
+                    value={animation.name}
+                    onChange={event => changeAnimationName(i, event.target.value)}
                   />
                 </div>
                 <div>
@@ -125,7 +123,7 @@ class AnimationSidebar extends PureComponent {
                   <input
                     type="number"
                     value={animation.numberOfFrames}
-                    onChange={event => changeAnimationFrameLength(key, event.target.value)}
+                    onChange={event => changeAnimationFrameLength(i, event.target.value)}
                   />
                 </div>
                 <div>
@@ -133,10 +131,10 @@ class AnimationSidebar extends PureComponent {
                   <select
                     type="select"
                     value={animation.spritesheet}
-                    onChange={event => changeAnimationSpritesheet(key, event.target.value)}
+                    onChange={event => changeAnimationSpritesheet(i, event.target.value)}
                   >
-                    {sheets.map((sheet, i) => {
-                      return (<option key={sheet.src} value={i}>{sheet.name}</option>);
+                    {sheets.map((sheet, j) => {
+                      return (<option key={sheet.src} value={j}>{sheet.name}</option>);
                     })}
                   </select>
                 </div>

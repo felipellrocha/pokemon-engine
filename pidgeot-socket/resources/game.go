@@ -11,9 +11,13 @@ func (r *Resource) CreateGame(c *gin.Context) {
   uuid := uuid.NewV4().String()
 
   hub := NewHub()
-  r.Connections[uuid] = hub
+  //r.Connections[uuid] = hub
+  r.Connections["test"] = hub
 
-  go hub.Run()
+  go hub.Listen()
+  go hub.Loop()
+
+  //fmt.Println("%#v\n", hub.World)
 
   response := gin.H{
     "status": "ok",

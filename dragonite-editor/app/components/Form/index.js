@@ -40,6 +40,7 @@ class Form extends PureComponent {
   renderInput(field, i) {
     const {
       tilesets,
+      animations,
     } = this.props;
 
     if (field.type === 'int') {
@@ -68,14 +69,28 @@ class Form extends PureComponent {
         </div>
       );
     }
-    else if (field.type === 'TextureSource') {
-      const value = (field.value) ? field.value : '';
+    else if (field.type === 'AnimationType') {
+      const value = field.value ? parseInt(field.value) : 0;
       return (
         <div className="value">
-          <select value={value} onChange={event => this.handleChange(event.target.value, field, i)}>
-            { tilesets.map(tileset => {
+          <select value={value} onChange={event => this.handleChange(parseInt(event.target.value), field, i)}>
+            { animations.map((animation, index) => {
               return (
-                <option key={tileset.src} value={tileset.src}>{tileset.name}</option>
+                <option key={animation.id} value={index}>{animation.name}</option>
+              );
+            })}
+          </select>
+        </div>
+      )
+    }
+    else if (field.type === 'TextureSource') {
+      const value = field.value ? parseInt(field.value) : 0;
+      return (
+        <div className="value">
+          <select value={value} onChange={event => this.handleChange(parseInt(event.target.value), field, i)}>
+            { tilesets.map((tileset, index) => {
+              return (
+                <option key={tileset.src} value={index}>{tileset.name}</option>
               );
             })}
           </select>
@@ -242,5 +257,6 @@ const toggleBit = (value, bit) => {
 export default connect(
   state => ({
     tilesets: state.app.tilesets,
+    animations: state.app.animations,
   }),
 )(Form);

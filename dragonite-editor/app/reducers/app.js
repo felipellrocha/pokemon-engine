@@ -3,6 +3,12 @@ import { handleActions } from 'redux-actions';
 import path from 'path';
 
 import {
+  addLast,
+  updateIn,
+  setIn,
+} from 'timm';
+
+import {
   arrayReplace,
   arrayRemove,
 	UUID,
@@ -179,66 +185,31 @@ export default handleActions({
     }
   },
   ADD_ANIMATION: (state, action) => {
-    return {
-      ...state,
-      animations: {
-        ...state.animations,
-        [action.name]: {
-          id: UUID(),
-          numberOfFrames: 32,
-          sheet: 0,
-          spritesheet: 0,
-          keyframes: {
-            0: {
-              x: 0,
-              y: 0,
-              w: state.tile.width,
-              h: state.tile.height,
-            },
-          },
-        }
-      }
-    }
-  },
-  CHANGE_ANIMATION_FRAME_LENGTH: (state, action) => {
-    return {
-      ...state,
-      animations: {
-        ...state.animations,
-        [action.name]: {
-          ...state.animations[action.name],
-          numberOfFrames: parseInt(action.numberOfFrames),
-        }
-      },
-    }
-  },
-  CHANGE_ANIMATION_SPRITESHEET: (state, action) => {
-    return {
-      ...state,
-      animations: {
-        ...state.animations,
-        [action.name]: {
-          ...state.animations[action.name],
-          spritesheet: parseInt(action.sheet),
+    const newAnimation = {
+      id: UUID(),
+      name: action.name,
+      numberOfFrames: 32,
+      sheet: 0,
+      spritesheet: 0,
+      keyframes: {
+        0: {
+          x: 0,
+          y: 0,
+          w: state.tile.width,
+          h: state.tile.height,
         },
       },
-    }
+    };
+    return updateIn(state, ['animations'], prev => addLast(prev, newAnimation));
+  },
+  CHANGE_ANIMATION_FRAME_LENGTH: (state, action) => {
+    return setIn(state, ['animations', action.index, 'numberOfFrames'], parseInt(action.numberOfFrames));
+  },
+  CHANGE_ANIMATION_SPRITESHEET: (state, action) => {
+    return setIn(state, ['animations', action.index, 'spritesheet'], parseInt(action.sheet));
   },
   CHANGE_ANIMATION_NAME: (state, action) => {
-    const {
-      animations: {
-        [action.name]: animation,
-        ...animations,
-      }
-    } = state;
-
-    return {
-      ...state,
-      animations: {
-        ...animations,
-        [action.newName]: animation,
-      },
-    }
+    return setIn(state, ['animations', action.index, 'name'], parseInt(action.name));
   },
   DELETE_KEYFRAME: (state, action) => {
     const {
@@ -280,22 +251,7 @@ export default handleActions({
 
     const frame = getFrame(state.animations[selectedAnimation].keyframes, selectedFrame);
 
-    return {
-      ...state,
-      animations: {
-        ...state.animations,
-        [selectedAnimation]: {
-          ...state.animations[selectedAnimation],
-          keyframes: {
-            ...state.animations[selectedAnimation].keyframes,
-            [selectedFrame]: {
-              ...frame,
-              ...coord,
-            }
-          }
-        }
-      }
-    }
+    return setIn(state, ['animations', selectedAnimation, 'keyframes', selectedFrame], {...frame, ...coord});
   },
   CHANGE_TILE_WIDTH: (state, action) => {
     return {

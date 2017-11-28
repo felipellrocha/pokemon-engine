@@ -37,6 +37,7 @@ preprocessorLine
     = ('#' (!__.)* __)
     / ('typedef' (!';' .)* ';' __)
     / ('using' (!';' .)* ';' __)
+    / ('enum' (!';' .)* ';' __)
     {
         return {
             type: 'IGNORE',
@@ -50,6 +51,7 @@ propertyTypes =
   "int" /
   "script" /
   "point" /
+  "AnimationType" /
   "TextureSource" /
   "ResolverType" /
   "TileLayer" /
@@ -68,13 +70,13 @@ property
 {
   const v = (function() {
     if (!value) {
-      if (['int', 'ResolverType'].includes(property)) return 0;
+      if (['int', 'ResolverType', 'AnimationType'].includes(property)) return 0;
       if (property === 'string') return '';
       if (property === 'point') return {x: 0, y: 0};
       if (property === 'bool') return false;
     }
     else {
-      if (['int', 'ResolverType'].includes(property)) return parseInt(value[1]);
+      if (['int', 'ResolverType', 'AnimationType'].includes(property)) return parseInt(value[1]);
       if (property === 'string') return value[1];
       if (property === 'bool') return value[1] === 'true';
     }

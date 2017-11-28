@@ -1,13 +1,13 @@
 #include "networking.h"
 
 void NetworkingSystem::update(float dt) {
-  if (game->socket->getReadyState() != WebSocket::CLOSED) {
-    //printf("Am i here?");
-    WebSocket::pointer wsp = game->socket;
+  auto game = this->game;
 
-    game->socket->poll();
-    game->socket->dispatch([wsp](const string& message) {
-      printf("Message received!\n> %s\n", message.c_str());
+  if (game->socket->getReadyState() != WebSocket::CLOSED) {
+    game->socket->poll(0);
+    
+    game->socket->dispatch([game](const string& message) {
+      game->getMessages(message.c_str(), message.length());
     });
   }
 };

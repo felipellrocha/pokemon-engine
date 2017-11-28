@@ -200,7 +200,8 @@
     "redux-actions": "^2.0.1",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.0",
-    "source-map-support": "^0.4.10"
+    "source-map-support": "^0.4.10",
+    "timm": "^1.4.0"
   },
   "devEngines": {
     "node": ">=6.x",

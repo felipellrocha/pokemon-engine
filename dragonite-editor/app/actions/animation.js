@@ -35,37 +35,37 @@ export function addAnimation(name) {
 }
 
 export const CHANGE_ANIMATION_FRAME_LENGTH = 'CHANGE_ANIMATION_FRAME_LENGTH';
-export function changeAnimationFrameLength(name, numberOfFrames) {
+export function changeAnimationFrameLength(index, numberOfFrames) {
   return {
     type: CHANGE_ANIMATION_FRAME_LENGTH,
-    name,
+    index,
     numberOfFrames,
   }
 }
 
 export const CHANGE_ANIMATION_NAME = 'CHANGE_ANIMATION_NAME';
-export function changeAnimationName(name, newName) {
+export function changeAnimationName(index, name) {
   return {
     type: CHANGE_ANIMATION_NAME,
+    index,
     name,
-    newName,
   }
 }
 
 export const CHANGE_ANIMATION_SPRITESHEET = 'CHANGE_ANIMATION_SPRITESHEET';
-export function changeAnimationSpritesheet(name, sheet) {
+export function changeAnimationSpritesheet(index, sheet) {
   return {
     type: CHANGE_ANIMATION_SPRITESHEET,
-    name,
+    index,
     sheet,
   }
 }
 
 export const SELECT_ANIMATION = 'SELECT_ANIMATION';
-export function selectAnimation(name) {
+export function selectAnimation(index) {
   return {
     type: SELECT_ANIMATION,
-    name,
+    index,
   }
 }
 

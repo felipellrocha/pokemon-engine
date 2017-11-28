@@ -1,7 +1,7 @@
 {
-  "filename": "/Users/fllr/Development/game/targaryen/assets/metroidvania/game.targ",
-  "basepath": "/Users/fllr/Development/game/targaryen/assets/metroidvania",
-  "componentFilename": "/Users/fllr/Development/game/targaryen/src/game/components.h",
+  "filename": "/Users/fllr/.go/src/fighter/pidgeot-socket/assets/game.targ",
+  "basepath": "/Users/fllr/.go/src/fighter/pidgeot-socket/assets",
+  "componentFilename": "/Users/fllr/.go/src/fighter/pikachu-engine/src/game/components.h",
   "zoom": "1",
   "selectingShape": false,
   "selectedMap": 0,
@@ -12,7 +12,7 @@
     0
   ],
   "selectedLayer": 5,
-  "selectedAnimation": "player-idle",
+  "selectedAnimation": 0,
   "selectedFrame": 0,
   "selectedShape": {
     "columns": 1,
@@ -58,20 +58,7 @@
     },
     {
       "name": "DimensionComponent",
-      "members": {
-        "w": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "w"
-        },
-        "h": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "h"
-        }
-      }
+      "members": {}
     },
     {
       "name": "SpriteComponent",
@@ -100,11 +87,11 @@
           "value": 0,
           "name": "h"
         },
-        "src": {
+        "texture": {
           "type": "TextureSource",
           "pointer": false,
           "value": null,
-          "name": "src"
+          "name": "texture"
         }
       }
     },
@@ -217,6 +204,17 @@
     {
       "name": "WalkComponent",
       "members": {}
+    },
+    {
+      "name": "AnimationComponent",
+      "members": {
+        "animation": {
+          "type": "AnimationType",
+          "pointer": false,
+          "value": 0,
+          "name": "animation"
+        }
+      }
     },
     {
       "name": "ColorComponent",

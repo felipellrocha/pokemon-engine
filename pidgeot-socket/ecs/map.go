@@ -1,4 +1,4 @@
-package resources
+package ecs
 
 import (
   "fmt"
@@ -69,7 +69,7 @@ func (r *Tile) UnmarshalJSON(data []byte) error {
   return nil
 }
 
-func getMap(mapName string) (*Map, error) {
+func GetMap(mapName string) (*Map, error) {
   filename := fmt.Sprintf("./assets/game.targ/maps/%s.json", mapName)
   file, err := ioutil.ReadFile(filename)
 
