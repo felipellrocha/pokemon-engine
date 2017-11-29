@@ -18,6 +18,7 @@ class EntityComponent extends Component {
     const {
       id,
       rect,
+      index,
       entity: entityId,
       disableMouseEvents,
       selectedObject,
@@ -36,7 +37,7 @@ class EntityComponent extends Component {
     if (disableMouseEvents) rect['pointerEvents'] = 'none';
 
     const classes = classnames('object', {
-      selected: selectedObject === id,
+      selected: selectedObject === index,
     });
 
     const entity = entities[entityId];
@@ -63,7 +64,7 @@ const Entity = connect(
       e.preventDefault();
       e.stopPropagation();
       e.nativeEvent.stopImmediatePropagation();
-      dispatch(selectObject(props.id))
+      dispatch(selectObject(props.index))
     },
   }),
 )(EntityComponent);
@@ -193,8 +194,8 @@ class Objects extends PureComponent {
         onMouseUp={this.onMouseUp}
       >
         {mouseDown && <div className="selection" style={selectionRect} />}
-        {Object.values(layer.data).map(entity =>
-          (<Entity {...entity} key={entity.id} disableMouseEvents={mouseDown} />)
+        {layer.data.map(([setIndex, entity], index) =>
+          (<Entity {...entity} index={index} key={entity.id} disableMouseEvents={mouseDown} />)
         )}
       </div>
     );

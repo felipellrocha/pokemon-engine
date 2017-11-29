@@ -19,11 +19,11 @@ CXX_FLAGS = \
 	-Wno-shadow \
 	-Wsign-compare \
 	-pedantic \
-	-O2 \
 	-s SOCKET_DEBUG=1 \
 	-s USE_SDL=2 \
 	-s USE_SDL_IMAGE=2 \
 	-s USE_SDL_TTF=2 \
+  -s EXCEPTION_DEBUG=1 \
 	-s SDL2_IMAGE_FORMATS='["png"]' \
 	-s MODULARIZE=1 \
 	-s DISABLE_EXCEPTION_CATCHING=0 \
@@ -31,13 +31,16 @@ CXX_FLAGS = \
 	-s "BINARYEN_METHOD='native-wasm'" \
   -s ASSERTIONS=1 \
 	-s TOTAL_MEMORY=1024MB \
-	-D DRAW_COLLISION 
+	-D DRAW_COLLISION \
+  -g4
 	#-s SAFE_HEAP=1
 	#--profiling-funcs
+  #-O2
 	#--emit-symbol-map
 	#-D DRAW_FPS 
 EXEC_FLAGS = \
 	--preload-file assets \
+  --disable-debug-info-type-map \
 	-s EXPORTED_FUNCTIONS='["_initialize", "_resize"]' \
 	--emrun
 LIBS :=

@@ -25243,6 +25243,28 @@
           0
         ]
       ]
+    },
+    {
+      "id": "2ee816c3-03b9-4754-bc9a-7d3d3f303bf8",
+      "type": "object",
+      "name": "action",
+      "visible": true,
+      "data": [
+        [
+          -3,
+          {
+            "id": "297ec32e-dd6b-4c96-ac60-dac5f678865a",
+            "rect": {
+              "x": 220,
+              "y": 248,
+              "w": 67,
+              "h": 37
+            },
+            "components": [],
+            "entity": "6d7ffb40-784d-473c-8819-7d147e28c28d"
+          }
+        ]
+      ]
     }
   ]
 }

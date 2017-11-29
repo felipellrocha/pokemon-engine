@@ -51,7 +51,9 @@ const ws = proxy({
 app.use('/socket', ws);
 
 app.get('/*', async (req, res) => {
-  res.render('app.ejs');
+  res.render('app.ejs', {
+    host: req.headers.host,
+  });
 });
 
 console.log(`Listening at ${HOST}:${PORT}`);

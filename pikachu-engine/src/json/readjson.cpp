@@ -1,4 +1,5 @@
-#include "readjson.h"
+/*
+ #include "readjson.h"
 
 json readFile(const string &fileName)
 {
@@ -14,3 +15,4 @@ json readFile(const string &fileName)
   return json::parse(string(&bytes[0], fileSize));
 
 }
+*/

@@ -11,6 +11,7 @@ import (
 const (
   EMPTY_SET = -1
   ENTITY_SET = -2
+  OBJECT_SET = -3
 )
 
 type Grid struct {
@@ -38,10 +39,23 @@ type Map struct {
   Layers []Layer `json:"layers"`
 }
 
+type Rect struct {
+  X int `json:"x"`
+  Y int `json:"y"`
+  W int `json:"w"`
+  H int `json:"h"`
+}
+
+type ObjectDescription struct {
+  EntityId string `json:"entity"`
+  Rect Rect `json:"rect"`
+}
+
 type Tile struct {
   SetIndex int
   TileIndex int
   EntityId string
+  ObjectDescription ObjectDescription
 }
 
 func (r *Tile) UnmarshalJSON(data []byte) error {
@@ -50,19 +64,22 @@ func (r *Tile) UnmarshalJSON(data []byte) error {
     return err
   }
 
-  i, err := strconv.Atoi(string(values[0]))
+  setIndex, err := strconv.Atoi(string(values[0]))
 
-  if err != nil { return fmt.Errorf("Could not unpack SetIndex: %d", i) }
+  if err != nil { return fmt.Errorf("Could not unpack SetIndex: %d", setIndex) }
 
-  if i >= -1 {
-    j, err := strconv.Atoi(string(values[1]))
+  if setIndex >= EMPTY_SET {
+    tileIndex, err := strconv.Atoi(string(values[1]))
 
-    if err != nil { return fmt.Errorf("Could not unpack TileIndex: %d", j)  }
+    if err != nil { return fmt.Errorf("Could not unpack TileIndex: %d", tileIndex)  }
 
-    r.SetIndex = i
-    r.TileIndex = j
-  } else if i == ENTITY_SET {
-    r.SetIndex = i
+    r.SetIndex = setIndex
+    r.TileIndex = tileIndex
+  } else if setIndex == OBJECT_SET {
+    r.SetIndex = setIndex
+    if err := json.Unmarshal(values[1], &r.ObjectDescription); err != nil { return fmt.Errorf("Could not unpack object set: %s\n%s", values[1], err) }
+  } else if setIndex == ENTITY_SET {
+    r.SetIndex = setIndex
     r.EntityId = strings.Trim(string(values[1]), "\"")
   }
 

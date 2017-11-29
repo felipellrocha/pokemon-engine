@@ -26,6 +26,12 @@ func main() {
   router.GET("/game/:game_id", resource.JoinGame)
   router.GET("/games", resource.ListGames)
 
+  hub := resources.NewHub()
+  resource.Connections["test"] = hub
+
+  go hub.Listen()
+  go hub.Loop()
+
   fmt.Println("Listening on port 8000")
 
   router.Run(":8000")

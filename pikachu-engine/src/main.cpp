@@ -42,28 +42,35 @@ extern "C" {
 
   int initialize() {
     fpsTimer.start();
+    try {
+      WebSocket::pointer socket = WebSocket::simple_socket();
+      string data;
+      printf("connecting...\n");
+      for (int hasResponded = 0; socket->getReadyState() != WebSocket::CLOSED && hasResponded < 1; hasResponded++) {
+        socket->poll(-1);
+        socket->dispatch([&data](const string& message) {
+          printf("connected!\n");
+          data = message;
+        });
 
-    WebSocket::pointer socket = WebSocket::simple_socket();
-    string response;
-    //printf("connecting...\n");
-    //socket->poll(0);
-    socket->dispatch([&response](const string& message) {
-      printf("connected!\n");
-      response = message;
-      printf("Waiting for response...\n");
+        printf("message: %s\n", data.c_str());
+      }
 
-      printf("message: %s\n", message.c_str());
-    });
+      //emscripten_async_call((em_arg_callback_func)getFromSocket, socket, 0);
 
-    //emscripten_async_call((em_arg_callback_func)getFromSocket, socket, 0);
+      EntityManager *manager = new EntityManager();
+      Renderer game = Renderer(data, "assets/metroidvania/", socket, manager, 100, 100);
 
-    //EntityManager *manager = new EntityManager();
-    //Renderer game = Renderer(response, "assets/metroidvania/", socket, manager, 100, 100);
+      emscripten_set_main_loop_arg((em_arg_callback_func)loop, &game, -1, 1);
+      
+    } catch (const exception &e) {
+      cout << "Uncaught exception: " << e.what() << "!" << endl;
+    } catch (...) {
+      cout << "Uncaught unknown exception!" << endl;
+    }
 
-    //emscripten_set_main_loop_arg((em_arg_callback_func)loop, &game, -1, 1);
-
-    //SDL_Quit();
-    //return 0;
+    SDL_Quit();
+    return 0;
   }
 }
 #else
@@ -74,21 +81,23 @@ int main() {
   //getline(cin, id);
 
   //string url = "ws://localhost:8000/game/" + string(id);
-  string url = "ws://localhost:8000/game/test";
+  //string url = "ws://localhost:8000/game/test";
+  //string url = "ws://localhost:9000/socket/game/" + string(id);
+  string url = "ws://localhost:9000/socket/game/test";
 
   WebSocket::pointer socket = WebSocket::from_url(url);
 
   string data;
   for (int hasResponded = 0; socket->getReadyState() != WebSocket::CLOSED && hasResponded < 1; hasResponded++) {
     socket->poll(-1);
-    socket->dispatch([socket, &hasResponded, &data](const string& message) {
+    socket->dispatch([&data](const string& message) {
       printf("received!\n");
 
       data = message;
     });
     printf("Waiting for responses...\n");
   }
-  //printf("message: %s", components.c_str());
+  printf("message: %s", data.c_str());
 
   fpsTimer.start();
   

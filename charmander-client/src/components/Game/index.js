@@ -36,8 +36,8 @@ class Game extends Component {
             printErr: console.error.bind(console),
             canvas: document.querySelector('canvas'),
             websocket: {
-              url: `ws://localhost:9000/socket/game/${gameId}`,
-              subprotocol: 'json, binary',
+              url: `ws://${window.location.host}/socket/game/${gameId}`,
+              subprotocol: 'binary',
             },
             locateFile: function (file) {
               return `/engine/${file}`;
@@ -51,7 +51,12 @@ class Game extends Component {
 
               try {
                 initialize();
-              } catch(e) { console.log('Error found: ', e, e.stack) };
+              } catch(e) {
+                if (e !== "SimulateInfiniteLoop") {
+                  console.log('Error found: ', e, e.stack);
+                  return;
+                }
+              };
               resize(width, height);
 
 

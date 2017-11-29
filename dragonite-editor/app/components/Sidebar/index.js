@@ -53,17 +53,9 @@ class LayerComponent extends PureComponent {
     this.handleMoveLayerUp = this.handleMoveLayerUp.bind(this);
     this.handleMoveLayerDown = this.handleMoveLayerDown.bind(this);
     this.handleRemoveLayer = this.handleRemoveLayer.bind(this);
-    this.handleAddLayer = this.handleAddLayer.bind(this);
     this.handleToggleVisibility = this.handleToggleVisibility.bind(this);
   }
 
-  handleAddLayer() {
-    const {
-      dispatch,
-    } = this.props;
-
-    dispatch(addLayer());
-  }
 
   handleMoveLayerUp() {
     const {
@@ -188,10 +180,20 @@ class component extends PureComponent {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
 
+    this.handleAddLayer = this.handleAddLayer.bind(this);
+
     this.state = {
       initialIndex: 0,
       selecting: false,
     };
+  }
+
+  handleAddLayer() {
+    const {
+      dispatch,
+    } = this.props;
+
+    dispatch(addLayer());
   }
 
   handleSelectTiles() {
@@ -390,7 +392,7 @@ class component extends PureComponent {
       preview['width'] = `${width}px`;
       preview['height'] = `${height}px`;
     }
-    
+
     return (
       <div className={styles.component}>
         <h1>{ name }</h1>

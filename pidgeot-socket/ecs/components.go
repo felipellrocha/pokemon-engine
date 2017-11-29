@@ -17,6 +17,7 @@ const (
   InputComponent = 5
   RenderComponent = 6
   AnimationComponent = 7
+  CollisionComponent = 8
 )
 
 type Component interface {
@@ -157,5 +158,32 @@ func (c *Animation) ToBinary() []byte {
   buffer := new(bytes.Buffer)
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.Type)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint8(c.Frame)); err != nil { fmt.Println("error!", err) }
+  return buffer.Bytes()
+}
+
+type Collision struct {
+  IsStatic bool
+  IsColliding bool
+
+  X int
+  Y int
+  W int
+  H int
+}
+func (c *Collision) ID() CID {
+  return CollisionComponent
+}
+func (c *Collision) IsRenderable() bool {
+  return false
+}
+func (c *Collision) ToBinary() []byte {
+  buffer := new(bytes.Buffer)
+  if err := binary.Write(buffer, binary.LittleEndian, bool(c.IsStatic)); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, bool(c.IsColliding)); err != nil { fmt.Println("error!", err) }
+
+  if err := binary.Write(buffer, binary.LittleEndian, uint32(c.X)); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, uint32(c.Y)); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, uint32(c.W)); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, uint32(c.H)); err != nil { fmt.Println("error!", err) }
   return buffer.Bytes()
 }

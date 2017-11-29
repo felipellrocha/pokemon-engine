@@ -10,6 +10,9 @@ module.exports = {
     application: './src/index.js',
   },
   devtool: 'source-map',
+  devServer: {
+    disableHostCheck: true,
+  },
   output: {
     path: path.join(__dirname, 'build'),
     filename: '[name].js',

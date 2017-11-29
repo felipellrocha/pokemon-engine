@@ -261,6 +261,7 @@ class _RealWebSocket : public easywsclient::WebSocket
         _dispatchBinary(bytesCallback);
     }
 
+#ifndef EMSCRIPTEN
     virtual void _dispatchBinary(BytesCallback_Imp & callable) {
         // TODO: consider acquiring a lock on rxbuf...
         while (true) {
@@ -311,6 +312,7 @@ class _RealWebSocket : public easywsclient::WebSocket
             if (rxbuf.size() < ws.header_size+ws.N) { return; /* Need: ws.header_size+ws.N - rxbuf.size() */ }
 
             // We got a whole message, now do something with it:
+            //printf(ws.opcode);
             if (false) { }
             else if (
                    ws.opcode == wsheader_type::TEXT_FRAME 
@@ -337,6 +339,23 @@ class _RealWebSocket : public easywsclient::WebSocket
             rxbuf.erase(rxbuf.begin(), rxbuf.begin() + ws.header_size+(size_t)ws.N);
         }
     }
+#else
+    virtual void _dispatchBinary(BytesCallback_Imp & callable) {
+      // TODO: consider acquiring a lock on rxbuf...
+      /*
+      printf("rx: %s\n", (char*)rxbuf);
+      printf("tx: %s\n", (char*)txbuf);
+      printf("received: %s\n", (char*)receivedData);
+
+      callable((const std::vector<uint8_t>) receivedData);
+      receivedData.erase(receivedData.begin(), receiveData.end());
+      std::vector<uint8_t> ().swap(receivedData); // free memory
+       */
+      callable((const std::vector<uint8_t>) rxbuf);
+      rxbuf.erase(rxbuf.begin(), rxbuf.end());
+      std::vector<uint8_t> ().swap(rxbuf); // free memory
+    }
+#endif
 
     void sendPing() {
         std::string empty;

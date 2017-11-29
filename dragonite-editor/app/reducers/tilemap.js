@@ -41,6 +41,12 @@ import {
   makeRect,
 } from 'utils';
 
+import {
+  addLast,
+  updateIn,
+  setIn,
+} from 'timm';
+
 export const initialState = {
   grid: {
     columns: 10,
@@ -213,26 +219,7 @@ export default handleActions({
       id,
     } = action;
 
-    const layer = state.layers[selectedLayer];
-    const object = layer.data[selectedObject];
-
-    return  {
-      ...state,
-      layers: [
-        ...state.layers.slice(0, selectedLayer),
-        {
-          ...layer,
-          data: {
-            ...layer.data,
-            [selectedObject]: {
-              ...object,
-              entity: id,
-            }
-          }
-        },
-        ...state.layers.slice(selectedLayer + 1, state.layers.length),
-      ],
-    }
+    return setIn(state, ['layers', selectedLayer, 'data', selectedObject, 1, 'entity'], id);
   },
   PUT_DOWN_OBJECT: (state, action) => {
     const {
@@ -248,25 +235,17 @@ export default handleActions({
     const layer = state.layers[selectedLayer];
     const id = UUID();
 
-    return {
-      ...state,
-      layers: [
-        ...state.layers.slice(0, selectedLayer),
-        {
-          ...layer,
-          data: {
-            ...layer.data,
-            [id]: {
-              id,
-              rect: { x, y, w, h },
-              components: [],
-              entity: '',
-            }
-          },
-        },
-        ...state.layers.slice(selectedLayer + 1, state.layers.length),
-      ]
-    };
+    const newObject = [
+      -3, 
+      {
+        id,
+        rect: { x, y, w, h },
+        components: [],
+        entity: '',
+      }
+    ];
+
+    return updateIn(state, ['layers', selectedLayer, 'data'], prev => [...prev, newObject]);
   },
   PUT_DOWN_TILE: (state, action) => {
     const {

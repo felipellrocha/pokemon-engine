@@ -8,8 +8,11 @@
 // wget https://raw.github.com/dhbaird/easywsclient/master/easywsclient.hpp
 // wget https://raw.github.com/dhbaird/easywsclient/master/easywsclient.cpp
 
+#include <stdio.h>
 #include <string>
 #include <vector>
+
+using namespace std;
 
 namespace easywsclient {
 

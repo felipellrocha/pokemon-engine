@@ -70,6 +70,19 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
   
   SDL_SetRenderDrawBlendMode(this->ren, SDL_BLENDMODE_BLEND);
 
+
+  EID camera = manager->createEntity();
+  manager->addComponent<DimensionComponent>(camera, this->windowWidth, this->windowHeight);
+  manager->addComponent<PositionComponent>(camera, 0, 0);
+  manager->saveSpecial("camera", camera);
+
+  this->resize(1200, 800);
+
+  this->registerSystem<NetworkingSystem>(manager);
+  this->registerSystem<InputSystem>(manager);
+  this->registerSystem<CameraSystem>(manager);
+  this->registerSystem<RenderSystem>(manager);
+
   this->getMessages(initialData.c_str(), initialData.length());
 };
 
@@ -94,9 +107,10 @@ void Renderer::getMessages(const char* buf, size_t size) {
         // read message length
         auto length = ReadBytesOfString<uint64_t>(buf, &index, size);
         char* msg = new char[length];
+        //msg[length + 1] = '\0';
         strncpy(msg, buf + index, length);
 
-        //printf(msg, "\n");
+        printf(msg, "\n");
 
         this->initGame(msg);
 
@@ -256,17 +270,6 @@ void Renderer::initGame(char* initialData) {
     this->animations[key] = anim;
   }
 
-  EID camera = manager->createEntity();
-  manager->addComponent<DimensionComponent>(camera, this->windowWidth, this->windowHeight);
-  manager->addComponent<PositionComponent>(camera, 0, 0);
-  manager->saveSpecial("camera", camera);
-
-  this->resize(1200, 800);
-
-  this->registerSystem<NetworkingSystem>(manager);
-  this->registerSystem<InputSystem>(manager);
-  this->registerSystem<CameraSystem>(manager);
-  this->registerSystem<RenderSystem>(manager);
 }
 
 void Renderer::loadStage(string initialPayload) {

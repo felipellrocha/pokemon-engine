@@ -79,7 +79,7 @@ class component extends PureComponent {
     } = this.props;
 
     const layer = layers[selectedLayer];
-    const object = layer.data[selectedObject];
+    const object = layer.data[selectedObject] && layer.data[selectedObject][1];
 
     return (
       <div className="actions">
@@ -116,7 +116,7 @@ class component extends PureComponent {
 
     const leftSide = (() => {
       if (layer && layer.type === 'object') {
-        if (selectedObject) return this.renderObject();
+        if (selectedObject >= 0) return this.renderObject();
         else (<div className="actions" />);
       } else {
         return this.renderTile()
@@ -153,7 +153,9 @@ export default compose(
       handleGrid: () => dispatch(toggleHideGrid()),
       handleChangeTileMethod: (value) => dispatch(changeTilingMethod(value)),
       handleChangeZoom: (e) => dispatch(changeZoom(e.target.value)),
-      handleChangeEntity: (e) => dispatch(changeEntityForObject(e.target.value)),
+      handleChangeEntity: (e) => {
+        dispatch(changeEntityForObject(e.target.value));
+      },
       handleClear: () => {
         dispatch(selectTile({setIndex: EMPTY, tileIndex: 0}));
         dispatch(selectShape(1, 1));

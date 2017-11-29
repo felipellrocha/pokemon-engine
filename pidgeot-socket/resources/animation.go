@@ -11,7 +11,6 @@ type AnimationSystem struct {
 }
 
 func (system AnimationSystem) Loop() {
-  //fmt.Printf("Animation loop!!!\n")
   entities, err := system.Hub.World.AllEntitiesWithComponent(ecs.AnimationComponent)
   if err != nil {
     return
