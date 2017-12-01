@@ -291,7 +291,6 @@ class component extends PureComponent {
         <Grid
           data={data}
           grid={grid}
-          className={styles.cancelEvents}
           simpleTiles
           selectorGrid
 
@@ -326,6 +325,11 @@ class component extends PureComponent {
       </div>
     );
   }
+          /*
+          onMouseMove={event => this.handleSelectTile(event, ENTITY, grid)}
+          onMouseDown={event => this.handleMouseDown(event, ENTITY, grid)}
+          onMouseUp={this.handleMouseUp}
+          */
 
   renderTerrainGrid(tileset, index) {
     const {

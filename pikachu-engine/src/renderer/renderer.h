@@ -35,15 +35,7 @@
 #include "game/behaviors/proximity.h"
 #include "game/utils.h"
 #include "game/systems/networking.h"
-#include "game/systems/ability.h"
 #include "game/systems/render.h"
-#include "game/systems/input.h"
-#include "game/systems/camera.h"
-#include "game/systems/collision.h"
-#include "game/systems/projectile.h"
-#include "game/systems/walk.h"
-#include "game/systems/transition.h"
-#include "game/systems/ai.h"
 #include "game/materials.h"
 
 #include "networking/websocket.hpp"
@@ -108,8 +100,6 @@ public:
   }
 
   void resize(int w, int h);
-  void getComponentsFromBinary(string d);
-
 
   void loop(float dt);
   bool isRunning() { return running; };
@@ -137,14 +127,8 @@ public:
   }
 
   void loadStage(string initialPayload);
-  void runScript(json commands);
 
   void createTile(json& data, int layer, int index);
-  void createEntityByData(json& data, int layer, int index);
-  void createEntityByID(string entityId);
-  void createEntityByID(string entityId, int layer, int x, int y, int w, int h);
-  void createEntityByID(string entityId, int layer, int index);
-  void createEntity(string entityId, int layer, int x, int y, int w, int h);
   string getEntityIDByName(string name) {
     return entitiesByName[name];
   }

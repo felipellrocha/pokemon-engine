@@ -79,8 +79,6 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
   this->resize(1200, 800);
 
   this->registerSystem<NetworkingSystem>(manager);
-  this->registerSystem<InputSystem>(manager);
-  this->registerSystem<CameraSystem>(manager);
   this->registerSystem<RenderSystem>(manager);
 
   this->getMessages(initialData.c_str(), initialData.length());
@@ -101,22 +99,27 @@ void Renderer::getMessages(const char* buf, size_t size) {
 
   while (index < size) {
     uint16_t msgType = ReadBytesOfString<uint16_t>(buf, &index, size);
-
     switch (msgType) {
       case MessageDef::INIT: {
         // read message length
         auto length = ReadBytesOfString<uint64_t>(buf, &index, size);
-        char* msg = new char[length];
-        //msg[length + 1] = '\0';
+        // this +1 makes this work on wasm for some reason...
+        char* msg = new char[length + 1];
         strncpy(msg, buf + index, length);
-
-        printf(msg, "\n");
 
         this->initGame(msg);
 
         delete [] msg;
-        index += length + 1;
+        index += length;
 
+        break;
+      }
+      case MessageDef::DELETE: {
+        // we will eventually need to disambiguate between deleting a
+        // component and an entity
+        //auto cid = ReadBytesOfString<uint16_t>(buf, &index, size);
+        auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
+        manager->removeEntity(eid);
         break;
       }
       case MessageDef::POSITION: {
@@ -139,6 +142,19 @@ void Renderer::getMessages(const char* buf, size_t size) {
         manager->addComponent<RenderComponent>(eid, layer, shouldTileX, shouldTileY);
         break;
       }
+      case MessageDef::COLLISION: {
+        auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        auto isStatic = ReadBytesOfString<bool>(buf, &index, size);
+
+        auto x = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto y = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto w = ReadBytesOfString<uint32_t>(buf, &index, size);
+        auto h = ReadBytesOfString<uint32_t>(buf, &index, size);
+
+        manager->addComponent<CollisionComponent>(eid, isStatic, x, y, w, h);
+        break;
+      }
       case MessageDef::DIMENSION: {
         auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
 
@@ -147,15 +163,6 @@ void Renderer::getMessages(const char* buf, size_t size) {
 
         manager->addComponent<DimensionComponent>(eid, w, h);
 
-        break;
-      }
-      case MessageDef::ANIMATION: {
-        auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
-
-        auto type = ReadBytesOfString<uint32_t>(buf, &index, size);
-        auto frame = ReadBytesOfString<uint8_t>(buf, &index, size);
-
-        manager->addComponent<AnimationComponent>(eid, type, frame);
         break;
       }
       case MessageDef::SPRITE: {
@@ -277,7 +284,8 @@ void Renderer::loadStage(string initialPayload) {
 
 void Renderer::loop(float dt) {
   SDL_Event event;
-  //printf("loop");
+  bool transmit = false;
+
   // extract input information so that all systems can use it
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) {
@@ -288,25 +296,26 @@ void Renderer::loop(float dt) {
       switch (event.key.keysym.sym)
       {
         case SDLK_UP:
-          if (!(Compass::NORTH & compass)) compass += Compass::NORTH;
+          if (!(Compass::NORTH & compass)) compass += Compass::NORTH; transmit = true;
         break;
         case SDLK_RIGHT:
-          if (!(Compass::EAST & compass)) compass += Compass::EAST;
+          if (!(Compass::EAST & compass)) compass += Compass::EAST; transmit = true;
         break;
         case SDLK_DOWN:
-          if (!(Compass::SOUTH & compass)) compass += Compass::SOUTH;
+          if (!(Compass::SOUTH & compass)) compass += Compass::SOUTH; transmit = true;
         break;
         case SDLK_LEFT:
-          if (!(Compass::WEST & compass)) compass += Compass::WEST;
+          if (!(Compass::WEST & compass)) compass += Compass::WEST; transmit = true;
         break;
+
         case SDLK_SPACE:
-          if (!(Actions::MAIN & actions)) actions += Actions::MAIN;
+          if (!(Actions::MAIN & actions)) actions += Actions::MAIN; transmit = true;
         break;
         case SDLK_LSHIFT:
-          if (!(Actions::SECONDARY & actions)) actions += Actions::SECONDARY;
+          if (!(Actions::SECONDARY & actions)) actions += Actions::SECONDARY; transmit = true;
         break;
         case SDLK_d:
-          if (!(Actions::ATTACK1 & actions)) actions += Actions::ATTACK1;
+          if (!(Actions::ATTACK1 & actions)) actions += Actions::ATTACK1; transmit = true;
         break;
       }
     }
@@ -314,43 +323,51 @@ void Renderer::loop(float dt) {
       switch (event.key.keysym.sym)
       {
         case SDLK_UP:
-          if (Compass::NORTH & compass) compass -= Compass::NORTH;
+          if (Compass::NORTH & compass) compass -= Compass::NORTH; transmit = true;
         break;
         case SDLK_RIGHT:
-          if (Compass::EAST & compass) compass -= Compass::EAST;
+          if (Compass::EAST & compass) compass -= Compass::EAST; transmit = true;
         break;
         case SDLK_DOWN:
-          if (Compass::SOUTH & compass) compass -= Compass::SOUTH;
+          if (Compass::SOUTH & compass) compass -= Compass::SOUTH; transmit = true;
         break;
         case SDLK_LEFT:
-          if (Compass::WEST & compass) compass -= Compass::WEST;
+          if (Compass::WEST & compass) compass -= Compass::WEST; transmit = true;
         break;
+
         case SDLK_SPACE:
-          if (Actions::MAIN & actions) actions -= Actions::MAIN;
+          if (Actions::MAIN & actions) actions -= Actions::MAIN; transmit = true;
         break;
         case SDLK_LSHIFT:
-          if (Actions::SECONDARY & actions) actions -= Actions::SECONDARY;
+          if (Actions::SECONDARY & actions) actions -= Actions::SECONDARY; transmit = true;
         break;
         case SDLK_d:
-          if (Actions::ATTACK1 & actions) actions -= Actions::ATTACK1;
+          if (Actions::ATTACK1 & actions) actions -= Actions::ATTACK1; transmit = true;
         break;
       }
     }
   }
 
+  if (transmit) {
+    char* bytes = new char[2];
+
+    // don't need this now, but will in the future
+    //*((uint8_t*)(bytes + 0)) = 1;
+    *((uint8_t*)(bytes + 0)) = compass;
+    *((uint8_t*)(bytes + 1)) = actions;
+
+    string message(bytes, 2);
+
+    socket->sendBinary(message);
+    printf("%d %d\n", compass, actions);
+
+    delete [] bytes;
+    transmit = false;
+  }
+
+
   for (auto& system : systems) system->update(dt);
 }
-
-void Renderer::runScript(json commands) {
-  for (auto &command : commands) {
-    cout << command << endl;
-		if (command.at("name").get<string>() == "changeMap") {
-      string level = command.at("parameters").at("map").at("value").get<string>();
-      float duration = command.at("parameters").at("duration").at("value").get<float>();
-      this->addTransition<FadeOutTransition>(level, duration);
-		}
-	}
-};
 
 void Renderer::createTile(json& data, int layer, int index) {
   json node = data.at(index);
@@ -372,7 +389,7 @@ void Renderer::createTile(json& data, int layer, int index) {
     sources = fourTile::calculateAll(tileIndex, index, surrounding, tileset, &grid);
   }
   for (auto& calc : sources) {
-    auto src = calc[0];
+    //auto src = calc[0];
     auto dst = calc[1];
 
     EID entity = manager->createEntity();
@@ -380,150 +397,6 @@ void Renderer::createTile(json& data, int layer, int index) {
     //manager->addComponent<SpriteComponent>(entity, src.x, src.y, src.w, src.h, tileset->texture);
     manager->addComponent<PositionComponent>(entity, dst.x, dst.y);
     manager->addComponent<RenderComponent>(entity, layer);
-  }
-}
-
-void Renderer::createEntityByData(json& data, int layer, int index) {
-  json node = data.at(index);
-
-  string entityId = node.at(1).get<string>();
-  createEntityByID(entityId, layer, index);
-}
-
-// if you don't care about where it's placed rendering wise (If entity has no
-// rendering component)
-void Renderer::createEntityByID(string entityId) {
-  createEntityByID(entityId, 0, 0);
-}
-
-// if you know the coordinates
-void Renderer::createEntityByID(string entityId, int layer, int x, int y, int w, int h) {
-  createEntity(entityId, layer, x, y, w, h);
-}
-
-void Renderer::createEntityByID(string entityId, int layer, int index) {
-  int x = this->grid.tile_w * this->grid.getX(index);
-  int y = this->grid.tile_h * this->grid.getY(index);
-  int w = this->grid.tile_w;
-  int h = this->grid.tile_h;
-
-  createEntity(entityId, layer, x, y, w, h);
-}
-
-void Renderer::createEntity(string entityId, int layer, int x, int y, int w, int h) {
-  json entity_definition = entities.at(entityId);
-  json components = entity_definition.at("components");
-  string name = entity_definition.at("name").get<string>();
-
-  EID entity = manager->createEntity();
-
-  if (name == "player") {
-    manager->saveSpecial("player", entity);
-  }
-
-  if (name == "enemy") {
-    auto follow = makeBehavior<Follower>(entity);
-    auto proximity = makeBehavior<Proximity>(entity, 50);
-    auto inverter = makeBehavior<Inverter>(entity);
-    auto sequence = makeBehavior<Sequence>(entity);
-    inverter->setChild(proximity);
-    sequence->addChild(inverter);
-    sequence->addChild(follow);
-
-    behaviors[entity] = sequence;
-
-    manager->addComponent<AIComponent>(entity);
-  }
-
-  for (uint k = 0; k < components.size(); k++) {
-    auto component = components.at(k);
-    string name = component.at("name").get<string>();
-
-    if (name == "CollisionComponent") {
-      auto members = component.at("members");
-      bool isStatic = members.at("isStatic").at("value").get<bool>();
-      int x = members.at("x").value("value", 0);
-      int y = members.at("y").value("value", 0);
-      int ww = members.at("w").value("value", 0);
-      int hh = members.at("h").value("value", 0);
-      int resolver = members.at("resolver").value("value", 0);
-
-      auto component = manager->addComponent<CollisionComponent>(
-        entity,
-        isStatic,
-        resolver,
-        x,
-        y,
-        (ww > 0) ? ww : (w > 0) ? w : this->grid.tile_w,
-        (hh > 0) ? hh : (h > 0) ? h : this->grid.tile_h
-      );
-
-      if (!members.at("onCollision").at("value").is_null()) {
-        component->onCollision = members.at("onCollision").at("value");
-      }
-    }
-    else if (name == "PositionComponent") {
-      manager->addComponent<PositionComponent>(entity, x, y);
-    }
-    else if (name == "DimensionComponent") {
-      manager->addComponent<DimensionComponent>(entity, w, h);
-    }
-    else if (name == "HealthComponent") {
-      int ch = component.at("members").at("currentHearts").at("value").get<int>();
-      int mh = component.at("members").at("maxHearts").at("value").get<int>();
-      int ce = component.at("members").at("currentEnergy").at("value").get<int>();
-      int me = component.at("members").at("maxEnergy").at("value").get<int>();
-
-      manager->addComponent<HealthComponent>(entity, ch, mh, ce, me);
-    }
-    else if (name == "SpriteComponent") {
-      auto members = component.at("members");
-      string source = members.at("src").at("value").get<string>();
-
-      int x = members.at("x").value("value", 0);
-      int y = members.at("y").value("value", 0);
-      int w_v = members.at("w").value("value", 0);
-      int h_v = members.at("h").value("value", 0);
-
-      SDL_Texture *texture = this->textures[source];
-
-      //manager->addComponent<SpriteComponent>(entity, x, y, (w_v) ? w_v : w, (h_v) ? h_v : h, texture);
-    }
-    else if (name == "AbilityComponent") {
-      auto component = manager->addComponent<AbilityComponent>(entity);
-      component->makeAbility(
-        Actions::ATTACK1,
-        AbilityType::RANGE,
-        ElementType::FIRE,
-        0.7f,
-        5
-      );
-    }
-    else if (name == "InputComponent") {
-      manager->addComponent<InputComponent>(entity);
-    }
-    else if (name == "RenderComponent") {
-      auto members = component.at("members");
-      bool shouldTileX = members.at("shouldTileX").at("value").get<bool>();
-      bool shouldTileY = members.at("shouldTileY").at("value").get<bool>();
-
-      manager->addComponent<RenderComponent>(entity, layer, shouldTileX, shouldTileY);
-    }
-    else if (name == "MovementComponent") {
-      int sX = component.at("members").at("slow").at("value").at("x").get<int>();
-      int sY = component.at("members").at("slow").at("value").at("y").get<int>();
-      int fX = component.at("members").at("fast").at("value").at("x").get<int>();
-      int fY = component.at("members").at("fast").at("value").at("y").get<int>();
-
-      manager->addComponent<MovementComponent>(entity, sX, sY, fX, fY);
-    }
-    else if (name == "WalkComponent") {
-      manager->addComponent<WalkComponent>(entity);
-    }
-    else if (name == "CenteredCameraComponent") {
-      EID camera = manager->getSpecial("camera");
-      manager->addComponent<CenteredCameraComponent>(camera, entity);
-    }
   }
 }
 

@@ -30,10 +30,17 @@ app.use('/app', proxy({
   },
 }));
 
-app.use('/engine', proxy({
+app.use('/engine/src', proxy({
   target: 'http://pikachu:8000',
   pathRewrite: {
     '^/engine': '',
+  },
+}));
+
+app.use('/engine', proxy({
+  target: 'http://pikachu:8000',
+  pathRewrite: {
+    '^/engine': '/build',
   },
 }));
 

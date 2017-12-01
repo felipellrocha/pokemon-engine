@@ -1,6 +1,7 @@
 :local(.component) {
   font-family: Helvetica Neue;
   overflow: hidden;
+  cursor: pointer;
 
   .row {
     pointer-events: none;
@@ -11,9 +12,9 @@
       border-bottom: 0px;
     }
   }
-}
 
-:local(.disableEvents) {
-  .row {
+  .enableEvents {
+    pointer-events: auto;
   }
 }
+

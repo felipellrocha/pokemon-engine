@@ -40,15 +40,46 @@ func (m *Manager) GetAllRenderableComponents() []byte {
   return buffer.Bytes()
 }
 
-func (m *Manager) GetComponentMessage(eid EID, cid CID) []byte {
-  entities, ok := m.Components[cid]
-  if !ok { return nil }
-
-  component, ok := entities[eid]
-  if !ok { return nil }
-
+func (m *Manager) DeleteEntity(eid EID) []byte {
   buffer := new(bytes.Buffer)
-  if err := binary.Write(buffer, binary.LittleEndian, uint16(cid)); err != nil { fmt.Println("error!", err) }
+
+  for cid, entities := range m.Components {
+    if component, ok := entities[eid]; ok {
+      delete(entities, eid)
+
+      if (*component).IsRenderable() {
+        if err := binary.Write(buffer, binary.LittleEndian, uint16(DELETE)); err != nil { fmt.Println("error!", err) }
+        if err := binary.Write(buffer, binary.LittleEndian, uint16(cid)); err != nil { fmt.Println("error!", err) }
+        if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
+      }
+    }
+  }
+
+  return buffer.Bytes()
+}
+
+func (m *Manager) GetComponentMessages(eid EID, components ...Component) []byte {
+  buffer := new(bytes.Buffer)
+
+  for i, _ := range components {
+    // this manual way of grabbing the component fixes a nasty bug:
+    // http://bryce.is/writing/code/jekyll/update/2015/11/01/3-go-gotchas.html
+    component := components[i]
+
+    if !component.IsRenderable() { continue }
+
+    if err := binary.Write(buffer, binary.LittleEndian, uint16(component.ID())); err != nil { fmt.Println("error!", err) }
+    if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
+    if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil { fmt.Println("error!", err) }
+  }
+
+  return buffer.Bytes()
+}
+
+func (m *Manager) GetComponentMessage(eid EID, component *Component) []byte {
+  buffer := new(bytes.Buffer)
+
+  if err := binary.Write(buffer, binary.LittleEndian, uint16((*component).ID())); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, (*component).ToBinary()); err != nil { fmt.Println("error!", err) }
 

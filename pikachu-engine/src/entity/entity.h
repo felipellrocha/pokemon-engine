@@ -40,11 +40,15 @@ class EntityManager {
     }
 
     template<class ComponentClass, typename... Args>
-    ComponentClass* addComponent(EID entity, Args... args) {
-      ComponentClass* component = new ComponentClass(args...);
+    void addComponent(EID entity, Args... args) {
       type_index cid = type_index(typeid(ComponentClass));
-      components[cid][entity] = component;
-      return component;
+
+      if (components[cid].find(entity) == components[cid].end()) {
+        ComponentClass* component = new ComponentClass(args...);
+        components[cid][entity] = component;
+      } else {
+        static_cast<ComponentClass *>(components[cid][entity])->update(args...);
+      }
     }
 
     template<class ComponentClass>

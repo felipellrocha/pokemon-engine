@@ -611,6 +611,53 @@
               "name": "animation"
             }
           }
+        },
+        {
+          "name": "CollisionComponent",
+          "members": {
+            "isStatic": {
+              "type": "bool",
+              "pointer": false,
+              "value": false,
+              "name": "isStatic"
+            },
+            "resolver": {
+              "type": "ResolverType",
+              "pointer": false,
+              "value": 0,
+              "name": "resolver"
+            },
+            "x": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "x"
+            },
+            "y": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "y"
+            },
+            "w": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "w"
+            },
+            "h": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "h"
+            },
+            "onCollision": {
+              "type": "script",
+              "pointer": false,
+              "value": null,
+              "name": "onCollision"
+            }
+          }
         }
       ]
     }

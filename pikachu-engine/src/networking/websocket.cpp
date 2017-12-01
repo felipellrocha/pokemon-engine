@@ -342,15 +342,6 @@ class _RealWebSocket : public easywsclient::WebSocket
 #else
     virtual void _dispatchBinary(BytesCallback_Imp & callable) {
       // TODO: consider acquiring a lock on rxbuf...
-      /*
-      printf("rx: %s\n", (char*)rxbuf);
-      printf("tx: %s\n", (char*)txbuf);
-      printf("received: %s\n", (char*)receivedData);
-
-      callable((const std::vector<uint8_t>) receivedData);
-      receivedData.erase(receivedData.begin(), receiveData.end());
-      std::vector<uint8_t> ().swap(receivedData); // free memory
-       */
       callable((const std::vector<uint8_t>) rxbuf);
       rxbuf.erase(rxbuf.begin(), rxbuf.end());
       std::vector<uint8_t> ().swap(rxbuf); // free memory
@@ -374,6 +365,7 @@ class _RealWebSocket : public easywsclient::WebSocket
         sendData(wsheader_type::BINARY_FRAME, message.size(), message.begin(), message.end());
     }
 
+#ifndef EMSCRIPTEN
     template<class Iterator>
     void sendData(wsheader_type::opcode_type type, uint64_t message_size, Iterator message_begin, Iterator message_end) {
         // TODO:
@@ -431,6 +423,15 @@ class _RealWebSocket : public easywsclient::WebSocket
             for (size_t i = 0; i != message_size; ++i) { *(txbuf.end() - message_size + i) ^= masking_key[i&0x3]; }
         }
     }
+#else
+  template<class Iterator>
+  void sendData(wsheader_type::opcode_type type, uint64_t message_size, Iterator message_begin, Iterator message_end) {
+    // TODO: consider acquiring a lock on txbuf...
+    if (readyState == CLOSING || readyState == CLOSED) { return; }
+    // N.B. - txbuf will keep growing until it can be transmitted over the socket:
+    txbuf.insert(txbuf.end(), message_begin, message_end);
+  }
+#endif
 
     void close() {
         if(readyState == CLOSING || readyState == CLOSED) { return; }

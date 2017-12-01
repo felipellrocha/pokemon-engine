@@ -40,20 +40,8 @@ void RenderSystem::update(float dt) {
     auto sprite = manager->getComponent<SpriteComponent>(entity);
     auto position = manager->getComponent<PositionComponent>(entity);
     auto dimension = manager->getComponent<DimensionComponent>(entity);
-    auto health = manager->getComponent<HealthComponent>(entity);
-    auto color = manager->getComponent<ColorComponent>(entity);
 
-    if (color) {
-      SDL_SetRenderDrawColor( game->ren, color->r, color->g, color->b, color->a );
-      SDL_Rect r;
-      r.x = position->x;
-      r.y = position->y;
-      r.w = dimension->w;
-      r.h = dimension->h;
-      SDL_RenderFillRect(game->ren, &r);
-    }
-
-    else if (sprite) {
+    if (sprite) {
       auto texture = game->tilesets[sprite->texture]->texture;
 
 
@@ -133,36 +121,6 @@ void RenderSystem::update(float dt) {
         };
         SDL_RenderCopy(game->ren, texture, &src, &dst);
       }
-    }
-
-    if (health) {
-      string healthDisplay = to_string(health->currentHearts)
-        + "/"
-        + to_string(health->maxHearts);
-
-      bgSurface = TTF_RenderText_Blended(outline, healthDisplay.c_str(), black);
-      fgSurface = TTF_RenderText_Blended(font, healthDisplay.c_str(), white);
-      message = SDL_CreateTextureFromSurface(game->ren, bgSurface);
-
-      rect.w = bgSurface->w;
-      rect.h = bgSurface->h;
-      rect.x = position->x + (dimension->w / 2) - (rect.w / 2) - camera.x;
-      rect.y = position->y - 17 - camera.y;
-
-      SDL_RenderCopy(game->ren, message, NULL, &rect);
-      SDL_FreeSurface(bgSurface);
-      SDL_DestroyTexture(message);
-
-      message = SDL_CreateTextureFromSurface(game->ren, fgSurface);
-
-      rect.w = fgSurface->w;
-      rect.h = fgSurface->h;
-      rect.x = position->x + (dimension->w / 2) - (rect.w / 2) - camera.x;
-      rect.y = position->y - 15 - camera.y;
-
-      SDL_RenderCopy(game->ren, message, NULL, &rect);
-      SDL_FreeSurface(fgSurface);
-      SDL_DestroyTexture(message);
     }
   }
 

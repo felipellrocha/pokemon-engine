@@ -19,6 +19,7 @@ func (system AnimationSystem) Loop() {
   for entity, _ := range entities {
     a, _ := system.Hub.World.GetComponent(entity, ecs.AnimationComponent)
     s, _ := system.Hub.World.GetComponent(entity, ecs.SpriteComponent)
+    c, err := system.Hub.World.GetComponent(entity, ecs.CollisionComponent)
 
     animation := (*a).(*ecs.Animation)
     sprite := (*s).(*ecs.Sprite)
@@ -30,8 +31,16 @@ func (system AnimationSystem) Loop() {
       sprite.W = keyframe.W
       sprite.H = keyframe.H
 
-      message := system.Hub.World.GetComponentMessage(entity, ecs.SpriteComponent)
-      system.Hub.broadcast <- message
+      system.Hub.broadcast <- system.Hub.World.GetComponentMessage(entity, s)
+
+      if err == nil {
+        collision := (*c).(*ecs.Collision)
+
+        collision.W = keyframe.W
+        collision.H = keyframe.H
+
+        system.Hub.broadcast <- system.Hub.World.GetComponentMessage(entity, c)
+      }
     }
 
     animation.Frame = (animation.Frame + 1) % definition.NumberOfFrames

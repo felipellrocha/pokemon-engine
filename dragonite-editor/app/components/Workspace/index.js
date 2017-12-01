@@ -15,9 +15,66 @@ import {
   paintTile,
 } from 'actions';
 
-import { memoize } from 'lodash';
+import { memoize, throttle } from 'lodash';
 
 class Workspace extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this._handlePutTile = throttle(this._handlePutTile.bind(this), 50, { leading: true});
+
+    this._handleMouseMove = this._handleMouseMove.bind(this);
+    this._handleMouseDown = this._handleMouseDown.bind(this);
+    this._handleMouseUp = this._handleMouseUp.bind(this);
+
+    this.state = {
+      mouseDown: false,
+    }
+  }
+
+  _handleMouseMove(event) {
+    event.persist();
+
+    this._handlePutTile(event);
+  }
+
+  _handlePutTile(e) {
+    if (!this.state.mouseDown && e.type !== 'click') { return }
+
+    const {
+      offsetX: x,
+      offsetY: y,
+    } = e.nativeEvent;
+
+    const {
+      dispatch,
+      tile,
+      method,
+      selectedLayer,
+      selectedTile,
+    } = this.props;
+
+    const xy = {
+      x: Math.floor(x / tile.width),
+      y: Math.floor(y / tile.height),
+    };
+
+    if (method === 'put') dispatch(putDownTile(xy));
+    else dispatch(paintTile(xy, selectedLayer, selectedTile));
+  }
+
+  _handleMouseDown() {
+    this.setState({
+      mouseDown: true,
+    });
+  }
+
+  _handleMouseUp() {
+    this.setState({
+      mouseDown: false,
+    });
+  }
+
   render() {
     const {
       grid,
@@ -41,10 +98,6 @@ class Workspace extends PureComponent {
     return (
       <div
         className={styles.component}
-        onClick={this._handlePutTile}
-        onMouseMove={this._handlePutTile}
-        onMouseDown={this._handleMouseDown}
-        onMouseUp={this._handleMouseUp}
         style={style}
       > 
         {layers.map((layer, index) => {
@@ -62,6 +115,12 @@ class Workspace extends PureComponent {
                 data={layer.data}
                 className={classes}
                 actionMethod={actionMethod}
+
+                onClick={this._handlePutTile}
+                onMouseMove={this._handleMouseMove}
+                onMouseDown={this._handleMouseDown}
+                onMouseUp={this._handleMouseUp}
+
                 togglableGrid
                 workspace
               />

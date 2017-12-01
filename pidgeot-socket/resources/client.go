@@ -8,6 +8,8 @@ import (
   "time"
 
   "github.com/gorilla/websocket"
+
+  "fighter/pidgeot-socket/ecs"
 )
 
 
@@ -22,7 +24,9 @@ const (
   pingPeriod = (pongWait * 9) / 10
 
   // Maximum message size allowed from peer.
-  maxMessageSize = 512
+  maxMessageSize = 1500
+
+  MTU = 1500
 )
 
 var (
@@ -31,6 +35,7 @@ var (
 )
 
 type Client struct {
+  Eid ecs.EID
   hub *Hub
   conn *websocket.Conn
   send chan []byte
@@ -54,8 +59,15 @@ func (c *Client) ReadPump() {
       }
       break
     }
-    message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-    c.hub.broadcast <- message
+    message = bytes.Trim(message, " \n\t")
+    input := Input{
+      Eid: c.Eid,
+    }
+
+    if err := GetInput(message, &input); err != nil {
+      fmt.Println(err)
+    }
+    c.hub.Inputs.Enqueue(input)
   }
 }
 
@@ -82,7 +94,6 @@ func (c *Client) WritePump() {
 
       n := len(c.send)
       for i := 0; i < n; i++ {
-        w.Write(newline)
         w.Write(<-c.send)
       }
 
@@ -116,7 +127,7 @@ func ServeWS(hub *Hub, w http.ResponseWriter, r *http.Request) {
     panic(err)
   }
 
-  client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
+  client := &Client{hub: hub, conn: conn, send: make(chan []byte, MTU)}
 
   client.hub.register <- client
 

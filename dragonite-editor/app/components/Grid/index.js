@@ -25,6 +25,7 @@ class Grid extends PureComponent {
 
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
 
     this.state = {
       mouseDown: false,
@@ -33,17 +34,31 @@ class Grid extends PureComponent {
 
   putTile(e) {
     const {
+      tileEvents,
+      actionMethod,
+    } = this.props;
+
+    if ((!this.state.mouseDown && e.type !== 'click') || !tileEvents || !actionMethod) { return }
+
+    this.onMouseMove(e);
+  }
+
+  onMouseMove(e) {
+    const {
       dispatch,
       tile,
       method,
       selectedLayer,
       selectedTile,
+      tileEvents,
       actionMethod,
     } = this.props;
 
-    if ((!this.state.mouseDown && e.type !== 'click') || !actionMethod) { return }
+    if ((!this.state.mouseDown && e.type !== 'click')) { return }
 
     this.props.onMouseMove(e);
+
+    if (!actionMethod) { return }
 
     const {
       offsetX: x,
@@ -59,6 +74,8 @@ class Grid extends PureComponent {
   }
 
   onMouseDown(e) {
+    if (this.props.tileEvents) { return }
+
     this.setState({
       mouseDown: true,
     });
@@ -67,6 +84,8 @@ class Grid extends PureComponent {
   }
 
   onMouseUp(e) {
+    if (this.props.tileEvents) { return }
+
     this.setState({
       mouseDown: false,
     });
@@ -92,7 +111,7 @@ class Grid extends PureComponent {
     const classes = classnames(styles.component, className);
     const selectedIndexes = getSelectedIndexes(selectedShape, selectedTile, grid);
     const rowClasses = classnames('row', {
-      [styles.disableEvents]: !tileEvents,
+      enableEvents: tileEvents,
     });
 
     return (
@@ -101,7 +120,7 @@ class Grid extends PureComponent {
         style={{width: grid.columns * tile.width}}
 
         onClick={this.putTile}
-        onMouseMove={this.putTile}
+        onMouseMove={this.onMouseMove}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
       >
@@ -109,7 +128,7 @@ class Grid extends PureComponent {
           const columns = [...Array(grid.columns)]
 
           return (
-            <div className='row' key={y}>
+            <div className={rowClasses} key={y}>
               {columns.map((_, x) => {
                 const cell = data[y * grid.columns + x];
 

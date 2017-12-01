@@ -7,13 +7,27 @@ import (
   "encoding/binary"
 
   "fighter/pidgeot-socket/ecs"
+  "github.com/oleiade/lane"
 )
+
+type SpawnTypes uint8
+const (
+  Player SpawnTypes = iota
+)
+
+type SpawnPoint struct {
+  EntityId string
+  Layer int
+  Index int
+}
 
 type Hub struct {
   clients map[*Client]bool
   broadcast chan []byte
   register chan *Client
   unregister chan *Client
+  SpawnPoints map[SpawnTypes][]SpawnPoint
+  Inputs *lane.Queue
   App ecs.App
   Map ecs.Map
   World ecs.Manager
@@ -41,22 +55,51 @@ func NewHub() *Hub {
     register: make(chan *Client),
     unregister: make(chan *Client),
     clients: make(map[*Client]bool),
+    SpawnPoints: make(map[SpawnTypes][]SpawnPoint),
+    Inputs: lane.NewQueue(),
     App: *app,
     Map: *currentMap,
     World: *world,
     Systems: make([]ecs.System, 0),
   }
 
-  hub.RegisterSystem(AnimationSystem{
-    Hub: hub,
-  })
+  hub.RegisterSystem(
+    PhysicsSystem{
+      Hub: hub,
+    },
+    AnimationSystem{
+      Hub: hub,
+    },
+    InputSystem{
+      Hub: hub,
+    })
+
+  hub.SpawnPoints[Player] = make([]SpawnPoint, 0)
 
   for i, layer := range currentMap.Layers {
     for j, tile := range layer.Data {
       if tile.SetIndex == ecs.ENTITY_SET {
-        hub.CreateFromEntityId(tile.EntityId, i, j)
+        definition := app.Entities[tile.EntityId]
+
+        if definition.Name == "player" {
+          hub.SpawnPoints[Player] = append(hub.SpawnPoints[Player], SpawnPoint{
+            EntityId: tile.EntityId,
+            Layer: i,
+            Index: j,
+          })
+        } else {
+          hub.CreateFromEntityId(tile.EntityId, i, j)
+        }
       } else if tile.SetIndex == ecs.OBJECT_SET {
-        entity :=  hub.CreateFromEntityId(tile.ObjectDescription.EntityId, i, j)
+        entity, _ := hub.CreateFromEntityId(tile.ObjectDescription.EntityId, i, j)
+
+        if c, err := hub.World.GetComponent(entity, ecs.CollisionComponent); err == nil {
+          // if a collision component exists, let's try and update some of its data
+          collision := (*c).(*ecs.Collision)
+
+          collision.W = tile.ObjectDescription.Rect.W
+          collision.H = tile.ObjectDescription.Rect.H
+        }
 
         position := &ecs.Position{
           X: tile.ObjectDescription.Rect.X,
@@ -94,18 +137,21 @@ func NewHub() *Hub {
       }
     }
   }
+  fmt.Println(hub.SpawnPoints[Player])
 
   return &hub
 }
 
-func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) ecs.EID {
+func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) (ecs.EID, []byte) {
   entity := hub.World.NewEntity()
 
   definition, ok := hub.App.Entities[entityId]
   if !ok {
     //fmt.Println("not found! %s")
-    return entity
+    return entity, nil
   }
+
+  components := make([]ecs.Component, 0)
 
   for _, component := range definition.Components {
     members := component.Members
@@ -119,7 +165,7 @@ func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) ecs.EID
         Layer: layer,
       }
 
-      hub.World.AddComponents(entity, render)
+      components = append(components, render)
     } else if component.Name == "AnimationComponent" {
       definition, _ := ReadInt(members, "animation")
 
@@ -129,7 +175,7 @@ func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) ecs.EID
         IsAnimating: false,
       }
 
-      hub.World.AddComponents(entity, animation)
+      components = append(components, animation)
     } else if component.Name == "DimensionComponent" {
       w, _ := ReadInt(members, "w")
       h, _ := ReadInt(members, "h")
@@ -139,14 +185,14 @@ func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) ecs.EID
         H: h,
       }
 
-      hub.World.AddComponents(entity, dimension)
+      components = append(components, dimension)
     } else if component.Name == "PositionComponent" {
       position := &ecs.Position{
         X: hub.Map.Grid.X(tile) * hub.App.Tile.Width,
         Y: hub.Map.Grid.Y(tile) * hub.App.Tile.Height,
       }
 
-      hub.World.AddComponents(entity, position)
+      components = append(components, position)
     } else if component.Name == "SpriteComponent" {
       x, _ := ReadInt(members, "x")
       y, _ := ReadInt(members, "y")
@@ -162,15 +208,37 @@ func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) ecs.EID
         SetIndex: setIndex,
       }
 
-      hub.World.AddComponents(entity, sprite)
+      components = append(components, sprite)
+    } else if component.Name == "CollisionComponent" {
+      isStatic, _ := ReadBool(members, "isStatic")
+      isColliding, _ := ReadBool(members, "isColliding")
+
+      x, _ := ReadInt(members, "x")
+      y, _ := ReadInt(members, "y")
+      w, _ := ReadInt(members, "w")
+      h, _ := ReadInt(members, "h")
+
+      collision := &ecs.Collision{
+        IsStatic: isStatic,
+        IsColliding: isColliding,
+        X: x,
+        Y: y,
+        W: w,
+        H: h,
+      }
+
+      fmt.Printf("collision: %#v\n", collision)
+
+      components = append(components, collision)
     }
   }
 
-  return entity
+  hub.World.AddComponents(entity, components...)
+  return entity, hub.World.GetComponentMessages(entity, components...)
 }
 
-func (h *Hub) RegisterSystem(system ecs.System) {
-  h.Systems = append(h.Systems, system)
+func (h *Hub) RegisterSystem(systems ...ecs.System) {
+  h.Systems = append(h.Systems, systems...)
 }
 
 func (h *Hub) Loop() {
@@ -186,17 +254,30 @@ func (h *Hub) Loop() {
 }
 
 func (h *Hub) Listen() {
+  spawnIndex := 0
+
   for {
     select {
     case client := <-h.register:
       h.clients[client] = true
-      // already comes with data lengths
       data := h.World.GetAllRenderableComponents()
       msgType := make([]byte, 2)
       binary.LittleEndian.PutUint16(msgType, ecs.JSON)
+
+      spawn := h.SpawnPoints[Player][spawnIndex]
+      eid, entity := h.CreateFromEntityId(spawn.EntityId, spawn.Layer, spawn.Index)
+
+      client.Eid = eid
+
       if init, err := json.Marshal(h.App); err == nil {
         client.send <- append(msgType, ecs.GetLengthInBytes(init)...)
         client.send <- data
+
+        spawnIndex = (spawnIndex + 1) % len(h.SpawnPoints[Player])
+
+        for c := range h.clients {
+          c.send <- entity
+        }
       } else {
         delete(h.clients, client)
         close(client.send)
@@ -204,7 +285,13 @@ func (h *Hub) Listen() {
       }
     case client := <-h.unregister:
       if _, ok := h.clients[client]; ok {
+        data := h.World.DeleteEntity(client.Eid)
         delete(h.clients, client)
+
+        for c := range h.clients {
+          c.send <- data
+        }
+
         close(client.send)
       }
     case message := <-h.broadcast:

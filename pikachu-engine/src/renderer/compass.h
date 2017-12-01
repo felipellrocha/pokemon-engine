@@ -6,14 +6,14 @@
 using namespace std;
 
 enum Compass {
-  NORTH = 2,
-  NORTHEAST = 4,
-  EAST = 8,
-  SOUTHEAST = 16,
-  SOUTH = 32,
-  SOUTHWEST = 64,
-  WEST = 128,
-  NORTHWEST = 256,
+  NORTH = 1,
+  NORTHEAST = 2,
+  EAST = 4,
+  SOUTHEAST = 8,
+  SOUTH = 16,
+  SOUTHWEST = 32,
+  WEST = 64,
+  NORTHWEST = 128,
 };
 
 inline ostream& operator << (ostream &os, Compass const &c) {
@@ -31,9 +31,9 @@ inline ostream& operator << (ostream &os, Compass const &c) {
 }
 
 enum Actions {
-  MAIN = 2,
-  SECONDARY = 4,
-  ATTACK1 = 8,
+  MAIN = 1,
+  SECONDARY = 2,
+  ATTACK1 = 4,
 };
 
 #endif

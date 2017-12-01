@@ -9,15 +9,18 @@ import (
 type CID uint16
 
 const (
-  JSON = 0 // Reserved
-  HealthComponent = 1
-  PositionComponent = 2
-  DimensionComponent = 3
-  SpriteComponent = 4
-  InputComponent = 5
-  RenderComponent = 6
-  AnimationComponent = 7
-  CollisionComponent = 8
+  JSON = iota
+  DELETE
+
+  PositionComponent
+  DimensionComponent
+  SpriteComponent
+  RenderComponent
+  CollisionComponent
+
+  HealthComponent
+  InputComponent
+  AnimationComponent
 )
 
 type Component interface {
@@ -52,8 +55,8 @@ type Position struct {
   X int
   Y int
 
-  NextX int
-  NextY int
+  DeltaX int
+  DeltaY int
 
   Direction int
 }
@@ -165,6 +168,9 @@ type Collision struct {
   IsStatic bool
   IsColliding bool
 
+  ImpulseX int
+  ImpulseY int
+
   X int
   Y int
   W int
@@ -174,12 +180,11 @@ func (c *Collision) ID() CID {
   return CollisionComponent
 }
 func (c *Collision) IsRenderable() bool {
-  return false
+  return true
 }
 func (c *Collision) ToBinary() []byte {
   buffer := new(bytes.Buffer)
   if err := binary.Write(buffer, binary.LittleEndian, bool(c.IsStatic)); err != nil { fmt.Println("error!", err) }
-  if err := binary.Write(buffer, binary.LittleEndian, bool(c.IsColliding)); err != nil { fmt.Println("error!", err) }
 
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.X)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.Y)); err != nil { fmt.Println("error!", err) }

@@ -43,12 +43,22 @@ SDL_Texture* loadTexture(SDL_Renderer *ren, string src);
 template<typename Type>
 Type ReadBytesOfString(const char* buffer, int* index, int totalSize) {
   int size = sizeof(Type);
-  assert(*index + size <= totalSize);
+  //assert(*index + size <= totalSize);
 
   Type value;
   value = *((Type*)(buffer + *index));
   *index += size;
   return value;
+}
+
+template<typename Type>
+char* WriteVarToBytes(Type var) {
+  int size = sizeof(var);
+  char* output = new char[size];
+
+  for (int i = 0; i < size; i++) output[size - i] = (var >> (i * 8));
+
+  return output;
 }
 
 #endif

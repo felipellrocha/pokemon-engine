@@ -18,7 +18,7 @@ services:
   pikachu:
     build: ./pikachu-engine
     volumes:
-      - ./pikachu-engine/build:/src
+      - ./pikachu-engine:/src
     expose:
       - 8000
 
