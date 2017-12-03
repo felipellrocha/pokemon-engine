@@ -137,7 +137,6 @@ func NewHub() *Hub {
       }
     }
   }
-  fmt.Println(hub.SpawnPoints[Player])
 
   return &hub
 }
@@ -221,6 +220,9 @@ func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) (ecs.EI
       collision := &ecs.Collision{
         IsStatic: isStatic,
         IsColliding: isColliding,
+        WithGravity: true,
+        MaxSpeedY: 6,
+        JumpImpulse: 8,
         X: x,
         Y: y,
         W: w,

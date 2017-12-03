@@ -1,9 +1,11 @@
 package resources
 
 import (
+  "fmt"
+
   "fighter/pidgeot-socket/ecs"
 
-  //"github.com/bxcodec/saint"
+  _ "github.com/bxcodec/saint"
 )
 
 type PhysicsSystem struct {
@@ -28,11 +30,18 @@ func (system PhysicsSystem) Loop() {
       continue
     }
 
-    // Add gravity
+    if c1.WithGravity {
+      // Add gravity
+      c1.ImpulseY = func() int {
+        if impulse := c1.ImpulseY + 1; impulse > c1.MaxSpeedY {
+          return c1.MaxSpeedY
+        } else {
+          return impulse
+        }
+      }()
+    }
 
-    DeltaY := c1.ImpulseY
-    DeltaX := c1.ImpulseX
-    DeltaY += 1
+    fmt.Println(c1.ImpulseY)
 
     for e2, _ := range entities {
       c2_p, _ := system.Hub.World.GetComponent(e2, ecs.CollisionComponent)
@@ -41,17 +50,10 @@ func (system PhysicsSystem) Loop() {
       c2 := (*c2_p).(*ecs.Collision)
       p2 := (*p2_p).(*ecs.Position)
 
-      if (e1 == e2) {
-        /*
-        p1.Y += p1.DeltaY
-        p1.X += p1.DeltaX
+      if (e1 == e2) { continue }
 
-        system.Hub.broadcast <- system.Hub.World.GetComponentMessage(e1, p1_p)
-        fmt.Printf("%#v\n", p1)
-        */
-        continue
-      }
-
+      DeltaY := c1.ImpulseY
+      DeltaX := c1.ImpulseX
       NextX1 := p1.X + DeltaX + c1.X
       NextY1 := p1.Y + DeltaY + c1.Y
       NextX2 := p2.X + DeltaX + c2.X
@@ -64,6 +66,8 @@ func (system PhysicsSystem) Loop() {
       if (colliding) {
         //hDistance := saint.Abs((NextX1 + (c1.W / 2)) + (NextX2 + (c2.W / 2)))
         //vDistance := saint.Abs((NextY1 + (c1.H / 2)) + (NextY2 + (c2.H / 2)))
+
+        c1.IsJumping = false
 
         overlapY := CalculateOverlap(NextY1, NextY1 + c1.H, NextY2, NextY2 + c2.H)
         overlapX := CalculateOverlap(NextX1, NextX1 + c1.W, NextX2, NextX2 + c2.W)
@@ -78,6 +82,7 @@ func (system PhysicsSystem) Loop() {
 
           NextY1 += (direction * overlapY)
           DeltaY = 0
+          c1.ImpulseY = 0
         } else if overlapY > 0 {
           direction := func() int {
             if DeltaX < 0 {

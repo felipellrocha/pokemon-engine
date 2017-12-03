@@ -76,7 +76,7 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
   manager->addComponent<PositionComponent>(camera, 0, 0);
   manager->saveSpecial("camera", camera);
 
-  this->resize(1200, 800);
+  this->resize(600, 800);
 
   this->registerSystem<NetworkingSystem>(manager);
   this->registerSystem<RenderSystem>(manager);
@@ -359,7 +359,6 @@ void Renderer::loop(float dt) {
     string message(bytes, 2);
 
     socket->sendBinary(message);
-    printf("%d %d\n", compass, actions);
 
     delete [] bytes;
     transmit = false;

@@ -54,9 +54,7 @@ func (c *Client) ReadPump() {
   for {
     _, message, err := c.conn.ReadMessage()
     if err != nil {
-      if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
-        fmt.Printf("%+v\n", err)
-      }
+      if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) { fmt.Printf("%+v\n", err) }
       break
     }
     message = bytes.Trim(message, " \n\t")
@@ -64,9 +62,7 @@ func (c *Client) ReadPump() {
       Eid: c.Eid,
     }
 
-    if err := GetInput(message, &input); err != nil {
-      fmt.Println(err)
-    }
+    if err := GetInput(message, &input); err != nil { fmt.Println("Input error", err) }
     c.hub.Inputs.Enqueue(input)
   }
 }

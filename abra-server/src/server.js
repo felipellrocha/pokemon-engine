@@ -46,6 +46,9 @@ app.use('/engine', proxy({
 
 app.get('/stdio.html', proxy({
   target: 'http://pikachu:8000',
+  onProxyReq: (_, req) => {
+    console.log('stdio', req);
+  }
 }));
 
 const ws = proxy({

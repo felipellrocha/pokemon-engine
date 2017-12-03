@@ -167,6 +167,11 @@ func (c *Animation) ToBinary() []byte {
 type Collision struct {
   IsStatic bool
   IsColliding bool
+  WithGravity bool
+  IsJumping bool
+
+  MaxSpeedY int
+  JumpImpulse int
 
   ImpulseX int
   ImpulseY int
