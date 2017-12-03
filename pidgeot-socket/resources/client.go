@@ -63,7 +63,11 @@ func (c *Client) ReadPump() {
     }
 
     if err := GetInput(message, &input); err != nil { fmt.Println("Input error", err) }
-    c.hub.Inputs.Enqueue(input)
+    select {
+      case c.hub.Inputs <-input:
+      default:
+        fmt.Println("Missed input: ", input)
+    }
   }
 }
 

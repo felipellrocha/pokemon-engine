@@ -77,28 +77,31 @@ type InputSystem struct {
 }
 
 func (system InputSystem) Loop() {
-  for system.Hub.Inputs.Size() > 0 {
-    input := system.Hub.Inputs.Dequeue().(Input)
+  for  {
+    select {
+    case input := <-system.Hub.Inputs:
+      entity := input.Eid
 
-    entity := input.Eid
+      c, err := system.Hub.World.GetComponent(entity, ecs.CollisionComponent)
+      if err == nil {
+        collision := (*c).(*ecs.Collision)
 
-    c, err := system.Hub.World.GetComponent(entity, ecs.CollisionComponent)
-    if err == nil {
-      collision := (*c).(*ecs.Collision)
+        if input.Compass & NORTH != 0 && !collision.IsJumping {
+          fmt.Println("UP!")
+          collision.ImpulseY = -collision.JumpImpulse
+          collision.IsJumping = true
+        } else { collision.ImpulseX = 0 }
 
-      if input.Compass & NORTH != 0 && !collision.IsJumping {
-        fmt.Println("UP!")
-        collision.ImpulseY = -collision.JumpImpulse
-        collision.IsJumping = true
-      } else { collision.ImpulseX = 0 }
-
-      if input.Compass & EAST != 0 && input.Compass & WEST != 0 {
-        collision.ImpulseX = 0
-      } else if input.Compass & EAST != 0 {
-        collision.ImpulseX = 1
-      } else if input.Compass & WEST != 0 {
-        collision.ImpulseX = -1
-      } else { collision.ImpulseX = 0 }
+        if input.Compass & EAST != 0 && input.Compass & WEST != 0 {
+          collision.ImpulseX = 0
+        } else if input.Compass & EAST != 0 {
+          collision.ImpulseX = 1
+        } else if input.Compass & WEST != 0 {
+          collision.ImpulseX = -1
+        } else { collision.ImpulseX = 0 }
+      }
+    default:
+      return
     }
   }
 }

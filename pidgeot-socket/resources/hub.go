@@ -7,7 +7,6 @@ import (
   "encoding/binary"
 
   "fighter/pidgeot-socket/ecs"
-  "github.com/oleiade/lane"
 )
 
 type SpawnTypes uint8
@@ -27,7 +26,7 @@ type Hub struct {
   register chan *Client
   unregister chan *Client
   SpawnPoints map[SpawnTypes][]SpawnPoint
-  Inputs *lane.Queue
+  Inputs chan Input
   App ecs.App
   Map ecs.Map
   World ecs.Manager
@@ -56,7 +55,7 @@ func NewHub() *Hub {
     unregister: make(chan *Client),
     clients: make(map[*Client]bool),
     SpawnPoints: make(map[SpawnTypes][]SpawnPoint),
-    Inputs: lane.NewQueue(),
+    Inputs: make(chan Input, 64),
     App: *app,
     Map: *currentMap,
     World: *world,
