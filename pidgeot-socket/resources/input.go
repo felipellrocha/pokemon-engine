@@ -1,8 +1,6 @@
 package resources
 
 import (
-  "fmt"
-
   "strings"
   "bytes"
   "encoding/binary"
@@ -87,10 +85,9 @@ func (system InputSystem) Loop() {
         collision := (*c).(*ecs.Collision)
 
         if input.Compass & NORTH != 0 && !collision.IsJumping {
-          fmt.Println("UP!")
           collision.ImpulseY = -collision.JumpImpulse
           collision.IsJumping = true
-        } else { collision.ImpulseX = 0 }
+        }
 
         if input.Compass & EAST != 0 && input.Compass & WEST != 0 {
           collision.ImpulseX = 0

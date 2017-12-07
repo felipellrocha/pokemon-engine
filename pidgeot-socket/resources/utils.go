@@ -24,10 +24,10 @@ func ReadInt(members map[string]ecs.ComponentMember, key string) (int, error) {
 }
 
 func IsOverlapping(min1 int, max1 int, min2 int, max2 int) bool {
-  return max1 >= min2 && max2 >= min1;
+  return max1 > min2 && max2 > min1
 }
 
 func CalculateOverlap(min1 int, max1 int, min2 int, max2 int) int {
-  return saint.Max(0, saint.Min(max1, max2) - saint.Max(min1, min2));
+  return saint.Max(0, saint.Min(max1, max2) - saint.Max(min1, min2))
 }
 

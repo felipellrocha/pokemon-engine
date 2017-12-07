@@ -63,15 +63,16 @@ func NewHub() *Hub {
   }
 
   hub.RegisterSystem(
+    InputSystem{
+      Hub: hub,
+    },
     PhysicsSystem{
       Hub: hub,
     },
     AnimationSystem{
       Hub: hub,
-    },
-    InputSystem{
-      Hub: hub,
     })
+
 
   hub.SpawnPoints[Player] = make([]SpawnPoint, 0)
 
@@ -103,6 +104,8 @@ func NewHub() *Hub {
         position := &ecs.Position{
           X: tile.ObjectDescription.Rect.X,
           Y: tile.ObjectDescription.Rect.Y,
+          NextX: tile.ObjectDescription.Rect.X,
+          NextY: tile.ObjectDescription.Rect.Y,
         }
 
         dimension := &ecs.Dimension{
@@ -188,6 +191,8 @@ func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) (ecs.EI
       position := &ecs.Position{
         X: hub.Map.Grid.X(tile) * hub.App.Tile.Width,
         Y: hub.Map.Grid.Y(tile) * hub.App.Tile.Height,
+        NextX: hub.Map.Grid.X(tile) * hub.App.Tile.Width,
+        NextY: hub.Map.Grid.Y(tile) * hub.App.Tile.Height,
       }
 
       components = append(components, position)
@@ -221,7 +226,7 @@ func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) (ecs.EI
         IsColliding: isColliding,
         WithGravity: true,
         MaxSpeedY: 6,
-        JumpImpulse: 8,
+        JumpImpulse: 12,
         X: x,
         Y: y,
         W: w,

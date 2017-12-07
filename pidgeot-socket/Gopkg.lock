@@ -38,12 +38,6 @@
   version = "v0.0.3"
 
 [[projects]]
-  name = "github.com/oleiade/lane"
-  packages = ["."]
-  revision = "28f7c3f09254f12b51e620fa4db136ba58804762"
-  version = "v1.0.0"
-
-[[projects]]
   name = "github.com/satori/go.uuid"
   packages = ["."]
   revision = "879c5887cd475cd7864858769793b2ceb0d44feb"
@@ -76,6 +70,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "85efdba0ca2191df1713b04d3e056de6b60dde80386c1ee2bf0e83668fdf9f52"
+  inputs-digest = "7c1130de2503fa034e865da610a2049f994c2f466ba929439ef4b29efa052c69"
   solver-name = "gps-cdcl"
   solver-version = 1

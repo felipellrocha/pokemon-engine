@@ -1,15 +1,21 @@
 package resources
 
 import (
-  "fmt"
-
   "fighter/pidgeot-socket/ecs"
 
-  _ "github.com/bxcodec/saint"
+  "github.com/bxcodec/saint"
 )
 
 type PhysicsSystem struct {
   Hub Hub
+}
+
+func GetImpulseDirection(impulse int) int {
+  if impulse < 0 {
+    return 1
+  } else {
+    return -1
+  }
 }
 
 func (system PhysicsSystem) Loop() {
@@ -20,90 +26,72 @@ func (system PhysicsSystem) Loop() {
 
   for e1, _ := range entities {
     c1_p, _ := system.Hub.World.GetComponent(e1, ecs.CollisionComponent)
-    p1_p, _ := system.Hub.World.GetComponent(e1, ecs.PositionComponent)
-
     c1 := (*c1_p).(*ecs.Collision)
+
+    p1_p, _ := system.Hub.World.GetComponent(e1, ecs.PositionComponent)
     p1 := (*p1_p).(*ecs.Position)
 
     if c1.IsStatic {
-      // need to move these guys if they have any delta
+      // these are objects that have other things collide with them
       continue
     }
 
     if c1.WithGravity {
       // Add gravity
-      c1.ImpulseY = func() int {
-        if impulse := c1.ImpulseY + 1; impulse > c1.MaxSpeedY {
-          return c1.MaxSpeedY
-        } else {
-          return impulse
-        }
-      }()
+      c1.ImpulseY = saint.Min(c1.ImpulseY + 1,  c1.MaxSpeedY)
     }
 
-    fmt.Println(c1.ImpulseY)
-
     for e2, _ := range entities {
-      c2_p, _ := system.Hub.World.GetComponent(e2, ecs.CollisionComponent)
-      p2_p, _ := system.Hub.World.GetComponent(e2, ecs.PositionComponent)
+      if e1 == e2 { continue }
 
+      c2_p, _ := system.Hub.World.GetComponent(e2, ecs.CollisionComponent)
       c2 := (*c2_p).(*ecs.Collision)
+
+      p2_p, _ := system.Hub.World.GetComponent(e2, ecs.PositionComponent)
       p2 := (*p2_p).(*ecs.Position)
 
-      if (e1 == e2) { continue }
 
-      DeltaY := c1.ImpulseY
-      DeltaX := c1.ImpulseX
-      NextX1 := p1.X + DeltaX + c1.X
-      NextY1 := p1.Y + DeltaY + c1.Y
-      NextX2 := p2.X + DeltaX + c2.X
-      NextY2 := p2.Y + DeltaY + c2.Y
+      p1.NextX = p1.X + c1.ImpulseX
+      p2.NextX = p2.X + c2.ImpulseX
 
-      collidingX := IsOverlapping(NextX1, NextX1 + c1.W, NextX2, NextX2 + c2.W)
-      collidingY := IsOverlapping(NextY1, NextY1 + c1.H, NextY2, NextY2 + c2.H)
-      colliding := (collidingX && collidingY)
+      p1.NextY = p1.Y + c1.ImpulseY
+      p2.NextY = p2.Y + c2.ImpulseY
 
-      if (colliding) {
-        //hDistance := saint.Abs((NextX1 + (c1.W / 2)) + (NextX2 + (c2.W / 2)))
-        //vDistance := saint.Abs((NextY1 + (c1.H / 2)) + (NextY2 + (c2.H / 2)))
+      collidingX := IsOverlapping(p1.NextX, p1.NextX + c1.W, p2.NextX, p2.NextX + c2.W)
+      collidingY := IsOverlapping(p1.NextY, p1.NextY + c1.H, p2.NextY, p2.NextY + c2.H)
+      colliding := collidingX && collidingY
 
-        c1.IsJumping = false
+      if colliding {
+        hDistance := saint.Abs((p1.NextX + (c1.W / 2)) + (p2.NextX + (c2.W / 2)))
+        vDistance := saint.Abs((p1.NextY + (c1.H / 2)) + (p2.NextY + (c2.H / 2)))
 
-        overlapY := CalculateOverlap(NextY1, NextY1 + c1.H, NextY2, NextY2 + c2.H)
-        overlapX := CalculateOverlap(NextX1, NextX1 + c1.W, NextX2, NextX2 + c2.W)
-        if overlapY > 0 {
-          direction := func() int {
-            if DeltaY < 0 {
-              return 1
-            } else {
-              return -1
-            }
-          }()
+        // I think this is buggy right now
+        if hDistance > vDistance {
+          direction := GetImpulseDirection(c1.ImpulseY)
+          overlap := CalculateOverlap(p1.NextY, p1.NextY + c1.H, p2.NextY, p2.NextY + c2.H)
 
-          NextY1 += (direction * overlapY)
-          DeltaY = 0
+          p1.NextY += (direction * overlap)
           c1.ImpulseY = 0
-        } else if overlapY > 0 {
-          direction := func() int {
-            if DeltaX < 0 {
-              return -1
-            } else {
-              return 1
-            }
-          }()
+          c1.IsJumping = false
+        } else {
+          direction := GetImpulseDirection(c1.ImpulseX)
+          overlap := CalculateOverlap(p1.NextX, p1.NextX + c1.W, p2.NextX, p2.NextX + c2.W)
 
-          NextX1 += (direction * overlapX)
-          DeltaX = 0
+          p1.NextY += (direction * overlap)
         }
-
       }
+    }
+  }
 
-      if (p1.X != NextX1 || p1.Y != NextY1) {
-        p1.X = NextX1
-        p1.Y = NextY1
+  for e1, _ := range entities {
+    p1_p, _ := system.Hub.World.GetComponent(e1, ecs.PositionComponent)
+    p1 := (*p1_p).(*ecs.Position)
 
-        system.Hub.broadcast <- system.Hub.World.GetComponentMessage(e1, p1_p)
-      }
+    if (p1.X != p1.NextX || p1.Y != p1.NextY) {
+      p1.X = p1.NextX
+      p1.Y = p1.NextY
+
+      system.Hub.broadcast <- system.Hub.World.GetComponentMessage(e1, p1_p)
     }
   }
 }

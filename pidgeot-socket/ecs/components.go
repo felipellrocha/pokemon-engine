@@ -55,8 +55,8 @@ type Position struct {
   X int
   Y int
 
-  DeltaX int
-  DeltaY int
+  NextX int
+  NextY int
 
   Direction int
 }
