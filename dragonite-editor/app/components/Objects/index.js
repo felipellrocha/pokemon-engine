@@ -47,6 +47,9 @@ class EntityComponent extends Component {
         style={style}
         className={classes}
         onClick={handleSelectObject}
+        onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); }}
+        onMouseUp={(e) => { e.preventDefault(); e.stopPropagation(); }}
+        onMouseMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
       >
         {entity && entity.name}
       </div>
