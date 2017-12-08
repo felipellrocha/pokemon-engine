@@ -105,32 +105,10 @@ public:
   bool isRunning() { return running; };
   void quit() { running = false; };
 
-  template<class BehaviorClass, typename... Args>
-  BehaviorClass* makeBehavior(Args... args) {
-    return new BehaviorClass(this, manager, args...);
-  }
-
   template<class SystemClass, typename... Args>
   void registerSystem(Args... args) {
     SystemClass *system = new SystemClass(args..., this);
     this->systems.push_back(system);
-  }
-
-  template<class TransitionClass, typename... Args>
-  void addTransition(Args... args) {
-    TransitionClass *transition = new TransitionClass(args...);
-    incoming.push_front(transition);
-  }
-
-  void addTransition(Transition* transition) {
-    incoming.push_front(transition);
-  }
-
-  void loadStage(string initialPayload);
-
-  void createTile(json& data, int layer, int index);
-  string getEntityIDByName(string name) {
-    return entitiesByName[name];
   }
 
   Renderer(string initialData, string _assetPath, WebSocket::pointer socket, EntityManager* _manager, int width, int height);

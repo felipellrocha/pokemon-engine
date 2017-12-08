@@ -10,14 +10,6 @@ type PhysicsSystem struct {
   Hub Hub
 }
 
-func GetImpulseDirection(impulse int) int {
-  if impulse < 0 {
-    return 1
-  } else {
-    return -1
-  }
-}
-
 func (system PhysicsSystem) Loop() {
   entities, err := system.Hub.World.AllEntitiesWithComponent(ecs.CollisionComponent)
   if err != nil {
@@ -31,15 +23,15 @@ func (system PhysicsSystem) Loop() {
     p1_p, _ := system.Hub.World.GetComponent(e1, ecs.PositionComponent)
     p1 := (*p1_p).(*ecs.Position)
 
-    if c1.IsStatic {
-      // these are objects that have other things collide with them
-      continue
-    }
+    if c1.IsStatic { continue }
 
     if c1.WithGravity {
       // Add gravity
-      c1.ImpulseY = saint.Min(c1.ImpulseY + 1,  c1.MaxSpeedY)
+      c1.ImpulseY = saint.Min(c1.ImpulseY + 1, c1.MaxSpeedY)
     }
+
+    p1.NextY = p1.Y + c1.ImpulseY
+    p1.NextX = p1.X + c1.ImpulseX
 
     for e2, _ := range entities {
       if e1 == e2 { continue }
@@ -50,35 +42,33 @@ func (system PhysicsSystem) Loop() {
       p2_p, _ := system.Hub.World.GetComponent(e2, ecs.PositionComponent)
       p2 := (*p2_p).(*ecs.Position)
 
+      NextX2 := p2.X + c2.ImpulseX
+      NextY2 := p2.Y + c2.ImpulseY
 
-      p1.NextX = p1.X + c1.ImpulseX
-      p2.NextX = p2.X + c2.ImpulseX
-
-      p1.NextY = p1.Y + c1.ImpulseY
-      p2.NextY = p2.Y + c2.ImpulseY
-
-      collidingX := IsOverlapping(p1.NextX, p1.NextX + c1.W, p2.NextX, p2.NextX + c2.W)
-      collidingY := IsOverlapping(p1.NextY, p1.NextY + c1.H, p2.NextY, p2.NextY + c2.H)
+      // resolve y-axis
+      collidingX := IsOverlapping(p1.X, p1.X + c1.W, p2.X, p2.X + c2.W)
+      collidingY := IsOverlapping(p1.NextY, p1.NextY + c1.H, NextY2, NextY2 + c2.H)
       colliding := collidingX && collidingY
 
       if colliding {
-        hDistance := saint.Abs((p1.NextX + (c1.W / 2)) + (p2.NextX + (c2.W / 2)))
-        vDistance := saint.Abs((p1.NextY + (c1.H / 2)) + (p2.NextY + (c2.H / 2)))
+        direction := func (impulse int) int {if impulse < 0 { return 1 } else { return -1 }}(c1.ImpulseY)
+        overlap := CalculateOverlap(p1.NextY, p1.NextY + c1.H, NextY2, NextY2 + c2.H)
 
-        // I think this is buggy right now
-        if hDistance > vDistance {
-          direction := GetImpulseDirection(c1.ImpulseY)
-          overlap := CalculateOverlap(p1.NextY, p1.NextY + c1.H, p2.NextY, p2.NextY + c2.H)
+        p1.NextY += (direction * overlap)
+        c1.ImpulseY = 0
+        c1.IsJumping = false
+      }
 
-          p1.NextY += (direction * overlap)
-          c1.ImpulseY = 0
-          c1.IsJumping = false
-        } else {
-          direction := GetImpulseDirection(c1.ImpulseX)
-          overlap := CalculateOverlap(p1.NextX, p1.NextX + c1.W, p2.NextX, p2.NextX + c2.W)
+      // resolve x-axis
+      collidingX = IsOverlapping(p1.NextX, p1.NextX + c1.W, NextX2, NextX2 + c2.W)
+      collidingY = IsOverlapping(p1.Y, p1.Y + c1.H, p2.Y, p2.Y + c2.H)
+      colliding = collidingX && collidingY
 
-          p1.NextY += (direction * overlap)
-        }
+      if colliding {
+        direction := func (impulse int) int {if impulse < 0 { return 1 } else { return -1 }}(c1.ImpulseX)
+        overlap := CalculateOverlap(p1.NextX, p1.NextX + c1.W, NextX2, NextX2 + c2.W)
+
+        p1.NextX += (direction * overlap)
       }
     }
   }

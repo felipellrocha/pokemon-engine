@@ -279,9 +279,6 @@ void Renderer::initGame(char* initialData) {
 
 }
 
-void Renderer::loadStage(string initialPayload) {
-}
-
 void Renderer::loop(float dt) {
   SDL_Event event;
   bool transmit = false;
@@ -366,37 +363,6 @@ void Renderer::loop(float dt) {
 
 
   for (auto& system : systems) system->update(dt);
-}
-
-void Renderer::createTile(json& data, int layer, int index) {
-  json node = data.at(index);
-
-  int setIndex = node.at(0).get<int>();
-  int tileIndex = node.at(1).get<int>();
-
-  vector<array<rect, 2>> sources;
-  Tileset* tileset = tilesets[setIndex];
-  int surrounding = this->grid.findSurroundings(node, index, data);
-
-  if (tileset->type == "tile") {
-    sources = simpleTile::calculateAll(tileIndex, index, tileset, &grid);
-  }
-  else if (tileset->terrains[tileIndex] == "6-tile") {
-    sources = sixTile::calculateAll(tileIndex, index, surrounding, tileset, &grid);
-  }
-  else if (tileset->terrains[tileIndex] == "4-tile") {
-    sources = fourTile::calculateAll(tileIndex, index, surrounding, tileset, &grid);
-  }
-  for (auto& calc : sources) {
-    //auto src = calc[0];
-    auto dst = calc[1];
-
-    EID entity = manager->createEntity();
-
-    //manager->addComponent<SpriteComponent>(entity, src.x, src.y, src.w, src.h, tileset->texture);
-    manager->addComponent<PositionComponent>(entity, dst.x, dst.y);
-    manager->addComponent<RenderComponent>(entity, layer);
-  }
 }
 
 void Renderer::resize(int w, int h) {

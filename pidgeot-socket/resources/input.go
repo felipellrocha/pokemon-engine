@@ -75,7 +75,7 @@ type InputSystem struct {
 }
 
 func (system InputSystem) Loop() {
-  for  {
+  for {
     select {
     case input := <-system.Hub.Inputs:
       entity := input.Eid
@@ -92,9 +92,9 @@ func (system InputSystem) Loop() {
         if input.Compass & EAST != 0 && input.Compass & WEST != 0 {
           collision.ImpulseX = 0
         } else if input.Compass & EAST != 0 {
-          collision.ImpulseX = 1
+          collision.ImpulseX = 3
         } else if input.Compass & WEST != 0 {
-          collision.ImpulseX = -1
+          collision.ImpulseX = -3
         } else { collision.ImpulseX = 0 }
       }
     default:

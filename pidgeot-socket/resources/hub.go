@@ -225,15 +225,13 @@ func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) (ecs.EI
         IsStatic: isStatic,
         IsColliding: isColliding,
         WithGravity: true,
-        MaxSpeedY: 6,
-        JumpImpulse: 12,
+        MaxSpeedY: 15,
+        JumpImpulse: 15,
         X: x,
         Y: y,
         W: w,
         H: h,
       }
-
-      fmt.Printf("collision: %#v\n", collision)
 
       components = append(components, collision)
     }

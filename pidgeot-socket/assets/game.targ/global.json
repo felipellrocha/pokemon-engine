@@ -11,7 +11,7 @@
     -2,
     "6a995645-4320-4f7e-9a25-6446fcc9b631"
   ],
-  "selectedLayer": 5,
+  "selectedLayer": 6,
   "selectedAnimation": 0,
   "selectedFrame": 0,
   "selectedShape": {
@@ -263,5 +263,5 @@
   ],
   "initialTileIndex": 60,
   "hideGrid": true,
-  "selectedObject": 0
+  "selectedObject": 1
 }

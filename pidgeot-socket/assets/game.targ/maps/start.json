@@ -30306,7 +30306,23 @@
               "x": 220,
               "y": 248,
               "w": 67,
-              "h": 37
+              "h": 37,
+              "pointerEvents": "none"
+            },
+            "components": [],
+            "entity": "6d7ffb40-784d-473c-8819-7d147e28c28d"
+          }
+        ],
+        [
+          -3,
+          {
+            "id": "c6229bc7-6256-4281-b76e-3fca77c41f66",
+            "rect": {
+              "x": 296,
+              "y": 171,
+              "w": 93,
+              "h": 116,
+              "pointerEvents": "none"
             },
             "components": [],
             "entity": "6d7ffb40-784d-473c-8819-7d147e28c28d"
