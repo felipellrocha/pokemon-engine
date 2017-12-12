@@ -44,7 +44,6 @@ void RenderSystem::update(float dt) {
     if (sprite) {
       auto texture = game->tilesets[sprite->texture]->texture;
 
-
       if (render->shouldTileY && render->shouldTileX) {
         int xs = position->x - (ceil((float)position->x / sprite->w) * sprite->w);
         int ys = position->y - (ceil((float)position->y / sprite->h) * sprite->h);

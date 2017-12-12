@@ -9,11 +9,11 @@
   "selectedTerrainType": "6-tile",
   "selectedTile": [
     -2,
-    "6a995645-4320-4f7e-9a25-6446fcc9b631"
+    "86038a87-5751-4ac6-855b-0792d26dfee4"
   ],
-  "selectedLayer": 6,
-  "selectedAnimation": 0,
-  "selectedFrame": 0,
+  "selectedLayer": 5,
+  "selectedAnimation": 1,
+  "selectedFrame": 4,
   "selectedShape": {
     "columns": 1,
     "rows": 1
@@ -262,6 +262,6 @@
     }
   ],
   "initialTileIndex": 60,
-  "hideGrid": true,
-  "selectedObject": 1
+  "hideGrid": false,
+  "selectedObject": 2
 }

@@ -71,7 +71,7 @@ func GetInput(data []byte, out *Input) error {
 }
 
 type InputSystem struct {
-  Hub Hub
+  Hub *Hub
 }
 
 func (system InputSystem) Loop() {

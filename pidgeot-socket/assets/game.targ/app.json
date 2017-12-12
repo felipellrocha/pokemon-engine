@@ -50,7 +50,15 @@
       "name": "character.png",
       "rows": 10,
       "columns": 20,
-      "type": "tile",
+      "type": "image",
+      "terrains": {}
+    },
+    {
+      "src": "slime.png",
+      "name": "slime.png",
+      "rows": 2,
+      "columns": 12,
+      "type": "image",
       "terrains": {}
     }
   ],
@@ -106,6 +114,39 @@
           "y": 3,
           "w": 26,
           "h": 27
+        }
+      }
+    },
+    {
+      "id": "eb81f04b-0879-43e9-8fa3-132f923bdc64",
+      "name": "smile-walk",
+      "numberOfFrames": 32,
+      "sheet": 0,
+      "spritesheet": 6,
+      "keyframes": {
+        "0": {
+          "x": 5,
+          "y": 18,
+          "w": 21,
+          "h": 12
+        },
+        "7": {
+          "x": 37,
+          "y": 18,
+          "w": 21,
+          "h": 12
+        },
+        "15": {
+          "x": 66,
+          "y": 18,
+          "w": 27,
+          "h": 12
+        },
+        "23": {
+          "x": 37,
+          "y": 18,
+          "w": 21,
+          "h": 12
         }
       }
     }
@@ -598,6 +639,126 @@
               "pointer": false,
               "value": false,
               "name": "shouldTileY"
+            }
+          }
+        },
+        {
+          "name": "AnimationComponent",
+          "members": {
+            "animation": {
+              "type": "AnimationType",
+              "pointer": false,
+              "value": 0,
+              "name": "animation"
+            }
+          }
+        },
+        {
+          "name": "CollisionComponent",
+          "members": {
+            "isStatic": {
+              "type": "bool",
+              "pointer": false,
+              "value": false,
+              "name": "isStatic"
+            },
+            "resolver": {
+              "type": "ResolverType",
+              "pointer": false,
+              "value": 0,
+              "name": "resolver"
+            },
+            "x": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "x"
+            },
+            "y": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "y"
+            },
+            "w": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "w"
+            },
+            "h": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "h"
+            },
+            "onCollision": {
+              "type": "script",
+              "pointer": false,
+              "value": null,
+              "name": "onCollision"
+            }
+          }
+        }
+      ]
+    },
+    "86038a87-5751-4ac6-855b-0792d26dfee4": {
+      "name": "enemy",
+      "avatar": null,
+      "components": [
+        {
+          "name": "PositionComponent",
+          "members": {}
+        },
+        {
+          "name": "SpriteComponent",
+          "members": {
+            "x": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "x"
+            },
+            "y": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "y"
+            },
+            "w": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "w"
+            },
+            "h": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "h"
+            },
+            "src": {
+              "type": "TextureSource",
+              "pointer": false,
+              "value": 6,
+              "name": "texture"
+            }
+          }
+        },
+        {
+          "name": "DimensionComponent",
+          "members": {
+            "w": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "w"
+            },
+            "h": {
+              "type": "int",
+              "pointer": false,
+              "value": 0,
+              "name": "h"
             }
           }
         },

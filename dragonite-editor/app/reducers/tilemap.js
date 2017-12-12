@@ -221,6 +221,17 @@ export default handleActions({
 
     return setIn(state, ['layers', selectedLayer, 'data', selectedObject, 1, 'entity'], id);
   },
+  CHANGE_OBJECT_DIMENSIONS: (state, action) => {
+    const {
+      selectedLayer,
+      selectedObject,
+      property,
+      value,
+    } = action;
+
+    return setIn(state, ['layers', selectedLayer, 'data', selectedObject, 1, 'rect', property], value);
+  },
+
   PUT_DOWN_OBJECT: (state, action) => {
     const {
       initial,

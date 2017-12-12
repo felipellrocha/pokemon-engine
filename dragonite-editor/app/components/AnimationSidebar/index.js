@@ -38,7 +38,7 @@ class AnimationSidebar extends PureComponent {
     };
   }
 
-  getAnimationAndFrame() {
+  getAnimationAndFrame = () => {
     const {
       selectedAnimation,
       selectedFrame,
@@ -54,7 +54,19 @@ class AnimationSidebar extends PureComponent {
     return { animation, frame };
   }
 
-  toggleDialog() {
+  addAnimation = () => {
+    const name = this.animationName.value;
+    if (!name) return;
+
+    this.props.addAnimation(name);
+
+    this.setState(state => ({
+      dialogIsOpen: false,
+    }))
+    this.animationName.value = "";
+  }
+
+  toggleDialog = () => {
     this.setState(state => ({
       dialogIsOpen: !state.dialogIsOpen,
     }))
@@ -162,7 +174,7 @@ class AnimationSidebar extends PureComponent {
         }
         <Dialog
           visible={this.state.dialogIsOpen}
-          onContinue={addAnimation}
+          onContinue={this.addAnimation}
           onCancel={this.toggleDialog}
         >
           What is the name of the animation?
@@ -186,18 +198,7 @@ const mapDispatchToProps = (dispatch) => ({
   changeAnimationName: (name, value) => dispatch(changeAnimationName(name, value)),
   changeAnimationSpritesheet: (name, value) => dispatch(changeAnimationSpritesheet(name, value)),
   selectAnimation: (name) => dispatch(selectAnimation(name)),
-  addAnimation: () => {
-    const name = this.animationName.value;
-
-    if (!name) return;
-
-    dispatch(addAnimation(name));
-
-    this.setState(state => ({
-      dialogIsOpen: false,
-    }))
-    this.animationName.value = "";
-  },
+  addAnimation: (name) => dispatch(addAnimation(name)),
   changeX: (event) => {
     const value = event.target.value;
     const coord = { x: parseInt(value) };

@@ -137,22 +137,38 @@ export function selectObject(id) {
 }
 
 export const CHANGE_ENTITY_FOR_OBJECT = 'CHANGE_ENTITY_FOR_OBJECT';
-export function changeEntityForObject(id) {
-  return (dispatch, getState) => {
-    const {
-      global: {
-        selectedObject,
-        selectedLayer,
-      }
-    } = getState();
-    
-    dispatch({
-      type: CHANGE_ENTITY_FOR_OBJECT,
+export const changeEntityForObject = (id) => (dispatch, getState) => {
+  const {
+    global: {
       selectedObject,
       selectedLayer,
-      id,
-    })
-  }
+    }
+  } = getState();
+  
+  dispatch({
+    type: CHANGE_ENTITY_FOR_OBJECT,
+    selectedObject,
+    selectedLayer,
+    id,
+  })
+}
+
+export const CHANGE_OBJECT_DIMENSIONS = 'CHANGE_OBJECT_DIMENSIONS'
+export const changeObjectDimensions = (property, value) => (dispatch, getState) => {
+  const {
+    global: {
+      selectedObject,
+      selectedLayer,
+    }
+  } = getState();
+  
+  dispatch({
+    type: CHANGE_OBJECT_DIMENSIONS,
+    selectedObject,
+    selectedLayer,
+    property,
+    value,
+  })
 }
 
 export const SELECT_SHAPE = 'SELECT_SHAPE';

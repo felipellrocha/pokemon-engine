@@ -16,6 +16,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 70%;
+  }
+
+  .right {
+    width: 30%;
+    align-items: end;
   }
 
   .left, .right, .middle {
@@ -41,6 +47,12 @@
 
   select {
     margin-left: 5px;
+  }
+
+  input {
+    width: 50px;
+    border: 0;
+    border-bottom: 1px solid #eee;
   }
 }
 

@@ -7,6 +7,7 @@ import (
   "encoding/binary"
 
   "fighter/pidgeot-socket/ecs"
+  "fighter/pidgeot-socket/ai"
 )
 
 type SpawnTypes uint8
@@ -30,6 +31,7 @@ type Hub struct {
   App ecs.App
   Map ecs.Map
   World ecs.Manager
+  Forest []ai.IBehavior
   Systems []ecs.System
 }
 
@@ -59,18 +61,22 @@ func NewHub() *Hub {
     App: *app,
     Map: *currentMap,
     World: *world,
+    Forest: make([]ai.IBehavior, 0),
     Systems: make([]ecs.System, 0),
   }
 
   hub.RegisterSystem(
     InputSystem{
-      Hub: hub,
+      Hub: &hub,
+    },
+    AISystem{
+      Hub: &hub,
     },
     PhysicsSystem{
-      Hub: hub,
+      Hub: &hub,
     },
     AnimationSystem{
-      Hub: hub,
+      Hub: &hub,
     })
 
 
@@ -87,6 +93,16 @@ func NewHub() *Hub {
             Layer: i,
             Index: j,
           })
+        } else if definition.Name == "enemy" {
+          entity, _ := hub.CreateFromEntityId(tile.EntityId, i, j)
+
+          test := ai.NewTest(entity, world)
+          sequence := ai.NewSequence(entity, world, test)
+          tree := ai.NewBehaviorTree(sequence)
+
+          hub.Forest = append(hub.Forest, tree)
+
+          //tree.Tick(tree)
         } else {
           hub.CreateFromEntityId(tile.EntityId, i, j)
         }

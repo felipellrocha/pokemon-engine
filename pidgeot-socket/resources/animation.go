@@ -7,7 +7,7 @@ import (
 )
 
 type AnimationSystem struct {
-  Hub Hub
+  Hub *Hub
 }
 
 func (system AnimationSystem) Loop() {

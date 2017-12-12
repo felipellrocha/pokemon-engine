@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import { compose } from 'recompose';
 import { withRouter } from 'react-router-dom'
 
+import { throttle } from 'lodash';
+
 import {
   EMPTY,
 } from 'utils/constants';
@@ -22,6 +24,7 @@ import {
   changeZoom,
   changeTilingMethod,
   changeEntityForObject,
+  changeObjectDimensions,
   toggleHideGrid,
 } from 'actions';
 
@@ -76,6 +79,7 @@ class component extends PureComponent {
       selectedObject,
 
       handleChangeEntity,
+      handleChangeObjectDimensions,
     } = this.props;
 
     const layer = layers[selectedLayer];
@@ -84,6 +88,7 @@ class component extends PureComponent {
     return (
       <div className="actions">
         <div className="left">
+
           <div>
             <span>Entity:</span>
             <select onChange={handleChangeEntity} value={object.entity}>
@@ -95,6 +100,45 @@ class component extends PureComponent {
               })}
             </select>
           </div>
+
+        </div>
+        <div className="middle">
+          <div>
+            <span>X:</span>
+            <input
+              type="number"
+              value={object.rect.x}
+              onChange={e => handleChangeObjectDimensions('x', parseInt(e.target.value))}
+            />
+          </div>
+
+          <div>
+            <span>Y:</span>
+            <input
+              type="number"
+              value={object.rect.y}
+              onChange={e => handleChangeObjectDimensions('y', parseInt(e.target.value))}
+            />
+          </div>
+
+          <div>
+            <span>W:</span>
+            <input
+              type="number"
+              value={object.rect.w}
+              onChange={e => handleChangeObjectDimensions('w', parseInt(e.target.value))}
+            />
+          </div>
+
+          <div>
+            <span>H:</span>
+            <input
+              type="number"
+              value={object.rect.h}
+              onChange={e => handleChangeObjectDimensions('h', parseInt(e.target.value))}
+            />
+          </div>
+
         </div>
       </div>
     )
@@ -127,10 +171,8 @@ class component extends PureComponent {
       <div className={classes}>
         { leftSide }
         <div className="right">
-          <div>
-            <div>Zoom</div>
-            <input type="range" min="0" max="1" step="0.05" value={zoom} onChange={handleChangeZoom} />
-          </div>
+          <div>Zoom</div>
+          <input type="range" min="0" max="1" step="0.05" value={zoom} onChange={handleChangeZoom} />
         </div>
       </div>
     );
@@ -156,6 +198,9 @@ export default compose(
       handleChangeEntity: (e) => {
         dispatch(changeEntityForObject(e.target.value));
       },
+      handleChangeObjectDimensions: throttle((property, value) => {
+        dispatch(changeObjectDimensions(property, value));
+      }, 150, { loading: true}),
       handleClear: () => {
         dispatch(selectTile({setIndex: EMPTY, tileIndex: 0}));
         dispatch(selectShape(1, 1));

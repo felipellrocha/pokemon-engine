@@ -7,7 +7,7 @@ import (
 )
 
 type PhysicsSystem struct {
-  Hub Hub
+  Hub *Hub
 }
 
 func (system PhysicsSystem) Loop() {
