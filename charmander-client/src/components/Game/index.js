@@ -36,8 +36,8 @@ class Game extends Component {
             printErr: console.error.bind(console),
             canvas: document.querySelector('canvas'),
             websocket: {
-              //url: `ws://${window.location.host}/socket/game/${gameId}`,
-              url: `ws://localhost:8000/game/${gameId}`,
+              url: `ws://${window.location.host}/socket/game/${gameId}`,
+              //url: `ws://localhost:8000/game/${gameId}`,
               subprotocol: 'binary',
             },
             locateFile: function (file) {
