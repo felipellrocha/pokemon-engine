@@ -101,8 +101,6 @@ func NewHub() *Hub {
           tree := ai.NewBehaviorTree(sequence)
 
           hub.Forest = append(hub.Forest, tree)
-
-          //tree.Tick(tree)
         } else {
           hub.CreateFromEntityId(tile.EntityId, i, j)
         }

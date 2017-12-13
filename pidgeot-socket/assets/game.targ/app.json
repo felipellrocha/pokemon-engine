@@ -751,13 +751,13 @@
             "w": {
               "type": "int",
               "pointer": false,
-              "value": 0,
+              "value": 21,
               "name": "w"
             },
             "h": {
               "type": "int",
               "pointer": false,
-              "value": 0,
+              "value": 12,
               "name": "h"
             }
           }
@@ -768,7 +768,7 @@
             "animation": {
               "type": "AnimationType",
               "pointer": false,
-              "value": 0,
+              "value": 1,
               "name": "animation"
             }
           }
@@ -803,13 +803,13 @@
             "w": {
               "type": "int",
               "pointer": false,
-              "value": 0,
+              "value": 21,
               "name": "w"
             },
             "h": {
               "type": "int",
               "pointer": false,
-              "value": 0,
+              "value": 12,
               "name": "h"
             },
             "onCollision": {
@@ -817,6 +817,23 @@
               "pointer": false,
               "value": null,
               "name": "onCollision"
+            }
+          }
+        },
+        {
+          "name": "RenderComponent",
+          "members": {
+            "shouldTileX": {
+              "type": "bool",
+              "pointer": false,
+              "value": false,
+              "name": "shouldTileX"
+            },
+            "shouldTileY": {
+              "type": "bool",
+              "pointer": false,
+              "value": false,
+              "name": "shouldTileY"
             }
           }
         }
