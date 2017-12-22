@@ -62,7 +62,7 @@ class Entity extends PureComponent {
 
   render() {
     const {
-      id,
+      index,
       entities,
 
       changeComponentValue,
@@ -70,7 +70,7 @@ class Entity extends PureComponent {
       removeComponent,
     } = this.props;
 
-    const entity = entities[id];
+    const entity = entities[index];
 
     const classes = classnames(styles.component, {
       'over': this.state.dragOver,
@@ -78,7 +78,7 @@ class Entity extends PureComponent {
 
     return (
       <div
-        key={id}
+        key={index}
         className={classes}
         onDragOver={this.dragOver}
         onDragEnter={this.dragEnter}
@@ -130,10 +130,10 @@ export default connect(
     entities: state.app.entities,
   }),
   (dispatch, props) => ({
-    changeEntityName: (event) => dispatch(changeEntityName(props.id, event.target.value)),
-    receiveComponent: (component) => dispatch(receiveComponent(props.id, component)),
-    changeComponentValue: (i, j, value) => dispatch(changeComponentValue(props.id, i, j, value)),
-    removeComponent: (i) => dispatch(removeComponent(props.id, i)),
+    changeEntityName: (event) => dispatch(changeEntityName(props.index, event.target.value)),
+    receiveComponent: (component) => dispatch(receiveComponent(props.index, component)),
+    changeComponentValue: (i, j, value) => dispatch(changeComponentValue(props.index, i, j, value)),
+    removeComponent: (i) => dispatch(removeComponent(props.index, i)),
   })
 )(Entity);
 

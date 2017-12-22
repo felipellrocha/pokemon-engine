@@ -14,4 +14,56 @@
       color: #d33e43;
     }
   }
+
+  .errors {
+    font-size: 11px;
+    margin: 3px;
+    background: #ffdada;
+    padding: 3px;
+
+    &::before {
+      content: "Error!!!";
+      font-size: 10px;
+      color: #333;
+    }
+  }
+
+  .types {
+    font-size: 11px;
+    margin: 3px;
+
+    &::before {
+      content: "Component";
+      font-size: 10px;
+      color: #777;
+    }
+
+    .members {
+      display: flex;
+      margin: 5px 0 15px;
+
+      .member {
+        margin-right: 5px;
+        padding: 3px 6px;
+        background: rgba(0, 0, 0, .1);
+        border-radius: 2px;
+      }
+
+      .highlight {
+        background: #D33E43;
+        color: #fff;
+      }
+    }
+  }
+
+  .suggestions {
+    font-size: 11px;
+    margin: 3px;
+
+    &::before {
+      content: "Did you mean?";
+      font-size: 10px;
+      color: #777;
+    }
+  }
 }

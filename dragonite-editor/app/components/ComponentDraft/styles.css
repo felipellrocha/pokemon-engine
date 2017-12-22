@@ -1,0 +1,54 @@
+:local(.component) {
+  width: 500px;
+  background: #fff;
+  border-radius: 2px;
+  counter-reset: line;
+  padding: 15px;
+  font-size: 12px;
+
+  .entity {
+    color: #717171;
+  }
+
+  .component {
+    color: #d33e43;
+  }
+
+  .value {
+    color: #d33e43;
+  }
+
+  .info {
+    color: #aaa;
+  }
+
+  .number {
+    border-bottom: 1px solid #ddd;
+  }
+
+  select {
+    border: 0;
+    border-bottom: 1px solid #ddd;
+    background: transparent;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  .line-number {
+    display: flex;
+
+    &::before {
+      counter-increment: line;
+      content: counter(line);
+      font-size: 9px;
+      margin-right: 5px;
+      padding: 5px 10px;
+      border-right: 1px solid #ddd;
+    }
+
+    .line {
+      flex: 1;
+      padding: 3px 5px;
+    }
+  }
+}

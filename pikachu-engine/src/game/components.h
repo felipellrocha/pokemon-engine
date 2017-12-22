@@ -21,6 +21,7 @@ using json = nlohmann::json;
 typedef int TextureSource;
 typedef int AnimationType;
 typedef json script;
+typedef string AIScript;
 typedef int ResolverType;
 typedef map<Actions, Ability*> AbilityList;
 
@@ -62,8 +63,8 @@ struct PositionComponent : public Component {
 };
 
 struct DimensionComponent : public Component {
-  int w; //private
-  int h; //private
+  int w;
+  int h;
 
   DimensionComponent(int _w, int _h) : w(_w), h(_h) {}
 
@@ -156,6 +157,23 @@ struct CenteredCameraComponent : public Component {
   void update(EID _entity) {
     entity = _entity;
   }
+};
+
+struct AnimationComponent : public Component {
+  AnimationType animation;
+  int frame; //private
+  bool animating = false; //private
+
+  AnimationComponent(AnimationType _animation, int _frame) : animation(_animation), frame(_frame) { };
+  AnimationComponent() : AnimationComponent(0, 0) { };
+};
+
+
+
+struct AIComponent : public Component {
+  AIScript script;
+
+  AIComponent() { };
 };
 
 #endif

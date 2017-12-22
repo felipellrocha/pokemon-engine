@@ -1,0 +1,32 @@
+player {
+  PositionComponent
+  DimensionComponent {
+    w: 26
+    h: 27
+  }
+  SpriteComponent {
+    x: 11
+    y: 4
+    w: 0
+    h: 0
+    src: character.png
+  }
+  AnimationComponent {
+    animation: player-idle
+  }
+  RenderComponent
+  CollisionComponent
+  AIComponent {
+    script:
+      Choose() {
+        MoveLeft(1)
+        MoveRight(1)
+    }
+  }
+  SpriteComponent {
+    x: 10
+    y: 10
+    w: 20
+    h: 20
+  }
+}

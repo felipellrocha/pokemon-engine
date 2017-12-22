@@ -64,6 +64,11 @@ export default class MenuBuilder {
         { label: 'Save', accelerator: 'Command+S', click: () => { this.mainWindow.send('save'); } },
         { label: 'Save As', accelerator: 'Command+Shift+S', click: () => { this.mainWindow.send('save-as'); } },
         { type: 'separator' },
+        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+        { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" },
+        { type: 'separator' },
         { label: 'Undo', accelerator: 'Command+Z', click: () => { this.mainWindow.send('undo'); } },
         { label: 'Redo', accelerator: 'Shift+Command+Z', click: () => { this.mainWindow.send('redo'); } },
       ]

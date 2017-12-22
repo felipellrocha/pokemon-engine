@@ -43,3 +43,10 @@ export function removeComponent(id, componentIndex) {
     componentIndex,
   }
 }
+
+export const RECEIVE_ENTITIES = 'RECEIVE_ENTITIES';
+export const receiveEntities = (objects, text) => ({
+  type: RECEIVE_ENTITIES,
+  objects,
+  text,
+})

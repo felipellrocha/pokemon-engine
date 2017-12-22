@@ -151,10 +151,9 @@
       }
     }
   ],
-  "entities": {
-    "4f436517-dfe3-4b20-bf2f-069a4750ca6b": {
+  "entities": [
+    {
       "name": "hills",
-      "avatar": null,
       "components": [
         {
           "name": "RenderComponent",
@@ -254,9 +253,8 @@
         }
       ]
     },
-    "4fe2bb1e-a7ea-4d42-9bbc-2d890b2b32a1": {
+    {
       "name": "sky",
-      "avatar": null,
       "components": [
         {
           "name": "SpriteComponent",
@@ -333,9 +331,8 @@
         }
       ]
     },
-    "849ec5c7-52af-47c2-961d-c0fcc182fa8a": {
+    {
       "name": "cloud",
-      "avatar": null,
       "components": [
         {
           "name": "SpriteComponent",
@@ -412,9 +409,8 @@
         }
       ]
     },
-    "4959850f-4723-436b-a9d5-3a9dc8d973f8": {
+    {
       "name": "sea",
-      "avatar": null,
       "components": [
         {
           "name": "SpriteComponent",
@@ -491,9 +487,8 @@
         }
       ]
     },
-    "6d7ffb40-784d-473c-8819-7d147e28c28d": {
+    {
       "name": "wall",
-      "avatar": null,
       "components": [
         {
           "name": "DimensionComponent",
@@ -565,9 +560,8 @@
         }
       ]
     },
-    "6a995645-4320-4f7e-9a25-6446fcc9b631": {
+    {
       "name": "player",
-      "avatar": null,
       "components": [
         {
           "name": "PositionComponent",
@@ -702,9 +696,8 @@
         }
       ]
     },
-    "86038a87-5751-4ac6-855b-0792d26dfee4": {
+    {
       "name": "enemy",
-      "avatar": null,
       "components": [
         {
           "name": "PositionComponent",
@@ -839,6 +832,6 @@
         }
       ]
     }
-  },
+  ],
   "initialMap": 0
 }

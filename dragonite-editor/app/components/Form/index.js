@@ -158,6 +158,22 @@ class Form extends PureComponent {
         </div>
       );
     }
+    else if (field.type === 'AIScript') {
+      const value = (field.value === 'nullptr' || field.value === null) ?
+        [] :
+        field.value;
+      return (
+        <ScriptDraft
+          value={renderer(value)}
+          onChange={text => {
+            try {
+              const value = parser.parse(text);
+              this.handleChange(value, field, i);
+            } catch(e) {}
+          }}
+        />
+      );
+    }
     else if (field.type === 'script') {
       const value = (field.value === 'nullptr' || field.value === null) ?
         [] :

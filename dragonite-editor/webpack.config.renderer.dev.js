@@ -99,11 +99,9 @@ export default merge(baseConfig, {
         test: /\.peg(\?v=\d+\.\d+\.\d+)?$/,
         use: {
           loader: 'pegjs-loader',
-          /*
-          options: {
-            trace: true,
-          },
-          */
+          //options: {
+          //  trace: true,
+          //},
         },
       },
       // TTF Font

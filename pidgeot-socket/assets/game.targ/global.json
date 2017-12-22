@@ -20,45 +20,27 @@
   },
   "components": [
     {
-      "name": "HealthComponent",
-      "members": {
-        "currentHearts": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "currentHearts"
-        },
-        "maxHearts": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "maxHearts"
-        },
-        "currentEnergy": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "currentEnergy"
-        },
-        "maxEnergy": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "maxEnergy"
-        }
-      }
-    },
-    {
-      "name": "AbilityComponent",
-      "members": {}
-    },
-    {
       "name": "PositionComponent",
-      "members": {}
+      "members": {},
+      "area": "component"
     },
     {
       "name": "DimensionComponent",
-      "members": {}
+      "members": {
+        "w": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "w"
+        },
+        "h": {
+          "type": "int",
+          "pointer": false,
+          "value": 0,
+          "name": "h"
+        }
+      },
+      "area": "component"
     },
     {
       "name": "SpriteComponent",
@@ -93,34 +75,8 @@
           "value": null,
           "name": "texture"
         }
-      }
-    },
-    {
-      "name": "InputComponent",
-      "members": {}
-    },
-    {
-      "name": "MovementComponent",
-      "members": {
-        "slow": {
-          "type": "point",
-          "pointer": false,
-          "value": {
-            "x": 0,
-            "y": 0
-          },
-          "name": "slow"
-        },
-        "fast": {
-          "type": "point",
-          "pointer": false,
-          "value": {
-            "x": 0,
-            "y": 0
-          },
-          "name": "fast"
-        }
-      }
+      },
+      "area": "component"
     },
     {
       "name": "RenderComponent",
@@ -137,11 +93,8 @@
           "value": false,
           "name": "shouldTileY"
         }
-      }
-    },
-    {
-      "name": "CenteredCameraComponent",
-      "members": {}
+      },
+      "area": "component"
     },
     {
       "name": "CollisionComponent",
@@ -188,21 +141,11 @@
           "value": null,
           "name": "onCollision"
         }
-      }
+      },
+      "area": "component"
     },
     {
-      "name": "ProjectileComponent",
-      "members": {
-        "vec": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "vec"
-        }
-      }
-    },
-    {
-      "name": "WalkComponent",
+      "name": "CenteredCameraComponent",
       "members": {}
     },
     {
@@ -214,54 +157,23 @@
           "value": 0,
           "name": "animation"
         }
-      }
-    },
-    {
-      "name": "ColorComponent",
-      "members": {
-        "r": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "r"
-        },
-        "g": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "g"
-        },
-        "b": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "b"
-        },
-        "a": {
-          "type": "int",
-          "pointer": false,
-          "value": 0,
-          "name": "a"
-        }
-      }
-    },
-    {
-      "name": "ScriptComponent",
-      "members": {
-        "onCollision": {
-          "type": "bool",
-          "pointer": false,
-          "value": false,
-          "name": "onCollision"
-        }
-      }
+      },
+      "area": "component"
     },
     {
       "name": "AIComponent",
-      "members": {}
+      "members": {
+        "script": {
+          "type": "AIScript",
+          "pointer": false,
+          "value": "",
+          "name": "script"
+        }
+      }
     }
   ],
   "initialTileIndex": 60,
   "hideGrid": false,
-  "selectedObject": 2
+  "selectedObject": 2,
+  "entities": "hills {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=616, h=110, texture=1}\n    DimensionComponent {w=616, h=110}\n}\n\nsky {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=112, h=304, texture=4}\n    DimensionComponent {w=112, h=304}\n}\n\ncloud {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=544, h=236, texture=2}\n    DimensionComponent {w=544, h=304}\n}\n\nsea {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=112, h=96, texture=3}\n    DimensionComponent {w=112, h=96}\n}\n\nwall {\n    DimensionComponent {}\n    PositionComponent {}\n    CollisionComponent {isStatic=true}\n}\n\nplayer  {\n    PositionComponent {}\n    DimensionComponent {w=26, h=27}\n    AnimationComponent {animation=0}\n    SpriteComponent {x=0, y=0, w=0, h=0, texture=5}\n    RenderComponent {}\n    CollisionComponent {}\n}\n\nenemy {\n    PositionComponent {}\n    DimensionComponent {w=21, h=12}\n    AnimationComponent {animation=1}\n    SpriteComponent {x=0, y=0, w=0, h=0, texture=1}\n    RenderComponent {}\n    CollisionComponent {}\n}"
 }

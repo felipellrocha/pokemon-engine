@@ -1,0 +1,217 @@
+{
+  const { Tokens } = require('utils'); 
+
+  const trie = options.componentTrie ? options.componentTrie : {
+    find: () => (['PositionComponent']),
+  };
+  const types = options.types ? options.types : {
+    insert: () => {},
+    search: () => {},
+  };
+  const renderer = options.renderer ? options.renderer : [];
+  const suggestions = options.suggestions ? options.suggestions : [];
+
+  const getMemberLocation = (member) => {
+    const type = (function() {
+      if (member.type === 'TextureSource') return Tokens.TEXTURE_SOURCE;
+      else if (member.type === 'AnimationType') return Tokens.ANIMATION_TYPE;
+      else if (member.type === 'int') return Tokens.INT;
+      else if (member.type === 'bool') return Tokens.BOOL;
+      else return member.type;
+    })();
+
+    renderer.push({
+      type,
+      start: member.content.start,
+      end: member.content.end,
+    });
+  };
+
+  const getLocation = (type, loc) => {
+    renderer.push({
+      type,
+      start: loc.start.offset,
+      end: loc.end.offset,
+    });
+  };
+}
+
+Entities
+ = _* entities:Entity*
+ {
+   return entities
+ }
+
+Entity
+  = entity:EntityName
+    _*
+    Open
+    _*
+    components:(Component)*
+    Close
+    _*
+  {
+    return {
+      name: entity,
+      components: components,
+    }
+  }
+
+Component
+  = _*
+    component:ComponentName
+    _*
+    Open
+    _*
+    properties:Property*
+    Close
+    _*
+  {
+    const loc = location();
+
+    const find = trie.find(component) || [];
+    let members = {};
+
+    //(find.length > 1) 
+    //  expected('AUTOCOMPLETE');
+    //(find.length < 1)
+    if (find.length < 1) {
+      expected('COMPONENT_NOT_FOUND')
+    } else if (find.length === 1) {
+      const definition = find[0];
+
+      types.insert(loc.start.offset, loc.end.offset, Object.assign(definition, { area: 'component'}));
+      suggestions.push(...find.map(c => c.name));
+
+      console.log(definition);
+
+      members = properties.reduce((prev, c) => {
+        const member = definition.members[c.name];
+
+        if (member) {
+          const property = Object.assign(c, member, { area: 'member', value: c.value });
+          types.insert(property.property.start, property.value.end, property);
+          getMemberLocation(property);
+        } else {
+          expected('MEMBER_OF_COMPONENT_NOT_FOUND')
+        }
+
+        prev[c.name] = {
+          value: c.value,
+          name: c.name,
+          type: c.type,
+        };
+        return prev;
+      }, {});
+
+    }
+
+    return {
+      name: component,
+      members,
+    }
+  }
+
+Property
+  =  name:PropertyName
+    _*
+    Equal
+    _*
+    value:(Int / Bool)
+    (Comma _*)?
+  {
+    const loc = location();
+
+    console.log(value);
+    return Object.assign(value, {
+      name,
+      property: {
+        start: loc.start.offset,
+        end: loc.end.offset,
+      },
+      content: {
+        start: value.start,
+        end: value.end,
+      },
+    });
+  }
+
+Int
+  = value:$[0-9]+
+  {
+    const loc = location();
+
+    return {
+      type: 'int',
+      value: parseInt(value, 10),
+      start: loc.start.offset,
+      end: loc.end.offset,
+    }
+  }
+
+Bool
+  = value:('true' / 'false')
+  {
+    const loc = location();
+
+    return {
+      type: 'bool',
+      value: value === 'true',
+      start: loc.start.offset,
+      end: loc.end.offset,
+    }
+  }
+
+Open
+  = '{'
+  {
+    getLocation(Tokens.OPEN, location());
+  }
+
+Close
+  = '}'
+  {
+    getLocation(Tokens.CLOSE, location());
+  }
+
+Equal
+  = '='
+  {
+    getLocation(Tokens.EQUAL, location());
+  }
+
+Comma
+  = ','
+  {
+    getLocation(Tokens.COMMA, location());
+  }
+
+EntityName
+    = name:$(!(Open / _) .)+
+  {
+    getLocation(Tokens.ENTITY, location());
+
+    return name;
+  }
+ComponentName
+  = name:$(!(Open / _) .)+
+  {
+    getLocation(Tokens.COMPONENT, location());
+
+    return name;
+  }
+    
+PropertyName
+  = name:$(!(Equal / _) .)+
+  {
+    getLocation(Tokens.PROPERTY, location());
+
+    return name;
+  }
+
+_ = ' ' / '\n' / '\t'
+  {
+    getLocation(Tokens.WHITESPACE, location());
+  }
+
+__ = '\n' / '\t'

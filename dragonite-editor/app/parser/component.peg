@@ -51,6 +51,7 @@ propertyTypes =
   "int" /
   "script" /
   "point" /
+  "AIScript" /
   "AnimationType" /
   "TextureSource" /
   "ResolverType" /
@@ -71,13 +72,13 @@ property
   const v = (function() {
     if (!value) {
       if (['int', 'ResolverType', 'AnimationType'].includes(property)) return 0;
-      if (property === 'string') return '';
+      if (['string', 'AIScript'].includes(property)) return '';
       if (property === 'point') return {x: 0, y: 0};
       if (property === 'bool') return false;
     }
     else {
       if (['int', 'ResolverType', 'AnimationType'].includes(property)) return parseInt(value[1]);
-      if (property === 'string') return value[1];
+      if (['string', 'AIScript'].includes(property)) return value[1];
       if (property === 'bool') return value[1] === 'true';
     }
     return null;

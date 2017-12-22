@@ -16,6 +16,7 @@ import {
   RECEIVE_COMPONENTS,
   SELECT_OBJECT,
   SELECT_SHAPE,
+  RECEIVE_ENTITIES,
   CHANGE_INITIAL_TILE,
   SAVE_FILENAME,
   LOAD_STAGE,
@@ -37,6 +38,7 @@ const initialState = {
   zoom: .5,
   initialTile: 0,
   selectedMap: 0,
+  entities: '',
   selectedObject: null,
   selectedAction: 'put',
   selectedTerrainType: '6-tile',
@@ -59,6 +61,9 @@ export default handleActions({
       ...state,
       hideGrid: !state.hideGrid,
     }
+  },
+  RECEIVE_ENTITIES: (state, action) => {
+    return setIn(state, ['entities'], action.text);
   },
   RECEIVE_COMPONENTS: (state, action) => {
     return {
