@@ -2,7 +2,6 @@ package ecs
 
 import (
   "fmt"
-  "strings"
   "strconv"
   "io/ioutil"
   "encoding/json"
@@ -47,14 +46,14 @@ type Rect struct {
 }
 
 type ObjectDescription struct {
-  EntityId string `json:"entity"`
+  EntityId int `json:"entity"`
   Rect Rect `json:"rect"`
 }
 
 type Tile struct {
   SetIndex int
   TileIndex int
-  EntityId string
+  EntityId int
   ObjectDescription ObjectDescription
 }
 
@@ -80,7 +79,11 @@ func (r *Tile) UnmarshalJSON(data []byte) error {
     if err := json.Unmarshal(values[1], &r.ObjectDescription); err != nil { return fmt.Errorf("Could not unpack object set: %s\n%s", values[1], err) }
   } else if setIndex == ENTITY_SET {
     r.SetIndex = setIndex
-    r.EntityId = strings.Trim(string(values[1]), "\"")
+    tileIndex, err := strconv.Atoi(string(values[1]))
+
+    if err != nil { return fmt.Errorf("Could not unpack TileIndex: %d", tileIndex)  }
+
+    r.EntityId = tileIndex
   }
 
   return nil

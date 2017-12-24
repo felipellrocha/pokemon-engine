@@ -3,7 +3,7 @@ package ai
 import (
   _"fmt"
 
-  "fighter/pidgeot-socket/ecs"
+  "game/pidgeot-socket/ecs"
 )
 
 type Sequence struct {

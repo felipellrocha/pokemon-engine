@@ -5,7 +5,7 @@ import (
 
   "github.com/gin-gonic/gin"
 
-  "fighter/pidgeot-socket/resources"
+  "game/pidgeot-socket/resources"
 )
 
 func Health(c *gin.Context) {

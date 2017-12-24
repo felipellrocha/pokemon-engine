@@ -1,7 +1,7 @@
 package resources
 
 import (
-  _"fighter/pidgeot-socket/ecs"
+  _"game/pidgeot-socket/ecs"
 )
 
 type AISystem struct {

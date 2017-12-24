@@ -82,8 +82,8 @@ int main() {
 
   //string url = "ws://localhost:8000/game/" + string(id);
   //string url = "ws://localhost:9000/socket/game/" + string(id);
-  string url = "ws://localhost:8000/game/test";
-  //string url = "ws://localhost:9000/socket/game/test";
+  //string url = "ws://localhost:8000/game/test";
+  string url = "ws://localhost:9000/socket/game/test";
 
   WebSocket::pointer socket = WebSocket::from_url(url);
 

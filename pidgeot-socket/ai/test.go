@@ -1,7 +1,7 @@
 package ai
 
 import (
-  "fighter/pidgeot-socket/ecs"
+  "game/pidgeot-socket/ecs"
 )
 
 type Test struct {

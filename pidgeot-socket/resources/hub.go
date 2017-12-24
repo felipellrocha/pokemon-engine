@@ -6,8 +6,8 @@ import (
   "encoding/json"
   "encoding/binary"
 
-  "fighter/pidgeot-socket/ecs"
-  "fighter/pidgeot-socket/ai"
+  "game/pidgeot-socket/ecs"
+  "game/pidgeot-socket/ai"
 )
 
 type SpawnTypes uint8
@@ -16,7 +16,7 @@ const (
 )
 
 type SpawnPoint struct {
-  EntityId string
+  EntityId int
   Layer int
   Index int
 }
@@ -157,15 +157,15 @@ func NewHub() *Hub {
   return &hub
 }
 
-func (hub *Hub) CreateFromEntityId(entityId string, layer int, tile int) (ecs.EID, []byte) {
+func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, []byte) {
   entity := hub.World.NewEntity()
 
-  definition, ok := hub.App.Entities[entityId]
-  if !ok {
+  if entityId > len(hub.App.Entities) {
     //fmt.Println("not found! %s")
     return entity, nil
   }
 
+  definition := hub.App.Entities[entityId]
   components := make([]ecs.Component, 0)
 
   for _, component := range definition.Components {

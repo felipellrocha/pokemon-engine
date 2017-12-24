@@ -9,7 +9,7 @@ import (
 
   "github.com/gorilla/websocket"
 
-  "fighter/pidgeot-socket/ecs"
+  "game/pidgeot-socket/ecs"
 )
 
 

@@ -3,7 +3,7 @@ package resources
 import (
   "strconv"
 
-  "fighter/pidgeot-socket/ecs"
+  "game/pidgeot-socket/ecs"
 )
 
 type AnimationSystem struct {

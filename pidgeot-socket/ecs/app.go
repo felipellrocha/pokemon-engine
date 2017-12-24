@@ -74,7 +74,7 @@ type App struct {
   Tilesets []Tileset `json:"tilesets"`
   Maps []MapDescription `json:"maps"`
   Animations []AnimationDefinition `json:"animations"`
-  Entities map[string]Entity `json:"entities"`
+  Entities []Entity `json:"entities"`
 }
 
 func (w *App) GetInitialMap() string {

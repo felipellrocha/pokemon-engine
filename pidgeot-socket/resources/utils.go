@@ -4,7 +4,7 @@ import (
   "fmt"
   "strconv"
 
-  "fighter/pidgeot-socket/ecs"
+  "game/pidgeot-socket/ecs"
   "github.com/bxcodec/saint"
 )
 

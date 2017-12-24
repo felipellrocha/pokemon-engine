@@ -44,6 +44,7 @@ EXEC_FLAGS = \
 	--preload-file assets \
   --disable-debug-info-type-map \
 	-s EXPORTED_FUNCTIONS='["_initialize", "_resize"]' \
+  -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap", "Pointer_stringify"]' \
 	--emrun
 LIBS :=
 
