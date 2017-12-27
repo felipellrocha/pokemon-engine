@@ -61,7 +61,7 @@ const initialState = {
   sheets: [ ],
   maps: [ ],
   animations: { },
-  entities: { },
+  entities: [ ],
   initialMap: 0,
 };
 
@@ -71,6 +71,9 @@ initialState.maps = ['start'].map(name => ({
 }));
 
 export default handleActions({
+  RECEIVE_ENTITIES: (state, action) => {
+    return setIn(state, ['entities'], action.objects);
+  },
   ADD_ENTITY: (state, action) => {
     return {
       ...state,

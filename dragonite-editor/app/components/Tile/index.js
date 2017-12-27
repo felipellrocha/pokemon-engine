@@ -31,7 +31,7 @@ const COLORS = [
 
 function noop () { }
 
-const getMemberValue = (component) => (key) => component.members[key].value;
+const getMemberValue = (component) => (key, def) => component.members[key] ? component.members[key].value : def;
 
 const getColor = memoize(function(id) {
 
@@ -189,11 +189,14 @@ class component extends PureComponent {
 
       switch (component.name) {
         case 'SpriteComponent':
-          const tileset = tilesets[member('src')];
+          const tileset = tilesets[member('texture', 0)];
           const src = path.resolve(basepath, tileset['src']);
 
-          style.height = (member('h') > 0) ? member('h') : style.height;
-          style.width = (member('w') > 0) ? member('w') : style.width;
+          const h = member('h', 0);
+          const w = member('w', 0);
+
+          style.height = (h > 0) ? h : style.height;
+          style.width = (w > 0) ? w : style.width;
           style.backgroundImage = `url('file://${src}')`;
           style.opacity = 1;
           style.backgroundColor = 'transparent';
@@ -202,13 +205,13 @@ class component extends PureComponent {
           //style.resize = 'both';
         break;
         case 'RenderComponent':
-          if (member('shouldTileX')) {
+          if (member('shouldTileX', false)) {
             style.position = 'absolute';
             style.right = 0;
             style.left = 0;
             style.width = 'auto';
           }
-          if (member('shouldTileY')) {
+          if (member('shouldTileY', false)) {
             style.position = 'absolute';
             style.top = 0;
             style.bottom = 0;

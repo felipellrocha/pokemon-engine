@@ -122,6 +122,7 @@ struct CollisionComponent : public Component {
   // some more heavy duty things to check for collision
 
   bool isStatic = false;
+  bool withGravity = false;
   bool isColliding = false; //private
   ResolverType resolver;
   int x = 0;

@@ -3,6 +3,7 @@
   height: 300px;
   background: #ddd;
   border-radius: 2px;
+  z-index: 5000;
 
   .command {
     color: #717171;

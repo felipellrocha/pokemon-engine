@@ -159,74 +159,9 @@
           "name": "RenderComponent",
           "members": {
             "shouldTileX": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "shouldTileX"
-            },
-            "shouldTileY": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "shouldTileY"
-            }
-          }
-        },
-        {
-          "name": "MovementComponent",
-          "members": {
-            "slow": {
-              "type": "point",
-              "pointer": false,
-              "value": {
-                "x": 2,
-                "y": 0
-              },
-              "name": "slow"
-            },
-            "fast": {
-              "type": "point",
-              "pointer": false,
-              "value": {
-                "x": 2,
-                "y": 0
-              },
-              "name": "fast"
-            }
-          }
-        },
-        {
-          "name": "SpriteComponent",
-          "members": {
-            "x": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "x"
-            },
-            "y": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "y"
-            },
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 616,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 110,
-              "name": "h"
-            },
-            "src": {
-              "type": "TextureSource",
-              "pointer": false,
-              "value": 1,
-              "name": "src"
+              "value": true,
+              "name": "shouldTileX",
+              "type": "bool"
             }
           }
         },
@@ -235,19 +170,47 @@
           "members": {}
         },
         {
+          "name": "SpriteComponent",
+          "members": {
+            "x": {
+              "value": 0,
+              "name": "x",
+              "type": "int"
+            },
+            "y": {
+              "value": 0,
+              "name": "y",
+              "type": "int"
+            },
+            "w": {
+              "value": 616,
+              "name": "w",
+              "type": "int"
+            },
+            "h": {
+              "value": 110,
+              "name": "h",
+              "type": "int"
+            },
+            "texture": {
+              "value": 1,
+              "name": "texture",
+              "type": "TextureSource"
+            }
+          }
+        },
+        {
           "name": "DimensionComponent",
           "members": {
             "w": {
-              "type": "int",
-              "pointer": false,
               "value": 616,
-              "name": "w"
+              "name": "w",
+              "type": "int"
             },
             "h": {
-              "type": "int",
-              "pointer": false,
               "value": 110,
-              "name": "h"
+              "name": "h",
+              "type": "int"
             }
           }
         }
@@ -257,37 +220,12 @@
       "name": "sky",
       "components": [
         {
-          "name": "SpriteComponent",
+          "name": "RenderComponent",
           "members": {
-            "x": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "x"
-            },
-            "y": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "y"
-            },
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 112,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 304,
-              "name": "h"
-            },
-            "src": {
-              "type": "TextureSource",
-              "pointer": false,
-              "value": 4,
-              "name": "src"
+            "shouldTileX": {
+              "value": true,
+              "name": "shouldTileX",
+              "type": "bool"
             }
           }
         },
@@ -296,36 +234,47 @@
           "members": {}
         },
         {
-          "name": "DimensionComponent",
+          "name": "SpriteComponent",
           "members": {
-            "w": {
-              "type": "int",
-              "pointer": false,
+            "x": {
               "value": 0,
-              "name": "w"
+              "name": "x",
+              "type": "int"
+            },
+            "y": {
+              "value": 0,
+              "name": "y",
+              "type": "int"
+            },
+            "w": {
+              "value": 112,
+              "name": "w",
+              "type": "int"
             },
             "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "h"
+              "value": 304,
+              "name": "h",
+              "type": "int"
+            },
+            "texture": {
+              "value": 4,
+              "name": "texture",
+              "type": "TextureSource"
             }
           }
         },
         {
-          "name": "RenderComponent",
+          "name": "DimensionComponent",
           "members": {
-            "shouldTileX": {
-              "type": "bool",
-              "pointer": false,
-              "value": true,
-              "name": "shouldTileX"
+            "w": {
+              "value": 112,
+              "name": "w",
+              "type": "int"
             },
-            "shouldTileY": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "shouldTileY"
+            "h": {
+              "value": 304,
+              "name": "h",
+              "type": "int"
             }
           }
         }
@@ -335,37 +284,12 @@
       "name": "cloud",
       "components": [
         {
-          "name": "SpriteComponent",
+          "name": "RenderComponent",
           "members": {
-            "x": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "x"
-            },
-            "y": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "y"
-            },
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 544,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 236,
-              "name": "h"
-            },
-            "src": {
-              "type": "TextureSource",
-              "pointer": false,
-              "value": 2,
-              "name": "src"
+            "shouldTileX": {
+              "value": true,
+              "name": "shouldTileX",
+              "type": "bool"
             }
           }
         },
@@ -374,36 +298,47 @@
           "members": {}
         },
         {
-          "name": "DimensionComponent",
+          "name": "SpriteComponent",
           "members": {
-            "w": {
-              "type": "int",
-              "pointer": false,
+            "x": {
               "value": 0,
-              "name": "w"
+              "name": "x",
+              "type": "int"
+            },
+            "y": {
+              "value": 0,
+              "name": "y",
+              "type": "int"
+            },
+            "w": {
+              "value": 544,
+              "name": "w",
+              "type": "int"
             },
             "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "h"
+              "value": 236,
+              "name": "h",
+              "type": "int"
+            },
+            "texture": {
+              "value": 2,
+              "name": "texture",
+              "type": "TextureSource"
             }
           }
         },
         {
-          "name": "RenderComponent",
+          "name": "DimensionComponent",
           "members": {
-            "shouldTileX": {
-              "type": "bool",
-              "pointer": false,
-              "value": true,
-              "name": "shouldTileX"
+            "w": {
+              "value": 544,
+              "name": "w",
+              "type": "int"
             },
-            "shouldTileY": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "shouldTileY"
+            "h": {
+              "value": 304,
+              "name": "h",
+              "type": "int"
             }
           }
         }
@@ -413,37 +348,12 @@
       "name": "sea",
       "components": [
         {
-          "name": "SpriteComponent",
+          "name": "RenderComponent",
           "members": {
-            "x": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "x"
-            },
-            "y": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "y"
-            },
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 112,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 96,
-              "name": "h"
-            },
-            "src": {
-              "type": "TextureSource",
-              "pointer": false,
-              "value": 3,
-              "name": "src"
+            "shouldTileX": {
+              "value": true,
+              "name": "shouldTileX",
+              "type": "bool"
             }
           }
         },
@@ -452,36 +362,47 @@
           "members": {}
         },
         {
-          "name": "DimensionComponent",
+          "name": "SpriteComponent",
           "members": {
-            "w": {
-              "type": "int",
-              "pointer": false,
+            "x": {
               "value": 0,
-              "name": "w"
+              "name": "x",
+              "type": "int"
+            },
+            "y": {
+              "value": 0,
+              "name": "y",
+              "type": "int"
+            },
+            "w": {
+              "value": 112,
+              "name": "w",
+              "type": "int"
             },
             "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "h"
+              "value": 96,
+              "name": "h",
+              "type": "int"
+            },
+            "texture": {
+              "value": 3,
+              "name": "texture",
+              "type": "TextureSource"
             }
           }
         },
         {
-          "name": "RenderComponent",
+          "name": "DimensionComponent",
           "members": {
-            "shouldTileX": {
-              "type": "bool",
-              "pointer": false,
-              "value": true,
-              "name": "shouldTileX"
+            "w": {
+              "value": 112,
+              "name": "w",
+              "type": "int"
             },
-            "shouldTileY": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "shouldTileY"
+            "h": {
+              "value": 96,
+              "name": "h",
+              "type": "int"
             }
           }
         }
@@ -492,20 +413,7 @@
       "components": [
         {
           "name": "DimensionComponent",
-          "members": {
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "h"
-            }
-          }
+          "members": {}
         },
         {
           "name": "PositionComponent",
@@ -514,47 +422,15 @@
         {
           "name": "CollisionComponent",
           "members": {
+            "withGravity": {
+              "value": false,
+              "name": "withGravity",
+              "type": "bool"
+            },
             "isStatic": {
-              "type": "bool",
-              "pointer": false,
               "value": true,
-              "name": "isStatic"
-            },
-            "resolver": {
-              "type": "ResolverType",
-              "pointer": false,
-              "value": 8,
-              "name": "resolver"
-            },
-            "x": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "x"
-            },
-            "y": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "y"
-            },
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "h"
-            },
-            "onCollision": {
-              "type": "script",
-              "pointer": false,
-              "value": null,
-              "name": "onCollision"
+              "name": "isStatic",
+              "type": "bool"
             }
           }
         }
@@ -571,68 +447,14 @@
           "name": "DimensionComponent",
           "members": {
             "w": {
-              "type": "int",
-              "pointer": false,
               "value": 26,
-              "name": "w"
+              "name": "w",
+              "type": "int"
             },
             "h": {
-              "type": "int",
-              "pointer": false,
               "value": 27,
-              "name": "h"
-            }
-          }
-        },
-        {
-          "name": "SpriteComponent",
-          "members": {
-            "x": {
-              "type": "int",
-              "pointer": false,
-              "value": 11,
-              "name": "x"
-            },
-            "y": {
-              "type": "int",
-              "pointer": false,
-              "value": 4,
-              "name": "y"
-            },
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "h"
-            },
-            "src": {
-              "type": "TextureSource",
-              "pointer": false,
-              "value": 5,
-              "name": "src"
-            }
-          }
-        },
-        {
-          "name": "RenderComponent",
-          "members": {
-            "shouldTileX": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "shouldTileX"
-            },
-            "shouldTileY": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "shouldTileY"
+              "name": "h",
+              "type": "int"
             }
           }
         },
@@ -640,57 +462,58 @@
           "name": "AnimationComponent",
           "members": {
             "animation": {
-              "type": "AnimationType",
-              "pointer": false,
               "value": 0,
-              "name": "animation"
+              "name": "animation",
+              "type": "AnimationType"
             }
           }
+        },
+        {
+          "name": "SpriteComponent",
+          "members": {
+            "x": {
+              "value": 0,
+              "name": "x",
+              "type": "int"
+            },
+            "y": {
+              "value": 0,
+              "name": "y",
+              "type": "int"
+            },
+            "w": {
+              "value": 0,
+              "name": "w",
+              "type": "int"
+            },
+            "h": {
+              "value": 0,
+              "name": "h",
+              "type": "int"
+            },
+            "texture": {
+              "value": 5,
+              "name": "texture",
+              "type": "TextureSource"
+            }
+          }
+        },
+        {
+          "name": "RenderComponent",
+          "members": {}
         },
         {
           "name": "CollisionComponent",
           "members": {
             "isStatic": {
-              "type": "bool",
-              "pointer": false,
               "value": false,
-              "name": "isStatic"
+              "name": "isStatic",
+              "type": "bool"
             },
-            "resolver": {
-              "type": "ResolverType",
-              "pointer": false,
-              "value": 0,
-              "name": "resolver"
-            },
-            "x": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "x"
-            },
-            "y": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "y"
-            },
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "h"
-            },
-            "onCollision": {
-              "type": "script",
-              "pointer": false,
-              "value": null,
-              "name": "onCollision"
+            "withGravity": {
+              "value": true,
+              "name": "withGravity",
+              "type": "bool"
             }
           }
         }
@@ -704,54 +527,17 @@
           "members": {}
         },
         {
-          "name": "SpriteComponent",
-          "members": {
-            "x": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "x"
-            },
-            "y": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "y"
-            },
-            "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "w"
-            },
-            "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 0,
-              "name": "h"
-            },
-            "src": {
-              "type": "TextureSource",
-              "pointer": false,
-              "value": 6,
-              "name": "texture"
-            }
-          }
-        },
-        {
           "name": "DimensionComponent",
           "members": {
             "w": {
-              "type": "int",
-              "pointer": false,
               "value": 21,
-              "name": "w"
+              "name": "w",
+              "type": "int"
             },
             "h": {
-              "type": "int",
-              "pointer": false,
               "value": 12,
-              "name": "h"
+              "name": "h",
+              "type": "int"
             }
           }
         },
@@ -759,74 +545,58 @@
           "name": "AnimationComponent",
           "members": {
             "animation": {
-              "type": "AnimationType",
-              "pointer": false,
               "value": 1,
-              "name": "animation"
+              "name": "animation",
+              "type": "AnimationType"
             }
           }
         },
         {
-          "name": "CollisionComponent",
+          "name": "SpriteComponent",
           "members": {
-            "isStatic": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "isStatic"
-            },
-            "resolver": {
-              "type": "ResolverType",
-              "pointer": false,
-              "value": 0,
-              "name": "resolver"
-            },
             "x": {
-              "type": "int",
-              "pointer": false,
               "value": 0,
-              "name": "x"
+              "name": "x",
+              "type": "int"
             },
             "y": {
-              "type": "int",
-              "pointer": false,
               "value": 0,
-              "name": "y"
+              "name": "y",
+              "type": "int"
             },
             "w": {
-              "type": "int",
-              "pointer": false,
-              "value": 21,
-              "name": "w"
+              "value": 0,
+              "name": "w",
+              "type": "int"
             },
             "h": {
-              "type": "int",
-              "pointer": false,
-              "value": 12,
-              "name": "h"
+              "value": 0,
+              "name": "h",
+              "type": "int"
             },
-            "onCollision": {
-              "type": "script",
-              "pointer": false,
-              "value": null,
-              "name": "onCollision"
+            "texture": {
+              "value": 6,
+              "name": "texture",
+              "type": "TextureSource"
             }
           }
         },
         {
           "name": "RenderComponent",
+          "members": {}
+        },
+        {
+          "name": "CollisionComponent",
           "members": {
-            "shouldTileX": {
-              "type": "bool",
-              "pointer": false,
+            "isStatic": {
               "value": false,
-              "name": "shouldTileX"
+              "name": "isStatic",
+              "type": "bool"
             },
-            "shouldTileY": {
-              "type": "bool",
-              "pointer": false,
-              "value": false,
-              "name": "shouldTileY"
+            "withGravity": {
+              "value": true,
+              "name": "withGravity",
+              "type": "bool"
             }
           }
         }

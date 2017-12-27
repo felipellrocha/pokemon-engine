@@ -8,12 +8,21 @@ import (
   "github.com/bxcodec/saint"
 )
 
-func ReadBool(members map[string]ecs.ComponentMember, key string) (bool, error) {
-  return string(members[key].Value) == "true", nil
+func ReadBool(members map[string]ecs.ComponentMember, key string, def bool) (bool, error) {
+  if Key, ok := members[key]; ok {
+    return string(Key.Value) == "true", nil
+  } else {
+    return def, nil
+  }
 }
 
-func ReadInt(members map[string]ecs.ComponentMember, key string) (int, error) {
-  v, err := strconv.Atoi(string(members[key].Value))
+func ReadInt(members map[string]ecs.ComponentMember, key string, def int) (int, error) {
+  Key, ok := members[key];
+  if !ok {
+    return def, nil
+  }
+
+  v, err := strconv.Atoi(string(Key.Value))
 
   if err != nil {
     fmt.Println("binary.Read failed:", err, members)

@@ -9,6 +9,7 @@
   font-family: Helvetica Neue;
   box-sizing: border-box;
   box-shadow: 0 0 7px #808080;
+  z-index: 9000;
 
   .components {
     font-weight: 200;

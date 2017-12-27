@@ -171,8 +171,8 @@ func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, 
   for _, component := range definition.Components {
     members := component.Members
     if component.Name == "RenderComponent" {
-      shouldTileX, _ := ReadBool(members, "shouldTileX")
-      shouldTileY, _ := ReadBool(members, "shouldTileY")
+      shouldTileX, _ := ReadBool(members, "shouldTileX", false)
+      shouldTileY, _ := ReadBool(members, "shouldTileY", false)
 
       render := &ecs.Render{
         ShouldTileX: shouldTileX,
@@ -182,7 +182,7 @@ func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, 
 
       components = append(components, render)
     } else if component.Name == "AnimationComponent" {
-      definition, _ := ReadInt(members, "animation")
+      definition, _ := ReadInt(members, "animation", 0)
 
       animation := &ecs.Animation{
         Type: definition,
@@ -192,8 +192,8 @@ func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, 
 
       components = append(components, animation)
     } else if component.Name == "DimensionComponent" {
-      w, _ := ReadInt(members, "w")
-      h, _ := ReadInt(members, "h")
+      w, _ := ReadInt(members, "w", 0)
+      h, _ := ReadInt(members, "h", 0)
 
       dimension := &ecs.Dimension{
         W: w,
@@ -211,11 +211,11 @@ func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, 
 
       components = append(components, position)
     } else if component.Name == "SpriteComponent" {
-      x, _ := ReadInt(members, "x")
-      y, _ := ReadInt(members, "y")
-      w, _ := ReadInt(members, "w")
-      h, _ := ReadInt(members, "h")
-      setIndex, _ := ReadInt(component.Members, "src")
+      x, _ := ReadInt(members, "x", 0)
+      y, _ := ReadInt(members, "y", 0)
+      w, _ := ReadInt(members, "w", 0)
+      h, _ := ReadInt(members, "h", 0)
+      setIndex, _ := ReadInt(component.Members, "texture", 0)
 
       sprite := &ecs.Sprite{
         X: x,
@@ -227,18 +227,19 @@ func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, 
 
       components = append(components, sprite)
     } else if component.Name == "CollisionComponent" {
-      isStatic, _ := ReadBool(members, "isStatic")
-      isColliding, _ := ReadBool(members, "isColliding")
+      isStatic, _ := ReadBool(members, "isStatic", true)
+      isColliding, _ := ReadBool(members, "isColliding", false)
+      withGravity, _ := ReadBool(members, "withGravity", false)
 
-      x, _ := ReadInt(members, "x")
-      y, _ := ReadInt(members, "y")
-      w, _ := ReadInt(members, "w")
-      h, _ := ReadInt(members, "h")
+      x, _ := ReadInt(members, "x", 0)
+      y, _ := ReadInt(members, "y", 0)
+      w, _ := ReadInt(members, "w", 0)
+      h, _ := ReadInt(members, "h", 0)
 
       collision := &ecs.Collision{
         IsStatic: isStatic,
         IsColliding: isColliding,
-        WithGravity: true,
+        WithGravity: withGravity,
         MaxSpeedY: 15,
         JumpImpulse: 15,
         X: x,
