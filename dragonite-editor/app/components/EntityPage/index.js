@@ -125,7 +125,7 @@ class component extends PureComponent {
                         highlight: !!hoveredMembers[member.name],
                       });
                       return (
-                        <div className={classes}>{ member.name } : { member.type }</div>
+                        <div className={classes} key={ member.name }>{ member.name } : { member.type }</div>
                       )
                     })}
                   </div>
@@ -142,13 +142,6 @@ class component extends PureComponent {
                   case Errors.MEMBER_OF_COMPONENT_NOT_FOUND: return (<div>The component you're trying to use does not contain that property.</div>)
                 }
               })}
-            </div>
-          }
-          {(suggestions.length > 0) && 
-            <div className="suggestions">
-              {suggestions.map(suggestion => (
-                <div>{ suggestion }</div>
-              ))}
             </div>
           }
         </div>

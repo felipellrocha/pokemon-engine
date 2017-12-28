@@ -115,7 +115,7 @@ Property
     _*
     Equal
     _*
-    value:(Int / Bool)
+    value:(Int / Bool / aiScript)
     (Comma _*)?
   {
     const loc = location();
@@ -159,6 +159,77 @@ Bool
     }
   }
 
+aiScript
+  = Open
+    _*
+    components:aiComponent*
+    _*
+    Close
+  {
+    const loc = location();
+    return {
+      type: 'ai',
+      value: components,
+      start: loc.start.offset,
+      end: loc.end.offset,
+    };
+  }
+
+aiComponent
+  = name:aiName
+    _*
+    Open
+    _*
+    properties:aiProperty*
+    _*
+    Close
+    _*
+  {
+    const members = properties.reduce((prev, c) => {
+      //const member = definition.members[c.name];
+
+      //const property = Object.assign(c, member, { area: 'member', value: c.value });
+      //types.insert(property.property.start, property.value.end, property);
+      //getMemberLocation(property);
+
+      prev[c.name] = {
+        value: c.value,
+        name: c.name,
+        type: c.type,
+      };
+      return prev;
+    }, {});
+
+    return {
+      name,
+      properties: members,
+    }
+  }
+
+aiProperty
+  =  name:PropertyName
+    _*
+    Equal
+    _*
+    value:(Int / Bool / aiScript)
+    (Comma _*)?
+  {
+    const loc = location();
+
+    return Object.assign(value, {
+      name,
+      property: {
+        start: loc.start.offset,
+        end: loc.end.offset,
+      },
+      content: {
+        start: value.start,
+        end: value.end,
+      },
+    });
+  }
+
+
 Open
   = '{'
   {
@@ -194,6 +265,13 @@ ComponentName
   = name:$(!(Open / _) .)+
   {
     getLocation(Tokens.COMPONENT, location());
+
+    return name;
+  }
+aiName
+    = name:$(!(Open / _) .)+
+  {
+    getLocation(Tokens.AI, location());
 
     return name;
   }

@@ -14,6 +14,7 @@ export const Tokens = {
   PROPERTY: 10,
   TEXTURE_SOURCE: 11,
   ANIMATION_TYPE: 12,
+  AI: 13,
 };
 
 export const Errors = {

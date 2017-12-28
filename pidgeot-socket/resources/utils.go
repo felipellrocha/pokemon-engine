@@ -37,6 +37,6 @@ func IsOverlapping(min1 int, max1 int, min2 int, max2 int) bool {
 }
 
 func CalculateOverlap(min1 int, max1 int, min2 int, max2 int) int {
-  return saint.Max(0, saint.Min(max1, max2) - saint.Max(min1, min2))
+  return saint.Abs(saint.Max(0, saint.Min(max1, max2) - saint.Max(min1, min2)))
 }
 
