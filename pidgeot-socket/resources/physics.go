@@ -89,34 +89,21 @@ func (system PhysicsSystem) ResolveCollision(entities map[ecs.EID]*ecs.Component
   c2 := (*c2_p).(*ecs.Collision)
   p2 := (*p2_p).(*ecs.Position)
 
-  var collidingX bool
-  var collidingY bool
-  var colliding bool
-
   // resolve y-axis
-  collidingX = IsOverlapping(p1.X, p1.X + c1.W, p2.X, p2.X + c2.W)
-  collidingY = IsOverlapping(p1.NextY, p1.NextY + c1.H, p2.NextY, p2.NextY + c2.H)
-  colliding = collidingX && collidingY
+  mink := getMinkowski(p1, c1,  p2, c2)
+  overlapY, overlapX := mink.overlap()
 
-  overlapY := CalculateOverlap(p1.NextY, p1.NextY + c1.H, p2.NextY, p2.NextY + c2.H)
-  overlapX := CalculateOverlap(p1.NextX, p1.NextX + c1.W, p2.NextX, p2.NextX + c2.W)
+  if mink.collides() {
 
-  directionY := GetDirection(p1.NextY, p1.NextY + c1.H, p2.NextY, p2.NextY + c2.H)
-  directionX := GetDirection(p1.NextX, p1.NextX + c1.W, p2.NextX, p2.NextX + c2.W)
+    fmt.Println(overlapY, overlapX)
 
-  if colliding {
-    p1.NextY += (directionY * overlapY)
-    c1.ImpulseY = 0
-    c1.IsJumping = false
-  }
+    p1.NextY -= overlapY
+    p1.NextX -= overlapX
 
-  // resolve x-axis
-  collidingX = IsOverlapping(p1.NextX, p1.NextX + c1.W, p2.NextX, p2.NextX + c2.W)
-  collidingY = IsOverlapping(p1.NextY, p1.NextY + c1.H, p2.NextY, p2.NextY + c2.H)
-  colliding = collidingX && collidingY
-
-  if colliding {
-    p1.NextX += (directionX * overlapX)
+    if overlapY > 0 {
+      c1.ImpulseY = 0
+      c1.IsJumping = false
+    }
   }
 
   /*
@@ -130,16 +117,15 @@ func (system PhysicsSystem) ResolveCollision(entities map[ecs.EID]*ecs.Component
 
     if c3.IsStatic { continue }
 
-    collidingX = IsOverlapping(p1.NextX, p1.NextX + c1.W, p3.NextX, p3.NextX + c3.W)
-    collidingY = IsOverlapping(p1.NextY, p1.NextY + c1.H, p3.NextY, p3.NextY + c3.H)
-    colliding = collidingX && collidingY
+    mink = getMinkowski(p1, c1,  p3, c3)
 
-    if colliding {
+    if mink.collides() {
       // Apply correction
+
       fmt.Printf("resolving: %d, %d\n", e1, e3)
 
-      p3.NextX += (directionX * overlapX)
-      p3.NextY += (directionY * overlapY)
+      p3.NextX -= overlapX
+      p3.NextY -= overlapY
 
       system.ResolveCollision(entities, e1, e3)
     }
