@@ -118,3 +118,20 @@ func (m *Manager) AllEntitiesWithComponent(cid CID) (map[EID]*Component, error) 
 
   return entities, nil
 }
+
+// utility functions
+// Only used for testing, DO NOT RELY ON IT ON ACTUAL CODE
+func (m *Manager) GetRect(e EID) (int, int, int, int) {
+  c_p, _ := m.GetComponent(e, CollisionComponent)
+  p_p, _ := m.GetComponent(e, PositionComponent)
+  c := (*c_p).(*Collision)
+  p := (*p_p).(*Position)
+
+  return p.NextX, p.NextY, c.W, c.H
+}
+
+func (m *Manager) PrintRect(e EID) {
+  x, y, w, h := m.GetRect(e)
+  fmt.Printf("%d -- (x: %d, y: %d) (x: %d, y: %d)\n", e, x, y, x + w, y + h)
+}
+

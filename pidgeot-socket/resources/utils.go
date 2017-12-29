@@ -15,35 +15,19 @@ type Box struct {
   h int
 }
 
-func (b *Box) collides() bool {
-  return b.x <= 0 && b.y <= 0 && (b.x + b.w) >= 0 && (b.y + b.h) >= 0
-}
-
-func (b *Box) overlap() (int, int) {
+func (b *Box) collides() (bool, int, int) {
   var X int
   var Y int
+
+  collides := b.x <= 0 && b.y <= 0 && (b.x + b.w) >= 0 && (b.y + b.h) >= 0
 
   if saint.Abs(b.x) < saint.Abs(b.x + b.w) { X = b.x } else { X = b.x + b.w }
   if saint.Abs(b.y) < saint.Abs(b.y + b.h) { Y = b.y } else { Y = b.y + b.h }
 
-  if saint.Abs(X) < saint.Abs(Y) { return 0, X } else { return Y, 0 }
-}
-
-func getMinkowskiX(p1 *ecs.Position, c1 *ecs.Collision, p2 *ecs.Position, c2 *ecs.Collision) *Box {
-  return &Box{
-    x: p1.NextX - (p2.NextX + c2.W),
-    y: p1.Y - (p2.Y + c2.H),
-    w: c1.W + c2.W,
-    h: c1.H + c2.H,
-  }
-}
-
-func getMinkowskiY(p1 *ecs.Position, c1 *ecs.Collision, p2 *ecs.Position, c2 *ecs.Collision) *Box {
-  return &Box{
-    x: p1.X - (p2.X + c2.W),
-    y: p1.NextY - (p2.NextY + c2.H),
-    w: c1.W + c2.W,
-    h: c1.H + c2.H,
+  if saint.Abs(X) < saint.Abs(Y) {
+    return (collides && X != 0), 0, X
+  } else {
+    return (collides && Y != 0), Y, 0
   }
 }
 

@@ -1,8 +1,6 @@
 package resources
 
 import (
-  "fmt"
-
   "game/pidgeot-socket/ecs"
 
   "github.com/bxcodec/saint"
@@ -41,14 +39,13 @@ func (system PhysicsSystem) Loop() {
   }
 
   // resolving collisions
+  // everything vs static
   for e1, _ := range entities {
-    c1_p, _ := system.Hub.World.GetComponent(e1, ecs.CollisionComponent)
-    c1 := (*c1_p).(*ecs.Collision)
-
-    if c1.IsStatic { continue }
-
     for e2, _ := range entities {
-      if e1 == e2 { continue }
+      c2_p, _ := system.Hub.World.GetComponent(e2, ecs.CollisionComponent)
+      c2 := (*c2_p).(*ecs.Collision)
+
+      if c2.IsStatic { continue }
 
       system.ResolveCollision(entities, e1, e2)
     }
@@ -68,17 +65,9 @@ func (system PhysicsSystem) Loop() {
   }
 }
 
-func GetDirection(e1_p1 int, e1_p2 int, e2_p1 int, e2_p2 int) int {
-  if e1_p1 < e2_p1 {
-    return FORWARD
-  } else if e1_p1 > e2_p1 {
-    return BACKWARD
-  } else {
-    return STILL
-  }
-}
-
 func (system PhysicsSystem) ResolveCollision(entities map[ecs.EID]*ecs.Component, e1 ecs.EID, e2 ecs.EID) {
+  if e1 == e2 { return }
+
   c1_p, _ := system.Hub.World.GetComponent(e1, ecs.CollisionComponent)
   p1_p, _ := system.Hub.World.GetComponent(e1, ecs.PositionComponent)
   c1 := (*c1_p).(*ecs.Collision)
@@ -91,44 +80,39 @@ func (system PhysicsSystem) ResolveCollision(entities map[ecs.EID]*ecs.Component
 
   // resolve y-axis
   mink := getMinkowski(p1, c1,  p2, c2)
-  overlapY, overlapX := mink.overlap()
+  collides, overlapY, overlapX := mink.collides()
 
-  if mink.collides() {
+  if collides {
 
-    fmt.Println(overlapY, overlapX)
+    p2.NextY += overlapY
+    p2.NextX += overlapX
 
-    p1.NextY -= overlapY
-    p1.NextX -= overlapX
+    if overlapY < 0 {
+      c2.ImpulseY = 0
+      c2.IsJumping = false
+    }
 
-    if overlapY > 0 {
-      c1.ImpulseY = 0
-      c1.IsJumping = false
+    // chain
+    for e3, _ := range entities {
+      if e2 == e3 { continue }
+
+      c3_p, _ := system.Hub.World.GetComponent(e3, ecs.CollisionComponent)
+      p3_p, _ := system.Hub.World.GetComponent(e3, ecs.PositionComponent)
+      c3 := (*c3_p).(*ecs.Collision)
+      p3 := (*p3_p).(*ecs.Position)
+
+      if c3.IsStatic { continue }
+
+      mink = getMinkowski(p2, c2, p3, c3)
+      c, _, _ := mink.collides()
+
+      if c {
+        // Apply correction
+        p3.NextX += overlapX
+        p3.NextY += overlapY
+
+        system.ResolveCollision(entities, e2, e3)
+      }
     }
   }
-
-  /*
-  for e3, _ := range entities {
-    if e1 == e3 || e2 == e3 { continue }
-
-    c3_p, _ := system.Hub.World.GetComponent(e3, ecs.CollisionComponent)
-    p3_p, _ := system.Hub.World.GetComponent(e3, ecs.PositionComponent)
-    c3 := (*c3_p).(*ecs.Collision)
-    p3 := (*p3_p).(*ecs.Position)
-
-    if c3.IsStatic { continue }
-
-    mink = getMinkowski(p1, c1,  p3, c3)
-
-    if mink.collides() {
-      // Apply correction
-
-      fmt.Printf("resolving: %d, %d\n", e1, e3)
-
-      p3.NextX -= overlapX
-      p3.NextY -= overlapY
-
-      system.ResolveCollision(entities, e1, e3)
-    }
-  }
-  */
 }

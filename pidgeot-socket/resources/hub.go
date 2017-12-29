@@ -77,7 +77,8 @@ func NewHub() *Hub {
     },
     AnimationSystem{
       Hub: &hub,
-    })
+    },
+  )
 
 
   hub.SpawnPoints[Player] = make([]SpawnPoint, 0)
