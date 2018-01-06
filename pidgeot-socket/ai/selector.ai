@@ -1,0 +1,32 @@
+// template composite.go
+
+package ai
+
+import (
+  _"fmt"
+)
+
+type Selector struct {
+  Status Status
+
+  Children []Behavior
+}
+
+func NewSelector(children ...Behavior) *Selector {
+  return &Selector{
+    Children: children,
+  }
+}
+
+func (n *Selector) Update() Status {
+	if n.IsEmpty() { return SUCCESS }
+
+	for _, child := range n.Children {
+		status := child.Tick()
+
+		if status != FAILURE { return status }
+	}
+
+	return FAILURE
+}
+

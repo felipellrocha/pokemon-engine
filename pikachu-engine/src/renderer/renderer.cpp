@@ -76,7 +76,7 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
   manager->addComponent<PositionComponent>(camera, 0, 0);
   manager->saveSpecial("camera", camera);
 
-  this->resize(600, 800);
+  this->resize(1200, 800);
 
   this->registerSystem<NetworkingSystem>(manager);
   this->registerSystem<RenderSystem>(manager);
@@ -167,14 +167,15 @@ void Renderer::getMessages(const char* buf, size_t size) {
       }
       case MessageDef::SPRITE: {
         auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
-
+        
+        auto flip = ReadBytesOfString<bool>(buf, &index, size);
         auto x = ReadBytesOfString<uint32_t>(buf, &index, size);
         auto y = ReadBytesOfString<uint32_t>(buf, &index, size);
         auto w = ReadBytesOfString<uint32_t>(buf, &index, size);
         auto h = ReadBytesOfString<uint32_t>(buf, &index, size);
         auto textureIndex = ReadBytesOfString<uint32_t>(buf, &index, size);
 
-        manager->addComponent<SpriteComponent>(eid, x, y, w, h, textureIndex);
+        manager->addComponent<SpriteComponent>(eid, flip, x, y, w, h, textureIndex);
         break;
       }
       default: {

@@ -1,0 +1,70 @@
+{
+  package main
+
+  import (
+    "fmt"
+  )
+
+  func getByteArray(data interface{}) []byte {
+    d := data.([]interface{})
+    out := make([]byte, len(d))
+
+    for i, _ := range d {
+      out[i] = d[i].(byte)
+    }
+
+    return out
+  }
+
+  func getString(data interface{}) string {
+    return string(getByteArray(data))
+  }
+
+  type Data struct {
+    Template string
+    Struct string
+    Body string
+  }
+
+}
+
+File
+  =
+    template:Template
+    (!StartStruct .)*
+    structName:Struct
+    .*
+  {
+    return &Data{
+      Template: getString(template),
+      Struct: getString(structName),
+    }, nil
+  }
+
+
+Template
+  = "// template " name:TemplateChar* _*
+  {
+    return name, nil
+  }
+
+TemplateChar
+  = !_ char:.
+  {
+    return char.([]byte)[0], nil
+  }
+
+Struct
+  = StartStruct name:StructChar* EndStruct
+  {
+    return name, nil
+  }
+StartStruct = "type "
+EndStruct = " struct"
+StructChar
+  = !EndStruct char:. 
+  {
+    return char.([]byte)[0], nil
+  }
+
+_ = "\n" / " "

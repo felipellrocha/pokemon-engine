@@ -75,17 +75,19 @@ struct DimensionComponent : public Component {
 };
 
 struct SpriteComponent : public Component {
+  bool flip;
   int x;
   int y;
   int w;
   int h;
   TextureSource texture;
 
-  SpriteComponent(int _x, int _y, int _w, int _h, TextureSource _texture)
-      : x(_x), y(_y), w(_w), h(_h), texture(_texture) {
+  SpriteComponent(bool _flip, int _x, int _y, int _w, int _h, TextureSource _texture)
+      : flip(_flip), x(_x), y(_y), w(_w), h(_h), texture(_texture) {
   }
 
-  void update(int _x, int _y, int _w, int _h, TextureSource _texture) {
+  void update(bool _flip, int _x, int _y, int _w, int _h, TextureSource _texture) {
+    flip = _flip;
     x = _x;
     y = _y;
     w = _w;

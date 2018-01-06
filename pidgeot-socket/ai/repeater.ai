@@ -1,0 +1,27 @@
+// template decorator.go
+
+package ai
+
+import (
+  _"fmt"
+)
+
+type Repeater struct {
+  Status Status
+
+  Child Behavior
+}
+
+func NewRepeater(child Behavior) *Repeater {
+  return &Repeater{
+    Child: child,
+  }
+}
+
+func (n *Repeater) Update() Status {
+  status := n.Child.Tick()
+
+  if status == SUCCESS { return FAILURE } else if status == FAILURE { return SUCCESS }
+
+  return status
+}

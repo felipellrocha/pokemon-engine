@@ -1,0 +1,35 @@
+// template composite.go
+
+package ai
+
+import (
+  "game/pidgeot-socket/ecs"
+)
+
+type Sequence struct {
+  Status Status
+  Children []Behavior
+
+  World *ecs.Manager
+  Eid ecs.EID
+}
+
+func NewSequence(eid ecs.EID, world *ecs.Manager, children ...Behavior) *Sequence {
+  return &Sequence{
+    Eid: eid,
+    World: world,
+    Children: children,
+  }
+}
+
+func (n *Sequence) Update() Status {
+	if n.IsEmpty() { return SUCCESS }
+
+	for _, child := range n.Children {
+		status := child.Tick()
+
+		if status != SUCCESS { return status }
+	}
+
+	return SUCCESS
+}

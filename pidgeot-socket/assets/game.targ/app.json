@@ -599,6 +599,32 @@
               "type": "bool"
             }
           }
+        },
+        {
+          "name": "AIComponent",
+          "members": {
+            "script": {
+              "value": [
+                {
+                  "name": "Sequence",
+                  "properties": {
+                    "children": {
+                      "value": [
+                        {
+                          "name": "Test",
+                          "properties": {}
+                        }
+                      ],
+                      "name": "children",
+                      "type": "ai"
+                    }
+                  }
+                }
+              ],
+              "name": "script",
+              "type": "AIScript"
+            }
+          }
         }
       ]
     }

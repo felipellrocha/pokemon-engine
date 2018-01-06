@@ -92,6 +92,7 @@ func (c *Dimension) ToBinary() []byte {
 }
 
 type Sprite struct {
+  Flip bool
   X int
   Y int
   W int
@@ -106,6 +107,8 @@ func (c *Sprite) IsRenderable() bool {
 }
 func (c *Sprite) ToBinary() []byte {
   buffer := new(bytes.Buffer)
+  if err := binary.Write(buffer, binary.LittleEndian, bool(c.Flip)); err != nil { fmt.Println("error!", err) }
+
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.X)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.Y)); err != nil { fmt.Println("error!", err) }
   if err := binary.Write(buffer, binary.LittleEndian, uint32(c.W)); err != nil { fmt.Println("error!", err) }

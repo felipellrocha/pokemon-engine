@@ -1,0 +1,27 @@
+// template decorator.go
+
+package ai
+
+import (
+  _"fmt"
+)
+
+type Inveter struct {
+  Status Status
+
+  Child Behavior
+}
+
+func NewInveter(child Behavior) *Inveter {
+  return &Inveter{
+    Child: child,
+  }
+}
+
+func (n *Inveter) Update() Status {
+  status := n.Child.Tick()
+
+  if status == SUCCESS { return FAILURE } else if status == FAILURE { return SUCCESS }
+
+  return status
+}

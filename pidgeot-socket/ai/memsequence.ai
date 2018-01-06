@@ -1,0 +1,39 @@
+// template composite.go
+
+package ai
+
+import (
+  "game/pidgeot-socket/ecs"
+)
+
+type MemSequence struct {
+  Status Status
+  Children []Behavior
+
+  World *ecs.Manager
+  Eid ecs.EID
+}
+
+func NewMemSequence(eid ecs.EID, world *ecs.Manager, children ...Behavior) *MemSequence {
+  return &MemSequence{
+    Eid: eid,
+    World: world,
+
+    Children: children,
+    Index: 0,
+  }
+}
+
+func (n *MemSequence) Update() Status {
+	if n.IsEmpty() { return SUCCESS }
+
+	for i := n.Index; i < len(n.Children); i++ {
+    child := n.Children[i]
+
+		status := child.Tick(child)
+		if status != SUCCESS { return status }
+	}
+
+	return SUCCESS
+}
+

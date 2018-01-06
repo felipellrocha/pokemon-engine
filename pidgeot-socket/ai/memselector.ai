@@ -1,0 +1,35 @@
+// template composite.go
+
+package ai
+
+import (
+  _"fmt"
+)
+
+
+type MemSelector struct {
+  Status Status
+
+  Children []Behavior
+  Index int
+}
+
+func NewMemSelector(children ...Behavior) *MemSelector {
+  return &MemSelector{
+    Children: children,
+    Index: 0,
+  }
+}
+
+func (n *MemSelector) Update() Status {
+	if n.IsEmpty() { return SUCCESS }
+
+	for index := n.Index; index < len(n.Children); index++ {
+    child := n.Children[index]
+		status := child.Tick()
+
+		if status != FAILURE { return status }
+	}
+
+	return FAILURE
+}

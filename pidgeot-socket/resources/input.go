@@ -95,7 +95,22 @@ func (system InputSystem) Loop() {
           collision.ImpulseX = 3
         } else if input.Compass & WEST != 0 {
           collision.ImpulseX = -3
-        } else { collision.ImpulseX = 0 }
+        } else {
+          collision.ImpulseX = 0
+        }
+      }
+
+      s, err := system.Hub.World.GetComponent(entity, ecs.SpriteComponent)
+      if err == nil {
+        sprite := (*s).(*ecs.Sprite)
+
+        if input.Compass & EAST != 0 && input.Compass & WEST != 0 {
+          sprite.Flip = false
+        } else if input.Compass & EAST != 0 {
+          sprite.Flip = false
+        } else if input.Compass & WEST != 0 {
+          sprite.Flip = true
+        }
       }
     default:
       return

@@ -31,7 +31,7 @@ type Hub struct {
   App ecs.App
   Map ecs.Map
   World ecs.Manager
-  Forest []ai.IBehavior
+  Forest []ai.Behavior
   Systems []ecs.System
 }
 
@@ -61,7 +61,7 @@ func NewHub() *Hub {
     App: *app,
     Map: *currentMap,
     World: *world,
-    Forest: make([]ai.IBehavior, 0),
+    Forest: make([]ai.Behavior, 0),
     Systems: make([]ecs.System, 0),
   }
 
@@ -94,7 +94,7 @@ func NewHub() *Hub {
             Layer: i,
             Index: j,
           })
-        } else if definition.Name == "enemy" {
+        } else /*if definition.Name == "enemy" {
           entity, _ := hub.CreateFromEntityId(tile.EntityId, i, j)
 
           test := ai.NewTest(entity, world)
@@ -102,7 +102,7 @@ func NewHub() *Hub {
           tree := ai.NewBehaviorTree(sequence)
 
           hub.Forest = append(hub.Forest, tree)
-        } else {
+        } else*/ {
           hub.CreateFromEntityId(tile.EntityId, i, j)
         }
       } else if tile.SetIndex == ecs.OBJECT_SET {
@@ -250,6 +250,10 @@ func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, 
       }
 
       components = append(components, collision)
+    } else if component.Name == "AIComponent" {
+      script, _ := ReadBytes(members, "script")
+      tree := hub.CreateAI(script, entity)
+      hub.Forest = append(hub.Forest, tree)
     }
   }
 

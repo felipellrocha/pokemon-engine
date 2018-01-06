@@ -43,6 +43,7 @@ void RenderSystem::update(float dt) {
 
     if (sprite) {
       auto texture = game->tilesets[sprite->texture]->texture;
+      auto flip = sprite->flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
       if (render->shouldTileY && render->shouldTileX) {
         int xs = position->x - (ceil((float)position->x / sprite->w) * sprite->w);
@@ -63,7 +64,7 @@ void RenderSystem::update(float dt) {
             sprite->w,
             sprite->h
           };
-          SDL_RenderCopy(game->ren, texture, &src, &dst);
+          SDL_RenderCopyEx(game->ren, texture, &src, &dst, 0, NULL, flip);
         }
       }
       else if (render->shouldTileX) {
@@ -82,7 +83,7 @@ void RenderSystem::update(float dt) {
             sprite->w,
             sprite->h
           };
-          SDL_RenderCopy(game->ren, texture, &src, &dst);
+          SDL_RenderCopyEx(game->ren, texture, &src, &dst, 0, NULL, flip);
         }
       }
       else if (render->shouldTileY) {
@@ -101,7 +102,7 @@ void RenderSystem::update(float dt) {
             sprite->w,
             sprite->h
           };
-          SDL_RenderCopy(game->ren, texture, &src, &dst);
+          SDL_RenderCopyEx(game->ren, texture, &src, &dst, 0, NULL, flip);
         }
       }
       else {
@@ -118,7 +119,7 @@ void RenderSystem::update(float dt) {
           sprite->w,
           sprite->h 
         };
-        SDL_RenderCopy(game->ren, texture, &src, &dst);
+        SDL_RenderCopyEx(game->ren, texture, &src, &dst, 0, NULL, flip);
       }
     }
   }

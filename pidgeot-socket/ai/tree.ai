@@ -1,0 +1,19 @@
+// template behavior.go
+
+package ai
+
+type BehaviorTree struct {
+  Status Status
+
+  Root Behavior
+}
+
+func NewBehaviorTree(root Behavior) *BehaviorTree {
+  return &BehaviorTree{
+    Root: root,
+  }
+}
+
+func (n *BehaviorTree) Update() Status {
+  return n.Root.Tick()
+}

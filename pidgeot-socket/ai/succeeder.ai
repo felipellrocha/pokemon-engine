@@ -1,0 +1,27 @@
+// template decorator.go
+
+package ai
+
+import (
+  _"fmt"
+)
+
+type Succeeder struct {
+  Status Status
+
+  Child Behavior
+}
+
+func NewSucceeder(child Behavior) *Succeeder {
+  return &Succeeder{
+    Child: child,
+  }
+}
+
+func (n *Succeeder) Update() Status {
+  n.Child.Tick()
+
+  return SUCCESS
+}
+
+

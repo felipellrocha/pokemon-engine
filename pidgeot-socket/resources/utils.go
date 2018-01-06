@@ -40,6 +40,14 @@ func getMinkowski(p1 *ecs.Position, c1 *ecs.Collision, p2 *ecs.Position, c2 *ecs
   }
 }
 
+func ReadBytes(members map[string]ecs.ComponentMember, key string) ([]byte, error) {
+  if Key, ok := members[key]; ok {
+    return []byte(Key.Value), nil
+  } else {
+    return []byte(""), nil
+  }
+}
+
 func ReadBool(members map[string]ecs.ComponentMember, key string, def bool) (bool, error) {
   if Key, ok := members[key]; ok {
     return string(Key.Value) == "true", nil

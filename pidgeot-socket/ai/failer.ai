@@ -1,0 +1,25 @@
+// template decorator.go
+
+package ai
+
+import (
+  _"fmt"
+)
+
+type Failer struct {
+  Status Status
+
+  Child Behavior
+}
+
+func NewFailer(child Behavior) *Failer {
+  return &Failer{
+    Child: child,
+  }
+}
+
+func (n *Failer) Update() Status {
+  n.Child.Tick()
+
+  return FAILURE
+}

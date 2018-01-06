@@ -1,0 +1,93 @@
+{
+  package resources
+
+  import (
+    "fmt"
+    "strconv"
+
+    "game/pidgeot-socket/ai"
+  )
+
+}
+
+Behavior
+  = Open
+    _*
+    component:Component
+    _*
+    Close
+  {
+    fmt.Printf("%#v\n", component)
+
+    entity := c.globalStore["entityId"].(ecs.EID)
+    world := c.globalStore["world"].(*ecs.Manager)
+
+    test := ai.NewTest(entity, world)
+    sequence := ai.NewSequence(entity, world, test)
+
+    return ai.NewBehaviorTree(sequence), nil
+  }
+
+Component
+  = name:BehaviorName
+    _*
+    Open
+    _*
+    properties:Property*
+    _*
+    Close
+    _*
+
+SequenceBehavior
+  = "Sequence" Open _* Close
+  {
+    children := make([]ai.IBehavior, 0)
+
+    entity := c.globalStore["entityId"].(ecs.EID)
+    world := c.globalStore["world"].(*ecs.Manager)
+
+    return ai.NewSequence(entity, world, children...), nil
+  }
+
+Property
+  =  name:PropertyName
+    _*
+    Equal
+    _*
+    value:(Int / Bool / aiScript)
+    (Comma _*)?
+
+
+Int
+  = value:[0-9]+
+  {
+    return strconv.Atoi(value.(string))
+  }
+
+Bool
+  = value:("true" / "false")
+  {
+    return value.(string) == "true", nil
+  }
+
+Open
+  = '{'
+
+Close
+  = '}'
+
+Equal
+  = '='
+
+Comma
+  = ','
+
+BehaviorName
+    = name:(!(Open / _) .)+
+
+PropertyName
+  = name:(!(Equal / _) .)+
+
+_ = ' ' / '\n' / '\t'
+
+__ = '\n' / '\t'

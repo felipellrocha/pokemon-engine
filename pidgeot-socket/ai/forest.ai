@@ -1,0 +1,25 @@
+// template composite.go
+
+package ai
+
+import (
+  _"fmt"
+)
+
+type Forest struct {
+  Status Status
+
+  Children []Behavior
+}
+
+func NewForest() *Forest {
+  return &Forest{}
+}
+
+func (n *Forest) Update() Status {
+	for _, child := range n.Children {
+		child.Tick()
+	}
+
+  return RUNNING
+}
