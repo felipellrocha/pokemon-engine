@@ -1,6 +1,7 @@
 package resources
 
 import (
+  "errors"
   "fmt"
   "time"
   "encoding/json"
@@ -83,8 +84,14 @@ func NewHub() *Hub {
 
   hub.SpawnPoints[Player] = make([]SpawnPoint, 0)
 
-  for i, layer := range currentMap.Layers {
-    for j, tile := range layer.Data {
+  for i, _ := range currentMap.Layers {
+    layer := currentMap.Layers[i]
+
+    if !layer.Visible { continue }
+
+    for j, _ := range layer.Data {
+      tile := layer.Data[j]
+
       if tile.SetIndex == ecs.ENTITY_SET {
         definition := app.Entities[tile.EntityId]
 
@@ -94,19 +101,11 @@ func NewHub() *Hub {
             Layer: i,
             Index: j,
           })
-        } else /*if definition.Name == "enemy" {
-          entity, _ := hub.CreateFromEntityId(tile.EntityId, i, j)
-
-          test := ai.NewTest(entity, world)
-          sequence := ai.NewSequence(entity, world, test)
-          tree := ai.NewBehaviorTree(sequence)
-
-          hub.Forest = append(hub.Forest, tree)
-        } else*/ {
+        } else {
           hub.CreateFromEntityId(tile.EntityId, i, j)
         }
       } else if tile.SetIndex == ecs.OBJECT_SET {
-        entity, _ := hub.CreateFromEntityId(tile.ObjectDescription.EntityId, i, j)
+        entity, _, _ := hub.CreateFromEntityId(tile.ObjectDescription.EntityId, i, j)
 
         if c, err := hub.World.GetComponent(entity, ecs.CollisionComponent); err == nil {
           // if a collision component exists, let's try and update some of its data
@@ -128,9 +127,9 @@ func NewHub() *Hub {
           H: tile.ObjectDescription.Rect.H,
         }
 
-        world.AddComponents(entity, position, dimension)
+        hub.World.AddComponents(entity, position, dimension)
       } else if tile.SetIndex > ecs.EMPTY_SET {
-        entity := world.NewEntity()
+        entity := hub.World.NewEntity()
 
         tileset := app.Tilesets[tile.SetIndex]
 
@@ -150,7 +149,7 @@ func NewHub() *Hub {
           Layer: i,
         }
 
-        world.AddComponents(entity, position, render, sprite)
+        hub.World.AddComponents(entity, position, render, sprite)
       }
     }
   }
@@ -158,18 +157,19 @@ func NewHub() *Hub {
   return &hub
 }
 
-func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, []byte) {
+func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, []byte, error) {
   entity := hub.World.NewEntity()
 
   if entityId > len(hub.App.Entities) {
-    //fmt.Println("not found! %s")
-    return entity, nil
+    err := errors.New("Entity not found! %s")
+    return entity, nil, err
   }
 
   definition := hub.App.Entities[entityId]
   components := make([]ecs.Component, 0)
 
-  for _, component := range definition.Components {
+  for i, _ := range definition.Components {
+    component := definition.Components[i]
     members := component.Members
     if component.Name == "RenderComponent" {
       shouldTileX, _ := ReadBool(members, "shouldTileX", false)
@@ -258,7 +258,7 @@ func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, 
   }
 
   hub.World.AddComponents(entity, components...)
-  return entity, hub.World.GetComponentMessages(entity, components...)
+  return entity, hub.World.GetComponentMessages(entity, components...), nil
 }
 
 func (h *Hub) RegisterSystem(systems ...ecs.System) {
@@ -289,7 +289,7 @@ func (h *Hub) Listen() {
       binary.LittleEndian.PutUint16(msgType, ecs.JSON)
 
       spawn := h.SpawnPoints[Player][spawnIndex]
-      eid, entity := h.CreateFromEntityId(spawn.EntityId, spawn.Layer, spawn.Index)
+      eid, entity, _ := h.CreateFromEntityId(spawn.EntityId, spawn.Layer, spawn.Index)
 
       client.Eid = eid
 

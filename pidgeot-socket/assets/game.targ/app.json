@@ -62,9 +62,6 @@
       "terrains": {}
     }
   ],
-  "sheets": [
-    "/Users/fllr/Development/game/targaryen/assets/metroidvania/character.png"
-  ],
   "maps": [
     {
       "id": "start",

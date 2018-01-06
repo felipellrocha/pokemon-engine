@@ -1,2 +1,0 @@
-You need to run `xcode-select --install` in order to be able to compile
-the osx headers

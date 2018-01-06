@@ -9,26 +9,30 @@ import (
 type EID uint16
 
 type Manager struct {
-  lowestEntityId int
+  lowestEntityId EID
   Components map[CID]map[EID]*Component
 }
 
 func NewManager() *Manager {
   return &Manager{
     Components: make(map[CID]map[EID]*Component),
+    lowestEntityId: 0,
   }
 }
 
 func (m *Manager) NewEntity() EID {
-  m.lowestEntityId++
-  return EID(m.lowestEntityId)
+  m.lowestEntityId += 1
+  return m.lowestEntityId
 }
 
 func (m *Manager) GetAllRenderableComponents() []byte {
   buffer := new(bytes.Buffer)
 
-  for cid, entities := range m.Components {
-    for eid, component := range entities {
+  for cid, _ := range m.Components {
+    entities := m.Components[cid]
+    for eid, _ := range entities {
+      component := entities[eid]
+
       if (*component).IsRenderable() {
         if err := binary.Write(buffer, binary.LittleEndian, uint16(cid)); err != nil { fmt.Println("error!", err) }
         if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }

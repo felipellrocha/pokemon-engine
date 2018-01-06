@@ -39,7 +39,6 @@ void RenderSystem::update(float dt) {
     auto render = manager->getComponent<RenderComponent>(entity);
     auto sprite = manager->getComponent<SpriteComponent>(entity);
     auto position = manager->getComponent<PositionComponent>(entity);
-    auto dimension = manager->getComponent<DimensionComponent>(entity);
 
     if (sprite) {
       auto texture = game->tilesets[sprite->texture]->texture;
