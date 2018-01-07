@@ -76,9 +76,6 @@ public:
   json entities;
   forward_list<EID> toDelete;
   map<string, Animation> animations;
-  forward_list<Transition *> incoming;
-  forward_list<Transition *> outgoing;
-  set<Transition *> transitions;
 
   Grid grid;
   map<string, SDL_Texture*> textures;
@@ -90,11 +87,10 @@ public:
   int compass = 0;
   int actions = 0;
 
-  int numTransitions = 0;
-
 
   void initSocket();
   void initGame(char* message);
+  void bootstrap(string initialData);
   void getMessages(const char* buf, size_t size);
 
   string getAssetPath(string asset) {
@@ -113,7 +109,7 @@ public:
     this->systems.push_back(system);
   }
 
-  Renderer(string initialData, string _assetPath, WebSocket::pointer socket, EntityManager* _manager, int width, int height);
+  Renderer(string _assetPath, WebSocket::pointer socket, EntityManager* _manager, int width, int height);
   ~Renderer();
 };
 

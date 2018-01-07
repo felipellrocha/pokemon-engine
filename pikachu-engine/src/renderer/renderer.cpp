@@ -1,6 +1,6 @@
 #include "renderer.h"
 
-Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _socket, EntityManager* _manager, int _windowWidth, int _windowHeight)
+Renderer::Renderer(string _assetPath, WebSocket::pointer _socket, EntityManager* _manager, int _windowWidth, int _windowHeight)
   : socket(_socket), assetPath(_assetPath), manager(_manager), windowWidth(_windowWidth), windowHeight(_windowHeight) {
   this->running = true;
 
@@ -81,8 +81,6 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
   this->registerSystem<NetworkingSystem>(manager);
   this->registerSystem<RenderSystem>(manager);
   this->registerSystem<CleanSystem>(manager);
-
-  this->getMessages(initialData.c_str(), initialData.length());
 };
 
 /*
@@ -94,6 +92,10 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
  *  1-7. Component
  *
  */
+
+void Renderer::bootstrap(string initialData) {
+  getMessages(initialData.c_str(), initialData.length());
+}
 
 void Renderer::getMessages(const char* buf, size_t size) {
   int index = 0;

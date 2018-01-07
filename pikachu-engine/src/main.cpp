@@ -36,39 +36,33 @@ void loop(Renderer &renderer) {
 
 #ifdef __EMSCRIPTEN__
 extern "C" {
+
+  WebSocket::pointer sock = WebSocket::simple_socket();
+  EntityManager *manager = new EntityManager();
+  Renderer game = Renderer("assets/metroidvania/", sock, manager, 100, 100);
+
   void resize(int width, int height) {
-    //game.resize(width, height);
+    game.resize(width, height);
   }
 
   int initialize() {
     fpsTimer.start();
-    try {
-      WebSocket::pointer socket = WebSocket::simple_socket();
-      string data;
-      printf("connecting...\n");
-      for (int hasResponded = 0; socket->getReadyState() != WebSocket::CLOSED && hasResponded < 1; hasResponded++) {
-        socket->poll(-1);
-        socket->dispatch([&data](const string& message) {
-          printf("connected!\n");
-          data = message;
-        });
 
-        printf("message: %s\n", data.c_str());
-      }
+    string data;
+    printf("connecting...\n");
+    for (int hasResponded = 0; sock->getReadyState() != WebSocket::CLOSED && hasResponded < 1; hasResponded++) {
+      sock->poll(-1);
+      sock->dispatch([&data](const string& message) {
+        printf("connected!\n");
+        data = message;
+      });
 
-      //emscripten_async_call((em_arg_callback_func)getFromSocket, socket, 0);
-
-      EntityManager *manager = new EntityManager();
-      Renderer game = Renderer(data, "assets/metroidvania/", socket, manager, 100, 100);
-
-      emscripten_set_main_loop_arg((em_arg_callback_func)loop, &game, -1, 1);
-      
-    } catch (const exception &e) {
-      cout << "Uncaught exception: " << e.what() << "!" << endl;
-    } catch (...) {
-      cout << "Uncaught unknown exception!" << endl;
+      printf("message: %s\n", data.c_str());
     }
 
+    game.bootstrap(data);
+
+    emscripten_set_main_loop_arg((em_arg_callback_func)loop, &game, -1, 1);
     SDL_Quit();
     return 0;
   }
@@ -102,7 +96,8 @@ int main() {
   fpsTimer.start();
   
   EntityManager *manager = new EntityManager();
-  Renderer game = Renderer(data, "assets/metroidvania/", socket, manager, 100, 100);
+  Renderer game = Renderer("assets/metroidvania/", socket, manager, 100, 100);
+  game.bootstrap(data);
 
   while (game.isRunning()) {
     loop(game);
