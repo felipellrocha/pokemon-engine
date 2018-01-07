@@ -9,7 +9,7 @@ import (
 type CID uint16
 
 const (
-  JSON = iota
+  JSON CID = iota
   DELETE
 
   PositionComponent

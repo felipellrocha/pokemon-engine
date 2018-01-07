@@ -286,7 +286,7 @@ func (h *Hub) Listen() {
       h.clients[client] = true
       data := h.World.GetAllRenderableComponents()
       msgType := make([]byte, 2)
-      binary.LittleEndian.PutUint16(msgType, ecs.JSON)
+      binary.LittleEndian.PutUint16(msgType, uint16(ecs.JSON))
 
       spawn := h.SpawnPoints[Player][spawnIndex]
       eid, entity, _ := h.CreateFromEntityId(spawn.EntityId, spawn.Layer, spawn.Index)
