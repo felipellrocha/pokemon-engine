@@ -36,6 +36,7 @@
 #include "game/utils.h"
 #include "game/systems/networking.h"
 #include "game/systems/render.h"
+#include "game/systems/clean.h"
 #include "game/materials.h"
 
 #include "networking/websocket.hpp"
@@ -73,6 +74,7 @@ public:
   EntityManager* manager;
 
   json entities;
+  forward_list<EID> toDelete;
   map<string, Animation> animations;
   forward_list<Transition *> incoming;
   forward_list<Transition *> outgoing;

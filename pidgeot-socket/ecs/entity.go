@@ -47,17 +47,16 @@ func (m *Manager) GetAllRenderableComponents() []byte {
 func (m *Manager) DeleteEntity(eid EID) []byte {
   buffer := new(bytes.Buffer)
 
-  for cid, entities := range m.Components {
-    if component, ok := entities[eid]; ok {
-      delete(entities, eid)
+  for cid, _ := range m.Components {
+    entities := m.Components[cid]
 
-      if (*component).IsRenderable() {
-        if err := binary.Write(buffer, binary.LittleEndian, uint16(DELETE)); err != nil { fmt.Println("error!", err) }
-        if err := binary.Write(buffer, binary.LittleEndian, uint16(cid)); err != nil { fmt.Println("error!", err) }
-        if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
-      }
+    if _, ok := entities[eid]; ok {
+      delete(entities, eid)
     }
   }
+
+  if err := binary.Write(buffer, binary.LittleEndian, uint16(DELETE)); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
 
   return buffer.Bytes()
 }

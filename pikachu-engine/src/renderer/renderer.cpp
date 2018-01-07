@@ -80,6 +80,7 @@ Renderer::Renderer(string initialData, string _assetPath, WebSocket::pointer _so
 
   this->registerSystem<NetworkingSystem>(manager);
   this->registerSystem<RenderSystem>(manager);
+  this->registerSystem<CleanSystem>(manager);
 
   this->getMessages(initialData.c_str(), initialData.length());
 };
@@ -119,7 +120,8 @@ void Renderer::getMessages(const char* buf, size_t size) {
         // component and an entity
         //auto cid = ReadBytesOfString<uint16_t>(buf, &index, size);
         auto eid = ReadBytesOfString<uint32_t>(buf, &index, size);
-        manager->removeEntity(eid);
+        //manager->removeEntity(eid);
+        toDelete.push_front(eid);
         break;
       }
       case MessageDef::POSITION: {

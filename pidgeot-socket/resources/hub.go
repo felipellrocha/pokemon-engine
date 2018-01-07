@@ -310,13 +310,14 @@ func (h *Hub) Listen() {
     case client := <-h.unregister:
       if _, ok := h.clients[client]; ok {
         data := h.World.DeleteEntity(client.Eid)
-        delete(h.clients, client)
 
         for c := range h.clients {
           c.send <- data
         }
 
         close(client.send)
+
+        delete(h.clients, client)
       }
     case message := <-h.broadcast:
       for client := range h.clients {
