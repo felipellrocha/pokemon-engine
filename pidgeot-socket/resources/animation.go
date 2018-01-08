@@ -28,17 +28,18 @@ func (system AnimationSystem) Loop() {
       collision := (*c).(*ecs.Collision)
 
       if collision.ImpulseY < 0 {
-        animation.Type = 3
+        // jumping
+        animation.Type = animation.Jumping
       } else if collision.ImpulseY > 0 {
-        animation.Type = 4
+        animation.Type = animation.Falling
       } else if collision.ImpulseY == 0 && collision.IsJumping {
-          animation.Type = 0
+        animation.Type = animation.Idle
       } else if collision.ImpulseX > 0 {
-        animation.Type = 2
+        animation.Type = animation.Running
       } else if collision.ImpulseX < 0 {
-        animation.Type = 2
+        animation.Type = animation.Running
       } else {
-        animation.Type = 0
+        animation.Type = animation.Idle
       }
     }
 

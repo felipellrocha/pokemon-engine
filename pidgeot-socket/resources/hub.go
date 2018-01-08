@@ -183,12 +183,20 @@ func (hub *Hub) CreateFromEntityId(entityId int, layer int, tile int) (ecs.EID, 
 
       components = append(components, render)
     } else if component.Name == "AnimationComponent" {
-      definition, _ := ReadInt(members, "animation", 0)
+      idle, _ := ReadInt(members, "idle", 0)
+      running, _ := ReadInt(members, "running", 0)
+      jumping, _ := ReadInt(members, "jumping", 0)
+      falling, _ := ReadInt(members, "falling", 0)
 
       animation := &ecs.Animation{
-        Type: definition,
+        Type: 0,
         Frame: 0,
         IsAnimating: false,
+
+        Idle: idle,
+        Running: running,
+        Jumping: jumping,
+        Falling: falling,
       }
 
       components = append(components, animation)

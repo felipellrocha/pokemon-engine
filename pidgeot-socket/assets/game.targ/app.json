@@ -563,9 +563,24 @@
         {
           "name": "AnimationComponent",
           "members": {
-            "animation": {
+            "idle": {
               "value": 0,
-              "name": "animation",
+              "name": "idle",
+              "type": "AnimationType"
+            },
+            "running": {
+              "value": 2,
+              "name": "running",
+              "type": "AnimationType"
+            },
+            "jumping": {
+              "value": 3,
+              "name": "jumping",
+              "type": "AnimationType"
+            },
+            "falling": {
+              "value": 4,
+              "name": "falling",
               "type": "AnimationType"
             }
           }
@@ -646,9 +661,24 @@
         {
           "name": "AnimationComponent",
           "members": {
-            "animation": {
+            "idle": {
               "value": 1,
-              "name": "animation",
+              "name": "idle",
+              "type": "AnimationType"
+            },
+            "running": {
+              "value": 1,
+              "name": "running",
+              "type": "AnimationType"
+            },
+            "jumping": {
+              "value": 1,
+              "name": "jumping",
+              "type": "AnimationType"
+            },
+            "falling": {
+              "value": 1,
+              "name": "falling",
               "type": "AnimationType"
             }
           }

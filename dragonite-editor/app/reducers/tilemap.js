@@ -76,6 +76,8 @@ export default handleActions({
         const rows = [...Array(state.grid.rows)];
 
         return state.layers.map(layer => {
+          if (layer.type === 'object') return layer;
+
           const newRows = rows.map((_, i) => {
             const start = i * state.grid.columns;
             const end = start + state.grid.columns;
@@ -89,6 +91,8 @@ export default handleActions({
       }
       else {
         return state.layers.map(layer => {
+          if (layer.type === 'object') return layer;
+
           const rows = [...Array(state.grid.rows)];
           const newRows = rows.map((_, i) => {
             const start = i * state.grid.columns;
@@ -110,6 +114,8 @@ export default handleActions({
       if (action.value === state.grid.rows) return state.layers;
       else if (action.value > state.grid.rows) {
         return state.layers.map(layer => {
+          if (layer.type === 'object') return layer;
+
           const newRows = [...Array((action.value - state.grid.rows) * state.grid.columns)].map((_, i) => [EMPTY, 0])
           const data = [...layer.data, ...newRows];
           return Object.assign({}, layer, { data });
@@ -117,6 +123,8 @@ export default handleActions({
       }
       else {
         return state.layers.map(layer => {
+          if (layer.type === 'object') return layer;
+
           const data = [...layer.data.slice(0, action.value * state.grid.columns)]
           return Object.assign({}, layer, { data });
         });

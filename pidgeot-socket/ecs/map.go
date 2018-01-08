@@ -81,7 +81,8 @@ func (r *Tile) UnmarshalJSON(data []byte) error {
     r.SetIndex = setIndex
     tileIndex, err := strconv.Atoi(string(values[1]))
 
-    if err != nil { return fmt.Errorf("Could not unpack EntityIndex: %d", tileIndex)  }
+    if err != nil { return fmt.Errorf("Could not unpack EntityIndex. Tile: (%s, %s)", string(values[0]), string(values[1]))  }
+    //if err != nil { return fmt.Errorf("Could not unpack EntityIndex: %d", tileIndex)  }
 
     r.EntityId = tileIndex
   }

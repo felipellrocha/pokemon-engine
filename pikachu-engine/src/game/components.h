@@ -75,7 +75,7 @@ struct DimensionComponent : public Component {
 };
 
 struct SpriteComponent : public Component {
-  bool flip;
+  bool flip; //private
   int x;
   int y;
   int w;
@@ -163,9 +163,14 @@ struct CenteredCameraComponent : public Component {
 };
 
 struct AnimationComponent : public Component {
-  AnimationType animation;
+  AnimationType animation; //private
   int frame; //private
   bool animating = false; //private
+
+  AnimationType idle;
+  AnimationType running;
+  AnimationType jumping;
+  AnimationType falling;
 
   AnimationComponent(AnimationType _animation, int _frame) : animation(_animation), frame(_frame) { };
   AnimationComponent() : AnimationComponent(0, 0) { };

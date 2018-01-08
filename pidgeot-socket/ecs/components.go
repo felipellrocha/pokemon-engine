@@ -153,6 +153,11 @@ type Animation struct {
   Type int
   Frame int
   IsAnimating bool
+
+  Idle int
+  Running int
+  Jumping int
+  Falling int
 }
 func (c *Animation) ID() CID {
   return AnimationComponent

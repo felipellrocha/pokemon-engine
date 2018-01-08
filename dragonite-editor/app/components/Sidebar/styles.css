@@ -32,6 +32,11 @@
     padding: 10px 0;
   }
 
+  .layers {
+    max-height: 140px;
+    overflow: auto;
+  }
+
   .tilesets {
     overflow-y: auto;
     overflow-x: auto;

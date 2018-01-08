@@ -401,7 +401,7 @@ class component extends PureComponent {
       <div className={styles.component}>
         <h1>{ name }</h1>
         <h2>{ map.name }</h2>
-        <div className="separator">
+        <div className="layers separator">
           {layers.map((layer, i) => {
             return (<Layer layer={layer} index={i} layersLength={ layers.length } key={ layer.id } />)
           })}
@@ -409,14 +409,6 @@ class component extends PureComponent {
             <div>Add another layer</div>
             <InlineSVG icon="plus-circle" />
           </div>
-        </div>
-        <div className="actions separator">
-          <Button onClick={this.handleSelectTiles}>
-            Add texture
-          </Button>
-          <Button onClick={this.handleViewTilesetEditor}>
-            View texture editor
-          </Button>
         </div>
         <div className="tilesets separator">
           <div className="entities">
@@ -435,9 +427,9 @@ class component extends PureComponent {
               if (tileset.type === 'aware') return this.renderTerrainGrid(tileset, index)
             })}
           </div>
-          <div className="preview">
-            <div style={preview} />
-          </div>
+        </div>
+        <div className="preview">
+          <div style={preview} />
         </div>
       </div>
     );

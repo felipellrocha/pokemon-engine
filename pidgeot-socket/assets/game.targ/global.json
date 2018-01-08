@@ -8,21 +8,20 @@
   "selectedAction": "put",
   "selectedTerrainType": "6-tile",
   "selectedTile": [
-    -2,
-    "5"
+    0,
+    211
   ],
-  "selectedLayer": 4,
+  "selectedLayer": 2,
   "selectedAnimation": 4,
   "selectedFrame": 5,
   "selectedShape": {
-    "columns": 1,
-    "rows": 1
+    "columns": 4,
+    "rows": 3
   },
   "components": [
     {
       "name": "PositionComponent",
-      "members": {},
-      "area": "component"
+      "members": {}
     },
     {
       "name": "DimensionComponent",
@@ -39,8 +38,7 @@
           "value": 0,
           "name": "h"
         }
-      },
-      "area": "component"
+      }
     },
     {
       "name": "SpriteComponent",
@@ -75,8 +73,7 @@
           "value": null,
           "name": "texture"
         }
-      },
-      "area": "component"
+      }
     },
     {
       "name": "RenderComponent",
@@ -93,8 +90,7 @@
           "value": false,
           "name": "shouldTileY"
         }
-      },
-      "area": "component"
+      }
     },
     {
       "name": "CollisionComponent",
@@ -147,8 +143,7 @@
           "value": null,
           "name": "onCollision"
         }
-      },
-      "area": "component"
+      }
     },
     {
       "name": "CenteredCameraComponent",
@@ -157,14 +152,31 @@
     {
       "name": "AnimationComponent",
       "members": {
-        "animation": {
+        "idle": {
           "type": "AnimationType",
           "pointer": false,
           "value": 0,
-          "name": "animation"
+          "name": "idle"
+        },
+        "running": {
+          "type": "AnimationType",
+          "pointer": false,
+          "value": 0,
+          "name": "running"
+        },
+        "jumping": {
+          "type": "AnimationType",
+          "pointer": false,
+          "value": 0,
+          "name": "jumping"
+        },
+        "falling": {
+          "type": "AnimationType",
+          "pointer": false,
+          "value": 0,
+          "name": "falling"
         }
-      },
-      "area": "component"
+      }
     },
     {
       "name": "AIComponent",
@@ -175,12 +187,11 @@
           "value": "",
           "name": "script"
         }
-      },
-      "area": "component"
+      }
     }
   ],
-  "initialTileIndex": 60,
-  "hideGrid": false,
+  "initialTileIndex": 211,
+  "hideGrid": true,
   "selectedObject": 2,
-  "entities": "hills {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=616, h=110, texture=1}\n    DimensionComponent {w=616, h=110}\n}\n\nsky {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=112, h=304, texture=4}\n    DimensionComponent {w=112, h=304}\n}\n\ncloud {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=544, h=236, texture=2}\n    DimensionComponent {w=544, h=304}\n}\n\nsea {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=112, h=96, texture=3}\n    DimensionComponent {w=112, h=96}\n}\n\nwall {\n    DimensionComponent {}\n    PositionComponent {}\n    CollisionComponent {withGravity=false, isStatic=true}\n}\n\nplayer  {\n    PositionComponent {}\n    DimensionComponent {w=26, h=27}\n    AnimationComponent {animation=0}\n    SpriteComponent {x=0, y=0, w=0, h=0, texture=5}\n    RenderComponent {}\n    CollisionComponent {isStatic=false, withGravity=true}\n}\n\nenemy {\n    PositionComponent {}\n    DimensionComponent {w=21, h=12}\n    AnimationComponent {animation=1}\n    SpriteComponent {x=0, y=0, w=0, h=0, texture=6}\n    RenderComponent {}\n    CollisionComponent {isStatic=false, withGravity=true}\n    AIComponent{script={\n        Sequence{children={\n            Test{}\n        }}\n    }}\n}"
+  "entities": "hills {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=616, h=110, texture=1}\n    DimensionComponent {w=616, h=110}\n}\n\nsky {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=112, h=304, texture=4}\n    DimensionComponent {w=112, h=304}\n}\n\ncloud {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=544, h=236, texture=2}\n    DimensionComponent {w=544, h=304}\n}\n\nsea {\n    RenderComponent {shouldTileX=true}\n    PositionComponent {}\n    SpriteComponent {x=0, y=0, w=112, h=96, texture=3}\n    DimensionComponent {w=112, h=96}\n}\n\nwall {\n    DimensionComponent {}\n    PositionComponent {}\n    CollisionComponent {withGravity=false, isStatic=true}\n}\n\nplayer  {\n    PositionComponent {}\n    DimensionComponent {w=26, h=27}\n    AnimationComponent {\n        idle=0,\n        running=2,\n        jumping=3,\n        falling=4,\n    }\n    SpriteComponent {x=0, y=0, w=0, h=0, texture=5}\n    RenderComponent {}\n    CollisionComponent {isStatic=false, withGravity=true}\n}\n\nenemy {\n    PositionComponent {}\n    DimensionComponent {w=21, h=12}\n    AnimationComponent {\n        idle=1,\n        running=1,\n        jumping=1,\n        falling=1,\n    }\n    SpriteComponent {x=0, y=0, w=0, h=0, texture=6}\n    RenderComponent {}\n    CollisionComponent {isStatic=false, withGravity=true}\n    AIComponent{script={\n        Sequence{children={\n            Test{}\n        }}\n    }}\n}"
 }
