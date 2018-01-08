@@ -26,7 +26,20 @@ func (h *Hub) CreateAI(data []byte, entity ecs.EID) *ai.BehaviorTree {
   return nil
 }
 
-func GetSlice(members map[string]interface{}, key string) ([]interface{}, error) {
+func GetInt(m interface{}, key string, def int) (int, error) {
+  members := m.(map[string]interface{})
+
+  if k, ok := members[key]; ok {
+    Key := k.(map[string]interface{})
+    return int(Key["value"].(float64)), nil
+  } else {
+    return def, nil
+  }
+}
+
+func GetSlice(m interface{}, key string) ([]interface{}, error) {
+  members := m.(map[string]interface{})
+
   if k, ok := members[key]; ok {
     Key := k.(map[string]interface{})
     return Key["value"].([]interface{}), nil
@@ -39,19 +52,19 @@ func (h *Hub) CreateBehavior(behavior map[string]interface{}, entity ecs.EID) ai
   name := behavior["name"].(string)
 
   if name == "Sequence" {
-    b, _ := GetSlice(behavior["properties"].(map[string]interface{}), "children")
+    b, _ := GetSlice(behavior["properties"], "children")
     behaviors := make([]ai.Behavior, len(b))
 
     for i, _ := range b {
       behaviors[i] = h.CreateBehavior(b[i].(map[string]interface{}), entity)
     }
 
-    //test := ai.NewTest(entity, &h.World)
     return ai.NewSequence(entity, &h.World, behaviors...)
   }
 
-  if name == "Test" {
-    return ai.NewTest(entity, &h.World)
+  if name == "Walk" {
+    impulse, _ := GetInt(behavior["properties"], "impulse", 1)
+    return ai.NewWalk(impulse, entity, &h.World)
   }
 
   return nil

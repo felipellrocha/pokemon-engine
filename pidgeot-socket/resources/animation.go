@@ -43,7 +43,6 @@ func (system AnimationSystem) Loop() {
       }
     }
 
-
     definition := system.Hub.App.Animations[animation.Type]
 
     if keyframe, ok := definition.Keyframes[strconv.Itoa(animation.Frame)]; ok {

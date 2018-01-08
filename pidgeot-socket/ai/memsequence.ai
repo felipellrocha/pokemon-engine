@@ -12,6 +12,7 @@ type MemSequence struct {
 
   World *ecs.Manager
   Eid ecs.EID
+  Index int
 }
 
 func NewMemSequence(eid ecs.EID, world *ecs.Manager, children ...Behavior) *MemSequence {
@@ -30,7 +31,7 @@ func (n *MemSequence) Update() Status {
 	for i := n.Index; i < len(n.Children); i++ {
     child := n.Children[i]
 
-		status := child.Tick(child)
+		status := child.Tick()
 		if status != SUCCESS { return status }
 	}
 

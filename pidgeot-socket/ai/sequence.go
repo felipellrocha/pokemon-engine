@@ -5,8 +5,6 @@
 package ai
 
 import (
-  _"fmt"
-
   "game/pidgeot-socket/ecs"
 )
 

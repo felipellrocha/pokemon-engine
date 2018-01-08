@@ -134,13 +134,13 @@ Property
   }
 
 Int
-  = value:$[0-9]+
+  = sign:"-"? value:$[0-9]+
   {
     const loc = location();
 
     return {
       type: 'int',
-      value: parseInt(value, 10),
+      value: sign ? parseInt("-" + value, 10) : parseInt(value, 10),
       start: loc.start.offset,
       end: loc.end.offset,
     }

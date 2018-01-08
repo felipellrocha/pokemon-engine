@@ -22,11 +22,11 @@ func (system PhysicsSystem) Loop() {
 
   for e, _ := range entities {
     // apply impulse
-    c_p, _ := system.Hub.World.GetComponent(e, ecs.CollisionComponent)
-    c := (*c_p).(*ecs.Collision)
-
     p_p, _ := system.Hub.World.GetComponent(e, ecs.PositionComponent)
     p := (*p_p).(*ecs.Position)
+
+    c_p, _ := system.Hub.World.GetComponent(e, ecs.CollisionComponent)
+    c := (*c_p).(*ecs.Collision)
 
     if c.WithGravity {
       // Add gravity
@@ -51,8 +51,9 @@ func (system PhysicsSystem) Loop() {
     }
   }
 
+  positions, err := system.Hub.World.AllEntitiesWithComponent(ecs.PositionComponent)
   // moving entities
-  for e, _ := range entities {
+  for e, _ := range positions {
     p_p, _ := system.Hub.World.GetComponent(e, ecs.PositionComponent)
     p := (*p_p).(*ecs.Position)
 
