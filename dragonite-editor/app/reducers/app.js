@@ -60,7 +60,7 @@ const initialState = {
   tilesets: [ ],
   sheets: [ ],
   maps: [ ],
-  animations: { },
+  animations: [ ],
   entities: [ ],
   initialMap: 0,
 };

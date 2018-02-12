@@ -85,7 +85,7 @@ class component extends PureComponent {
     const layer = layers[selectedLayer];
     const object = layer.data[selectedObject] && layer.data[selectedObject][1];
 
-    return (
+    return (!object) ? null : (
       <div className="actions">
         <div className="left">
 

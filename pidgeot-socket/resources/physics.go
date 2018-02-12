@@ -84,7 +84,6 @@ func (system PhysicsSystem) ResolveCollision(entities map[ecs.EID]*ecs.Component
   collides, overlapY, overlapX := mink.collides()
 
   if collides {
-
     p2.NextY += overlapY
     p2.NextX += overlapX
 

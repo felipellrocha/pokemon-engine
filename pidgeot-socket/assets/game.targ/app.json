@@ -14,10 +14,18 @@
       "terrains": {}
     },
     {
-      "src": "far-grounds.png",
-      "name": "far-grounds.png",
-      "rows": 6,
-      "columns": 38,
+      "src": "character.png",
+      "name": "character.png",
+      "rows": 10,
+      "columns": 20,
+      "type": "image",
+      "terrains": {}
+    },
+    {
+      "src": "slime.png",
+      "name": "slime.png",
+      "rows": 2,
+      "columns": 12,
       "type": "image",
       "terrains": {}
     },
@@ -26,6 +34,14 @@
       "name": "clouds.png",
       "rows": 14,
       "columns": 34,
+      "type": "image",
+      "terrains": {}
+    },
+    {
+      "src": "far-grounds.png",
+      "name": "far-grounds.png",
+      "rows": 6,
+      "columns": 38,
       "type": "image",
       "terrains": {}
     },
@@ -44,24 +60,9 @@
       "columns": 7,
       "type": "image",
       "terrains": {}
-    },
-    {
-      "src": "character.png",
-      "name": "character.png",
-      "rows": 10,
-      "columns": 20,
-      "type": "image",
-      "terrains": {}
-    },
-    {
-      "src": "slime.png",
-      "name": "slime.png",
-      "rows": 2,
-      "columns": 12,
-      "type": "image",
-      "terrains": {}
     }
   ],
+  "sheets": [],
   "maps": [
     {
       "id": "start",
@@ -70,230 +71,190 @@
   ],
   "animations": [
     {
+      "id": "e97b975f-ee8d-4a6d-a8c0-25dde8ef3043",
       "name": "player-idle",
-      "id": "80fcadd9-b686-4188-9d96-5cc59ce771ee",
-      "numberOfFrames": 42,
+      "numberOfFrames": 24,
       "sheet": 0,
-      "spritesheet": 5,
+      "spritesheet": 1,
       "keyframes": {
         "0": {
-          "x": 11,
+          "x": 10,
           "y": 4,
-          "w": 26,
+          "w": 28,
           "h": 27
         },
-        "7": {
-          "x": 43,
+        "4": {
+          "x": 42,
           "y": 4,
-          "w": 26,
+          "w": 28,
           "h": 27
         },
-        "14": {
-          "x": 75,
+        "8": {
+          "x": 74,
           "y": 4,
-          "w": 26,
+          "w": 28,
           "h": 27
         },
-        "21": {
-          "x": 108,
+        "12": {
+          "x": 106,
           "y": 4,
-          "w": 26,
+          "w": 28,
           "h": 27
         },
-        "28": {
-          "x": 139,
+        "16": {
+          "x": 138,
           "y": 4,
-          "w": 26,
-          "h": 27
-        },
-        "35": {
-          "x": 172,
-          "y": 3,
-          "w": 26,
-          "h": 27
-        }
-      }
-    },
-    {
-      "id": "eb81f04b-0879-43e9-8fa3-132f923bdc64",
-      "name": "smile-walk",
-      "numberOfFrames": 32,
-      "sheet": 0,
-      "spritesheet": 6,
-      "keyframes": {
-        "0": {
-          "x": 5,
-          "y": 18,
-          "w": 21,
-          "h": 12
-        },
-        "7": {
-          "x": 37,
-          "y": 18,
-          "w": 21,
-          "h": 12
-        },
-        "15": {
-          "x": 66,
-          "y": 18,
-          "w": 27,
-          "h": 12
-        },
-        "23": {
-          "x": 37,
-          "y": 18,
-          "w": 21,
-          "h": 12
-        }
-      }
-    },
-    {
-      "id": "0fb59544-a314-4185-81a2-da7c27fdb917",
-      "name": "player-running",
-      "numberOfFrames": 40,
-      "sheet": 0,
-      "spritesheet": 5,
-      "keyframes": {
-        "0": {
-          "x": 11,
-          "y": 65,
-          "w": 27,
-          "h": 27
-        },
-        "5": {
-          "x": 44,
-          "y": 65,
-          "w": 27,
-          "h": 27
-        },
-        "10": {
-          "x": 75,
-          "y": 65,
-          "w": 27,
-          "h": 27
-        },
-        "15": {
-          "x": 107,
-          "y": 65,
-          "w": 27,
+          "w": 28,
           "h": 27
         },
         "20": {
-          "x": 141,
+          "x": 171,
+          "y": 4,
+          "w": 28,
+          "h": 27
+        }
+      }
+    },
+    {
+      "id": "1cd84615-e185-476f-acab-9bf520ba71dc",
+      "name": "player-running",
+      "numberOfFrames": 32,
+      "sheet": 0,
+      "spritesheet": 1,
+      "keyframes": {
+        "0": {
+          "x": 10,
           "y": 65,
-          "w": 27,
+          "w": 28,
           "h": 27
         },
-        "25": {
+        "4": {
+          "x": 43,
+          "y": 65,
+          "w": 28,
+          "h": 27
+        },
+        "8": {
+          "x": 75,
+          "y": 65,
+          "w": 28,
+          "h": 27
+        },
+        "12": {
+          "x": 108,
+          "y": 65,
+          "w": 28,
+          "h": 27
+        },
+        "16": {
+          "x": 140,
+          "y": 65,
+          "w": 28,
+          "h": 27
+        },
+        "20": {
           "x": 173,
           "y": 65,
-          "w": 27,
+          "w": 28,
           "h": 27
         },
-        "30": {
+        "24": {
           "x": 206,
           "y": 65,
-          "w": 27,
+          "w": 28,
           "h": 27
         },
-        "35": {
-          "x": 236,
+        "28": {
+          "x": 237,
           "y": 65,
-          "w": 27,
+          "w": 28,
           "h": 27
         }
       }
     },
     {
-      "id": "b61c0902-b51f-4aa9-ba88-6c152fe21d67",
+      "id": "5c7b2662-91f2-47a4-ac07-7d522180cbf1",
       "name": "player-jumping",
-      "numberOfFrames": 10,
+      "numberOfFrames": 12,
       "sheet": 0,
-      "spritesheet": 5,
+      "spritesheet": 1,
       "keyframes": {
         "0": {
-          "x": 9,
-          "y": 98,
-          "w": 26,
-          "h": 30
+          "x": 7,
+          "y": 97,
+          "w": 29,
+          "h": 31
         },
-        "5": {
-          "x": 41,
-          "y": 98,
-          "w": 26,
-          "h": 30
-        },
-        "35": {
-          "x": 8,
-          "y": 98,
-          "w": 26,
-          "h": 30
+        "6": {
+          "x": 40,
+          "y": 97,
+          "w": 29,
+          "h": 31
         }
       }
     },
     {
-      "id": "8e8e004c-383d-445d-92a3-c1053ab3383a",
+      "id": "b058e7cd-c31a-491a-bc93-6cfa56d122a6",
       "name": "player-falling",
-      "numberOfFrames": 10,
+      "numberOfFrames": 12,
       "sheet": 0,
-      "spritesheet": 5,
+      "spritesheet": 1,
       "keyframes": {
         "0": {
-          "x": 9,
-          "y": 130,
-          "w": 26,
-          "h": 30
+          "x": 8,
+          "y": 131,
+          "w": 29,
+          "h": 29
+        },
+        "6": {
+          "x": 40,
+          "y": 131,
+          "w": 29,
+          "h": 29
+        }
+      }
+    },
+    {
+      "id": "790086f4-7674-4595-9287-e0ecf1f1c881",
+      "name": "enemy-idle",
+      "numberOfFrames": 20,
+      "sheet": 0,
+      "spritesheet": 2,
+      "keyframes": {
+        "0": {
+          "x": 3,
+          "y": 15,
+          "w": 25,
+          "h": 16
         },
         "5": {
-          "x": 41,
-          "y": 130,
-          "w": 26,
-          "h": 30
+          "x": 35,
+          "y": 15,
+          "w": 25,
+          "h": 16
+        },
+        "10": {
+          "x": 64,
+          "y": 15,
+          "w": 31,
+          "h": 16
+        },
+        "15": {
+          "x": 35,
+          "y": 15,
+          "w": 25,
+          "h": 16
         }
       }
     }
   ],
   "entities": [
     {
-      "name": "hills",
+      "name": "player",
       "components": [
-        {
-          "name": "RenderComponent",
-          "members": {
-            "shouldTileX": {
-              "value": true,
-              "name": "shouldTileX",
-              "type": "bool"
-            }
-          }
-        },
-        {
-          "name": "PositionComponent",
-          "members": {}
-        },
         {
           "name": "SpriteComponent",
           "members": {
-            "x": {
-              "value": 0,
-              "name": "x",
-              "type": "int"
-            },
-            "y": {
-              "value": 0,
-              "name": "y",
-              "type": "int"
-            },
-            "w": {
-              "value": 616,
-              "name": "w",
-              "type": "int"
-            },
-            "h": {
-              "value": 110,
-              "name": "h",
-              "type": "int"
-            },
             "texture": {
               "value": 1,
               "name": "texture",
@@ -303,16 +264,180 @@
         },
         {
           "name": "DimensionComponent",
+          "members": {}
+        },
+        {
+          "name": "PositionComponent",
+          "members": {}
+        },
+        {
+          "name": "RenderComponent",
+          "members": {}
+        },
+        {
+          "name": "AnimationComponent",
           "members": {
-            "w": {
-              "value": 616,
-              "name": "w",
-              "type": "int"
+            "idle": {
+              "value": 0,
+              "name": "idle",
+              "type": "AnimationType"
             },
-            "h": {
-              "value": 110,
-              "name": "h",
-              "type": "int"
+            "running": {
+              "value": 1,
+              "name": "running",
+              "type": "AnimationType"
+            },
+            "jumping": {
+              "value": 2,
+              "name": "jumping",
+              "type": "AnimationType"
+            },
+            "falling": {
+              "value": 3,
+              "name": "falling",
+              "type": "AnimationType"
+            }
+          }
+        },
+        {
+          "name": "CollisionComponent",
+          "members": {
+            "withGravity": {
+              "value": true,
+              "name": "withGravity",
+              "type": "bool"
+            },
+            "isStatic": {
+              "value": false,
+              "name": "isStatic",
+              "type": "bool"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "enemy",
+      "components": [
+        {
+          "name": "SpriteComponent",
+          "members": {
+            "texture": {
+              "value": 2,
+              "name": "texture",
+              "type": "TextureSource"
+            }
+          }
+        },
+        {
+          "name": "PositionComponent",
+          "members": {}
+        },
+        {
+          "name": "DimensionComponent",
+          "members": {}
+        },
+        {
+          "name": "RenderComponent",
+          "members": {}
+        },
+        {
+          "name": "AnimationComponent",
+          "members": {
+            "idle": {
+              "value": 4,
+              "name": "idle",
+              "type": "AnimationType"
+            },
+            "running": {
+              "value": 4,
+              "name": "running",
+              "type": "AnimationType"
+            },
+            "jumping": {
+              "value": 4,
+              "name": "jumping",
+              "type": "AnimationType"
+            },
+            "falling": {
+              "value": 4,
+              "name": "falling",
+              "type": "AnimationType"
+            }
+          }
+        },
+        {
+          "name": "CollisionComponent",
+          "members": {
+            "withGravity": {
+              "value": true,
+              "name": "withGravity",
+              "type": "bool"
+            },
+            "isStatic": {
+              "value": false,
+              "name": "isStatic",
+              "type": "bool"
+            }
+          }
+        },
+        {
+          "name": "AIComponent",
+          "members": {
+            "script": {
+              "value": [
+                {
+                  "name": "Sequence",
+                  "properties": {
+                    "children": {
+                      "value": [
+                        {
+                          "name": "Walk",
+                          "properties": {
+                            "impulse": {
+                              "value": -1,
+                              "name": "impulse",
+                              "type": "int"
+                            }
+                          }
+                        }
+                      ],
+                      "name": "children",
+                      "type": "ai"
+                    }
+                  }
+                }
+              ],
+              "name": "script",
+              "type": "AIScript"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "wall",
+      "components": [
+        {
+          "name": "PositionComponent",
+          "members": {}
+        },
+        {
+          "name": "DimensionComponent",
+          "members": {}
+        },
+        {
+          "name": "CollisionComponent",
+          "members": {
+            "isStatic": {
+              "value": true,
+              "name": "isStatic",
+              "type": "bool"
+            },
+            "withGravity": {
+              "value": false,
+              "name": "withGravity",
+              "type": "bool"
             }
           }
         }
@@ -338,16 +463,6 @@
         {
           "name": "SpriteComponent",
           "members": {
-            "x": {
-              "value": 0,
-              "name": "x",
-              "type": "int"
-            },
-            "y": {
-              "value": 0,
-              "name": "y",
-              "type": "int"
-            },
             "w": {
               "value": 112,
               "name": "w",
@@ -359,7 +474,7 @@
               "type": "int"
             },
             "texture": {
-              "value": 4,
+              "value": 6,
               "name": "texture",
               "type": "TextureSource"
             }
@@ -402,16 +517,6 @@
         {
           "name": "SpriteComponent",
           "members": {
-            "x": {
-              "value": 0,
-              "name": "x",
-              "type": "int"
-            },
-            "y": {
-              "value": 0,
-              "name": "y",
-              "type": "int"
-            },
             "w": {
               "value": 544,
               "name": "w",
@@ -423,7 +528,7 @@
               "type": "int"
             },
             "texture": {
-              "value": 2,
+              "value": 3,
               "name": "texture",
               "type": "TextureSource"
             }
@@ -438,7 +543,7 @@
               "type": "int"
             },
             "h": {
-              "value": 304,
+              "value": 236,
               "name": "h",
               "type": "int"
             }
@@ -466,16 +571,6 @@
         {
           "name": "SpriteComponent",
           "members": {
-            "x": {
-              "value": 0,
-              "name": "x",
-              "type": "int"
-            },
-            "y": {
-              "value": 0,
-              "name": "y",
-              "type": "int"
-            },
             "w": {
               "value": 112,
               "name": "w",
@@ -483,128 +578,6 @@
             },
             "h": {
               "value": 96,
-              "name": "h",
-              "type": "int"
-            },
-            "texture": {
-              "value": 3,
-              "name": "texture",
-              "type": "TextureSource"
-            }
-          }
-        },
-        {
-          "name": "DimensionComponent",
-          "members": {
-            "w": {
-              "value": 112,
-              "name": "w",
-              "type": "int"
-            },
-            "h": {
-              "value": 96,
-              "name": "h",
-              "type": "int"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "wall",
-      "components": [
-        {
-          "name": "DimensionComponent",
-          "members": {}
-        },
-        {
-          "name": "PositionComponent",
-          "members": {}
-        },
-        {
-          "name": "CollisionComponent",
-          "members": {
-            "withGravity": {
-              "value": false,
-              "name": "withGravity",
-              "type": "bool"
-            },
-            "isStatic": {
-              "value": true,
-              "name": "isStatic",
-              "type": "bool"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "player",
-      "components": [
-        {
-          "name": "PositionComponent",
-          "members": {}
-        },
-        {
-          "name": "DimensionComponent",
-          "members": {
-            "w": {
-              "value": 26,
-              "name": "w",
-              "type": "int"
-            },
-            "h": {
-              "value": 27,
-              "name": "h",
-              "type": "int"
-            }
-          }
-        },
-        {
-          "name": "AnimationComponent",
-          "members": {
-            "idle": {
-              "value": 0,
-              "name": "idle",
-              "type": "AnimationType"
-            },
-            "running": {
-              "value": 2,
-              "name": "running",
-              "type": "AnimationType"
-            },
-            "jumping": {
-              "value": 3,
-              "name": "jumping",
-              "type": "AnimationType"
-            },
-            "falling": {
-              "value": 4,
-              "name": "falling",
-              "type": "AnimationType"
-            }
-          }
-        },
-        {
-          "name": "SpriteComponent",
-          "members": {
-            "x": {
-              "value": 0,
-              "name": "x",
-              "type": "int"
-            },
-            "y": {
-              "value": 0,
-              "name": "y",
-              "type": "int"
-            },
-            "w": {
-              "value": 0,
-              "name": "w",
-              "type": "int"
-            },
-            "h": {
-              "value": 0,
               "name": "h",
               "type": "int"
             },
@@ -616,145 +589,17 @@
           }
         },
         {
-          "name": "RenderComponent",
-          "members": {}
-        },
-        {
-          "name": "CollisionComponent",
-          "members": {
-            "isStatic": {
-              "value": false,
-              "name": "isStatic",
-              "type": "bool"
-            },
-            "withGravity": {
-              "value": true,
-              "name": "withGravity",
-              "type": "bool"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "enemy",
-      "components": [
-        {
-          "name": "PositionComponent",
-          "members": {}
-        },
-        {
           "name": "DimensionComponent",
           "members": {
             "w": {
-              "value": 21,
+              "value": 112,
               "name": "w",
               "type": "int"
             },
             "h": {
-              "value": 12,
+              "value": 96,
               "name": "h",
               "type": "int"
-            }
-          }
-        },
-        {
-          "name": "AnimationComponent",
-          "members": {
-            "idle": {
-              "value": 1,
-              "name": "idle",
-              "type": "AnimationType"
-            },
-            "running": {
-              "value": 1,
-              "name": "running",
-              "type": "AnimationType"
-            },
-            "jumping": {
-              "value": 1,
-              "name": "jumping",
-              "type": "AnimationType"
-            },
-            "falling": {
-              "value": 1,
-              "name": "falling",
-              "type": "AnimationType"
-            }
-          }
-        },
-        {
-          "name": "SpriteComponent",
-          "members": {
-            "x": {
-              "value": 0,
-              "name": "x",
-              "type": "int"
-            },
-            "y": {
-              "value": 0,
-              "name": "y",
-              "type": "int"
-            },
-            "w": {
-              "value": 0,
-              "name": "w",
-              "type": "int"
-            },
-            "h": {
-              "value": 0,
-              "name": "h",
-              "type": "int"
-            },
-            "texture": {
-              "value": 6,
-              "name": "texture",
-              "type": "TextureSource"
-            }
-          }
-        },
-        {
-          "name": "RenderComponent",
-          "members": {}
-        },
-        {
-          "name": "CollisionComponent",
-          "members": {
-            "isStatic": {
-              "value": false,
-              "name": "isStatic",
-              "type": "bool"
-            },
-            "withGravity": {
-              "value": true,
-              "name": "withGravity",
-              "type": "bool"
-            }
-          }
-        },
-        {
-          "name": "AIComponent",
-          "members": {
-            "script": {
-              "value": [
-                {
-                  "name": "Sequence",
-                  "properties": {
-                    "children": {
-                      "value": [
-                        {
-                          "name": "Test",
-                          "properties": {}
-                        }
-                      ],
-                      "name": "children",
-                      "type": "ai"
-                    }
-                  }
-                }
-              ],
-              "name": "script",
-              "type": "AIScript"
             }
           }
         }

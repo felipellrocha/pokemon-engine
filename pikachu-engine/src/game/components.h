@@ -43,6 +43,8 @@ struct PositionComponent : public Component {
   int nextX; //private
   int nextY; //private
 
+  EID relative;
+
   int direction = 0; //private
 
   PositionComponent(int _x, int _y)

@@ -76,7 +76,9 @@ func (r *Tile) UnmarshalJSON(data []byte) error {
     r.TileIndex = tileIndex
   } else if setIndex == OBJECT_SET {
     r.SetIndex = setIndex
-    if err := json.Unmarshal(values[1], &r.ObjectDescription); err != nil { return fmt.Errorf("Could not unpack object set: %s\n%s", values[1], err) }
+    if err := json.Unmarshal(values[1], &r.ObjectDescription); err != nil {
+      return fmt.Errorf("Could not unpack object set: %s\n%s", values[1], err)
+    }
   } else if setIndex == ENTITY_SET {
     r.SetIndex = setIndex
     tileIndex, err := strconv.Atoi(string(values[1]))

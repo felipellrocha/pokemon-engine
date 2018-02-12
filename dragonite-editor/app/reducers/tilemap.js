@@ -62,7 +62,7 @@ initialState.layers = ['background', 'middleground', 'foreground'].map(name => (
   type: 'tile',
   name: name,
   visible: true,
-  data: generateEmptyTilemap,
+  data: generateEmptyTilemap(),
 }));
 
 export default handleActions({

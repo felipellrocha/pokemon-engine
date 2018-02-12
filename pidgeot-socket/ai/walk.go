@@ -24,10 +24,10 @@ func NewWalk(impulse int, eid ecs.EID, world *ecs.Manager) *Walk {
 }
 
 func (n *Walk) Update() Status {
-  c, err := n.World.GetComponent(n.Eid, ecs.CollisionComponent)
+  p, err := n.World.GetComponent(n.Eid, ecs.PositionComponent)
   if err == nil {
-    collision := (*c).(*ecs.Collision)
-    collision.ImpulseX = n.Impulse
+    position := (*p).(*ecs.Position)
+    position.NextX = position.X + n.Impulse
 
     return SUCCESS
   }
