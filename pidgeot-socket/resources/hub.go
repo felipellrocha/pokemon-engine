@@ -129,6 +129,7 @@ func NewHub() *Hub {
 
         hub.World.AddComponents(entity, position, dimension)
       } else if tile.SetIndex > ecs.EMPTY_SET {
+        // create an actual tile
         entity := hub.World.NewEntity()
 
         tileset := app.Tilesets[tile.SetIndex]
@@ -145,11 +146,17 @@ func NewHub() *Hub {
           X: currentMap.Grid.X(j) * app.Tile.Width,
           Y: currentMap.Grid.Y(j) * app.Tile.Height,
         }
+
         render := &ecs.Render{
           Layer: i,
         }
 
-        hub.World.AddComponents(entity, position, render, sprite)
+        //fmt.Println(entity, position, sprite)
+
+        hub.World.AddComponents(entity, render, sprite, position)
+        p_p, _ := hub.World.GetComponent(entity, ecs.PositionComponent)
+        p := (*p_p).(*ecs.Position)
+        fmt.Println(p)
       }
     }
   }

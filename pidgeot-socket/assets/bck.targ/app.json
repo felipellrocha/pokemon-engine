@@ -743,8 +743,14 @@
                     "children": {
                       "value": [
                         {
-                          "name": "Test",
-                          "properties": {}
+                          "name": "Walk",
+                          "properties": {
+                            "impulse": {
+                              "value": -1,
+                              "name": "impulse",
+                              "type": "int"
+                            }
+                          }
                         }
                       ],
                       "name": "children",

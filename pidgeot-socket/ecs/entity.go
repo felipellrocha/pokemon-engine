@@ -29,14 +29,15 @@ func (m *Manager) GetAllRenderableComponents() []byte {
   buffer := new(bytes.Buffer)
 
   for cid, _ := range m.Components {
-    entities := m.Components[cid]
-    for eid, _ := range entities {
-      component := entities[eid]
+    //entities := m.Components[cid]
+    for eid, _ := range m.Components[cid] {
+      component := m.Components[cid][eid]
 
-      if (*component).IsRenderable() {
+      if component.IsRenderable() {
         if err := binary.Write(buffer, binary.LittleEndian, uint16(cid)); err != nil { fmt.Println("error!", err) }
         if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
-        if err := binary.Write(buffer, binary.LittleEndian, (*component).ToBinary()); err != nil { fmt.Println("error!", err) }
+        if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil { fmt.Println("error!", err) }
+        if (cid == 2) { fmt.Printf("eid: %d \t cid: %d\t:%p:\t%+v\n", eid, cid, &component) }
       }
     }
   }
@@ -100,10 +101,12 @@ func (m *Manager) GetComponent(eid EID, cid CID) (*Component, error) {
 }
 
 func (m *Manager) AddComponents(eid EID, components ...Component) {
+  //fmt.Printf("%d: ", eid)
   for i, _ := range components {
     // this manual way of grabbing the component fixes a nasty bug:
     // http://bryce.is/writing/code/jekyll/update/2015/11/01/3-go-gotchas.html
     component := components[i]
+    //fmt.Printf("%#v - ", component)
 
     cid := component.ID()
 
@@ -111,8 +114,10 @@ func (m *Manager) AddComponents(eid EID, components ...Component) {
       m.Components[cid] = make(map[EID]*Component)
     }
 
+    if (cid == 2) { fmt.Printf("eid: %d \t cid: %d\t:\t%+v\n", eid, cid, component) }
     m.Components[cid][eid] = &component
   }
+  //fmt.Printf("\n")
 }
 
 func (m *Manager) AllEntitiesWithComponent(cid CID) (map[EID]*Component, error) {

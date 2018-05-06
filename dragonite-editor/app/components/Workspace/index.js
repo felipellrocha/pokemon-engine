@@ -18,27 +18,17 @@ import {
 import { memoize, throttle } from 'lodash';
 
 class Workspace extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this._handlePutTile = throttle(this._handlePutTile.bind(this), 50, { leading: true});
-
-    this._handleMouseMove = this._handleMouseMove.bind(this);
-    this._handleMouseDown = this._handleMouseDown.bind(this);
-    this._handleMouseUp = this._handleMouseUp.bind(this);
-
-    this.state = {
-      mouseDown: false,
-    }
+  state = {
+    mouseDown: false,
   }
 
-  _handleMouseMove(event) {
+  _handleMouseMove = (event) => {
     event.persist();
 
     this._handlePutTile(event);
   }
 
-  _handlePutTile(e) {
+  _handlePutTile = throttle((e) => {
     if (!this.state.mouseDown && e.type !== 'click') { return }
 
     const {
@@ -61,15 +51,15 @@ class Workspace extends PureComponent {
 
     if (method === 'put') dispatch(putDownTile(xy));
     else dispatch(paintTile(xy, selectedLayer, selectedTile));
-  }
+  }, 50, { leading: true });
 
-  _handleMouseDown() {
+  _handleMouseDown = () => {
     this.setState({
       mouseDown: true,
     });
   }
 
-  _handleMouseUp() {
+  _handleMouseUp = () => {
     this.setState({
       mouseDown: false,
     });

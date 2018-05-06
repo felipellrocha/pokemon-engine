@@ -18,21 +18,11 @@ import {
 function noop () { }
 
 class Grid extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.putTile = this.putTile.bind(this);
-
-    this.onMouseDown = this.onMouseDown.bind(this);
-    this.onMouseUp = this.onMouseUp.bind(this);
-    this.onMouseMove = this.onMouseMove.bind(this);
-
-    this.state = {
-      mouseDown: false,
-    }
+  state = {
+    mouseDown: false,
   }
 
-  putTile(e) {
+  putTile = (e) => {
     const {
       tileEvents,
       actionMethod,
@@ -43,7 +33,7 @@ class Grid extends PureComponent {
     this.onMouseMove(e);
   }
 
-  onMouseMove(e) {
+  onMouseMove = (e) => {
     const {
       dispatch,
       tile,
@@ -73,7 +63,7 @@ class Grid extends PureComponent {
     dispatch(actionMethod(xy));
   }
 
-  onMouseDown(e) {
+  onMouseDown = (e) => {
     if (this.props.tileEvents) { return }
 
     this.setState({
@@ -83,7 +73,7 @@ class Grid extends PureComponent {
     this.props.onMouseDown(e);
   }
 
-  onMouseUp(e) {
+  onMouseUp = (e) => {
     if (this.props.tileEvents) { return }
 
     this.setState({

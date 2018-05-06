@@ -57,6 +57,7 @@ func (c Compass) String() string {
 
 type Input struct {
   Eid ecs.EID
+
   Compass Compass
   Action Action
 }

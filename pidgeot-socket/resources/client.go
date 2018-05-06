@@ -36,6 +36,8 @@ var (
 
 type Client struct {
   Eid ecs.EID
+  Melee ecs.EID
+
   hub *Hub
   conn *websocket.Conn
   send chan []byte

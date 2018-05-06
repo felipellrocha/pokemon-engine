@@ -447,16 +447,6 @@
       "name": "sky",
       "components": [
         {
-          "name": "RenderComponent",
-          "members": {
-            "shouldTileX": {
-              "value": true,
-              "name": "shouldTileX",
-              "type": "bool"
-            }
-          }
-        },
-        {
           "name": "PositionComponent",
           "members": {}
         },
@@ -494,12 +484,7 @@
               "type": "int"
             }
           }
-        }
-      ]
-    },
-    {
-      "name": "cloud",
-      "components": [
+        },
         {
           "name": "RenderComponent",
           "members": {
@@ -509,7 +494,12 @@
               "type": "bool"
             }
           }
-        },
+        }
+      ]
+    },
+    {
+      "name": "cloud",
+      "components": [
         {
           "name": "PositionComponent",
           "members": {}
@@ -548,12 +538,7 @@
               "type": "int"
             }
           }
-        }
-      ]
-    },
-    {
-      "name": "sea",
-      "components": [
+        },
         {
           "name": "RenderComponent",
           "members": {
@@ -563,7 +548,12 @@
               "type": "bool"
             }
           }
-        },
+        }
+      ]
+    },
+    {
+      "name": "sea",
+      "components": [
         {
           "name": "PositionComponent",
           "members": {}
@@ -600,6 +590,16 @@
               "value": 96,
               "name": "h",
               "type": "int"
+            }
+          }
+        },
+        {
+          "name": "RenderComponent",
+          "members": {
+            "shouldTileX": {
+              "value": true,
+              "name": "shouldTileX",
+              "type": "bool"
             }
           }
         }

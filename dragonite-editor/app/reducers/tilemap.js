@@ -341,7 +341,7 @@ export default handleActions({
 
       newState.layers[layer].data[gridIndex] = [
         selectedTile[0],
-        tilesetIndex,
+        parseInt(tilesetIndex),
       ];
     });
 

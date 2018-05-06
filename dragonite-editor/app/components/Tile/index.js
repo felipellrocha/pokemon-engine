@@ -200,10 +200,10 @@ class component extends PureComponent {
           style.backgroundImage = `url('file://${src}')`;
           style.opacity = 1;
           style.backgroundColor = 'transparent';
-        break;
+          break;
         case 'DimensionComponent':
           //style.resize = 'both';
-        break;
+          break;
         case 'RenderComponent':
           if (member('shouldTileX', false)) {
             style.position = 'absolute';
@@ -217,7 +217,7 @@ class component extends PureComponent {
             style.bottom = 0;
             style.width = 'auto';
           }
-        break;
+          break;
       }
     })
 
