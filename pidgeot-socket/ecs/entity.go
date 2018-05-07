@@ -1,28 +1,28 @@
 package ecs
 
 import (
-	"bytes"
-	"encoding/binary"
-	"fmt"
+  "bytes"
+  "encoding/binary"
+  "fmt"
 )
 
 type EID uint16
 
 type Manager struct {
-	lowestEntityId EID
-	Components     map[CID]map[EID]Component
+  lowestEntityId EID
+  Components     map[CID]map[EID]Component
 }
 
 func NewManager() *Manager {
-	return &Manager{
-		Components:     make(map[CID]map[EID]Component),
-		lowestEntityId: 0,
-	}
+  return &Manager{
+    Components:     make(map[CID]map[EID]Component),
+    lowestEntityId: 0,
+  }
 }
 
 func (m *Manager) NewEntity() EID {
-	m.lowestEntityId += 1
-	return m.lowestEntityId
+  m.lowestEntityId += 1
+  return m.lowestEntityId
 }
 
 func (m *Manager) GetAllRenderableComponents() []byte {
@@ -42,123 +42,91 @@ func (m *Manager) GetAllRenderableComponents() []byte {
 }
 
 func (m *Manager) DeleteEntity(eid EID) []byte {
-	buffer := new(bytes.Buffer)
+  buffer := new(bytes.Buffer)
 
-	for cid, _ := range m.Components {
-		entities := m.Components[cid]
+  for cid, _ := range m.Components {
+    entities := m.Components[cid]
 
-		if _, ok := entities[eid]; ok {
-			delete(entities, eid)
-		}
-	}
+    if _, ok := entities[eid]; ok { delete(entities, eid) }
+  }
 
-	if err := binary.Write(buffer, binary.LittleEndian, uint16(DELETE)); err != nil {
-		fmt.Println("error!", err)
-	}
-	if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil {
-		fmt.Println("error!", err)
-	}
+  if err := binary.Write(buffer, binary.LittleEndian, uint16(DELETE)); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
 
-	return buffer.Bytes()
+  return buffer.Bytes()
 }
 
 func (m *Manager) GetComponentMessages(eid EID, components ...Component) []byte {
-	buffer := new(bytes.Buffer)
+  buffer := new(bytes.Buffer)
 
-	for i, _ := range components {
-		// this manual way of grabbing the component fixes a nasty bug:
-		// http://bryce.is/writing/code/jekyll/update/2015/11/01/3-go-gotchas.html
-		component := components[i]
+  for i, _ := range components {
+    // this manual way of grabbing the component fixes a nasty bug:
+    // http://bryce.is/writing/code/jekyll/update/2015/11/01/3-go-gotchas.html
+    component := components[i]
 
-		if !component.IsRenderable() {
-			continue
-		}
+    if !component.IsRenderable() { continue }
 
-		if err := binary.Write(buffer, binary.LittleEndian, uint16(component.ID())); err != nil {
-			fmt.Println("error!", err)
-		}
-		if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil {
-			fmt.Println("error!", err)
-		}
-		if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil {
-			fmt.Println("error!", err)
-		}
-	}
+    if err := binary.Write(buffer, binary.LittleEndian, uint16(component.ID())); err != nil { fmt.Println("error!", err) }
+    if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
+    if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil { fmt.Println("error!", err) }
+  }
 
-	return buffer.Bytes()
+  return buffer.Bytes()
 }
 
 func (m *Manager) GetComponentMessage(eid EID, component Component) []byte {
-	buffer := new(bytes.Buffer)
+  buffer := new(bytes.Buffer)
 
-	if err := binary.Write(buffer, binary.LittleEndian, uint16(component.ID())); err != nil {
-		fmt.Println("error!", err)
-	}
-	if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil {
-		fmt.Println("error!", err)
-	}
-	if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil {
-		fmt.Println("error!", err)
-	}
+  if err := binary.Write(buffer, binary.LittleEndian, uint16(component.ID())); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
+  if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil { fmt.Println("error!", err) }
 
-	return buffer.Bytes()
+  return buffer.Bytes()
 }
 
 func (m *Manager) GetComponent(eid EID, cid CID) (Component, error) {
-	entities, ok := m.Components[cid]
-	if !ok {
-		return nil, fmt.Errorf("Could not find component")
-	}
+  entities, ok := m.Components[cid]
+  if !ok { return nil, fmt.Errorf("Could not find component") }
 
-	component, ok := entities[eid]
-	if !ok {
-		return nil, fmt.Errorf("Could not find entity")
-	}
+  component, ok := entities[eid]
+  if !ok { return nil, fmt.Errorf("Could not find entity") }
 
-	return component, nil
+  return component, nil
 }
 
 func (m *Manager) AddComponents(eid EID, components ...Component) {
-	//fmt.Printf("%p\n", m)
-	for i, _ := range components {
-		// this manual way of grabbing the component fixes a nasty bug:
-		// http://bryce.is/writing/code/jekyll/update/2015/11/01/3-go-gotchas.html
-		component := components[i]
-		//fmt.Printf("%#v - ", component)
+  for i, _ := range components {
+    // this manual way of grabbing the component fixes a nasty bug:
+    // http://bryce.is/writing/code/jekyll/update/2015/11/01/3-go-gotchas.html
+    component := components[i]
 
-		cid := component.ID()
+    cid := component.ID()
 
-		if m.Components[cid] == nil {
-			m.Components[cid] = make(map[EID]Component)
-		}
+    if m.Components[cid] == nil { m.Components[cid] = make(map[EID]Component) }
 
-    //if cid == 2 {	fmt.Printf("eid: %d \t cid: %d\t:\t%+v\n", eid, cid, component)	}
-		m.Components[cid][eid] = component
-	}
-	//fmt.Printf("\n")
+    m.Components[cid][eid] = component
+  }
 }
 
 func (m *Manager) AllEntitiesWithComponent(cid CID) (map[EID]Component, error) {
-	entities, ok := m.Components[cid]
-	if !ok {
-		return nil, fmt.Errorf("Could not find component")
-	}
+  entities, ok := m.Components[cid]
+  if !ok { return nil, fmt.Errorf("Could not find component") }
 
-	return entities, nil
+  return entities, nil
 }
 
 // utility functions
 // Only used for testing, DO NOT RELY ON IT ON ACTUAL CODE
 func (m *Manager) GetRect(e EID) (int, int, int, int) {
-	c_p, _ := m.GetComponent(e, CollisionComponent)
-	p_p, _ := m.GetComponent(e, PositionComponent)
-	c := c_p.(*Collision)
-	p := p_p.(*Position)
+  c_p, _ := m.GetComponent(e, CollisionComponent)
+  p_p, _ := m.GetComponent(e, PositionComponent)
+  c := c_p.(*Collision)
+  p := p_p.(*Position)
 
-	return p.NextX, p.NextY, c.W, c.H
+  return p.NextX, p.NextY, c.W, c.H
 }
 
 func (m *Manager) PrintRect(e EID) {
-	x, y, w, h := m.GetRect(e)
-	fmt.Printf("%d -- (x: %d, y: %d) (x: %d, y: %d)\n", e, x, y, x+w, y+h)
+  x, y, w, h := m.GetRect(e)
+  fmt.Printf("%d -- (x: %d, y: %d) (x: %d, y: %d)\n", e, x, y, x+w, y+h)
 }
