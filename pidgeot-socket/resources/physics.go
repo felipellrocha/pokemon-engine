@@ -23,10 +23,10 @@ func (system PhysicsSystem) Loop() {
   for e, _ := range entities {
     // apply impulse
     p_p, _ := system.Hub.World.GetComponent(e, ecs.PositionComponent)
-    p := (*p_p).(*ecs.Position)
+    p := p_p.(*ecs.Position)
 
     c_p, _ := system.Hub.World.GetComponent(e, ecs.CollisionComponent)
-    c := (*c_p).(*ecs.Collision)
+    c := c_p.(*ecs.Collision)
 
     if c.WithGravity {
       // Add gravity
@@ -43,7 +43,7 @@ func (system PhysicsSystem) Loop() {
   for e1, _ := range entities {
     for e2, _ := range entities {
       c2_p, _ := system.Hub.World.GetComponent(e2, ecs.CollisionComponent)
-      c2 := (*c2_p).(*ecs.Collision)
+      c2 := c2_p.(*ecs.Collision)
 
       if c2.IsStatic { continue }
 
@@ -55,7 +55,7 @@ func (system PhysicsSystem) Loop() {
   // moving entities
   for e, _ := range positions {
     p_p, _ := system.Hub.World.GetComponent(e, ecs.PositionComponent)
-    p := (*p_p).(*ecs.Position)
+    p := p_p.(*ecs.Position)
 
     if (p.X != p.NextX || p.Y != p.NextY) {
       p.X = p.NextX
@@ -66,18 +66,18 @@ func (system PhysicsSystem) Loop() {
   }
 }
 
-func (system PhysicsSystem) ResolveCollision(entities map[ecs.EID]*ecs.Component, e1 ecs.EID, e2 ecs.EID) {
+func (system PhysicsSystem) ResolveCollision(entities map[ecs.EID]ecs.Component, e1 ecs.EID, e2 ecs.EID) {
   if e1 == e2 { return }
 
   c1_p, _ := system.Hub.World.GetComponent(e1, ecs.CollisionComponent)
   p1_p, _ := system.Hub.World.GetComponent(e1, ecs.PositionComponent)
-  c1 := (*c1_p).(*ecs.Collision)
-  p1 := (*p1_p).(*ecs.Position)
+  c1 := c1_p.(*ecs.Collision)
+  p1 := p1_p.(*ecs.Position)
 
   c2_p, _ := system.Hub.World.GetComponent(e2, ecs.CollisionComponent)
   p2_p, _ := system.Hub.World.GetComponent(e2, ecs.PositionComponent)
-  c2 := (*c2_p).(*ecs.Collision)
-  p2 := (*p2_p).(*ecs.Position)
+  c2 := c2_p.(*ecs.Collision)
+  p2 := p2_p.(*ecs.Position)
 
   // resolve y-axis
   mink := getMinkowski(p1, c1,  p2, c2)
@@ -98,8 +98,8 @@ func (system PhysicsSystem) ResolveCollision(entities map[ecs.EID]*ecs.Component
 
       c3_p, _ := system.Hub.World.GetComponent(e3, ecs.CollisionComponent)
       p3_p, _ := system.Hub.World.GetComponent(e3, ecs.PositionComponent)
-      c3 := (*c3_p).(*ecs.Collision)
-      p3 := (*p3_p).(*ecs.Position)
+      c3 := c3_p.(*ecs.Collision)
+      p3 := p3_p.(*ecs.Position)
 
       if c3.IsStatic { continue }
 

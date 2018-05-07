@@ -26,7 +26,7 @@ func NewWalk(impulse int, eid ecs.EID, world *ecs.Manager) *Walk {
 func (n *Walk) Update() Status {
   p, err := n.World.GetComponent(n.Eid, ecs.PositionComponent)
   if err == nil {
-    position := (*p).(*ecs.Position)
+    position := p.(*ecs.Position)
     position.NextX = position.X + n.Impulse
 
     return SUCCESS

@@ -109,7 +109,7 @@ func NewHub() *Hub {
 
         if c, err := hub.World.GetComponent(entity, ecs.CollisionComponent); err == nil {
           // if a collision component exists, let's try and update some of its data
-          collision := (*c).(*ecs.Collision)
+          collision := c.(*ecs.Collision)
 
           collision.W = tile.ObjectDescription.Rect.W
           collision.H = tile.ObjectDescription.Rect.H
@@ -155,7 +155,7 @@ func NewHub() *Hub {
 
         hub.World.AddComponents(entity, render, sprite, position)
         p_p, _ := hub.World.GetComponent(entity, ecs.PositionComponent)
-        p := (*p_p).(*ecs.Position)
+        p := p_p.(*ecs.Position)
         fmt.Println(p)
       }
     }

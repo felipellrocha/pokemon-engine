@@ -83,7 +83,7 @@ func (system InputSystem) Loop() {
 
       c, err := system.Hub.World.GetComponent(entity, ecs.CollisionComponent)
       if err == nil {
-        collision := (*c).(*ecs.Collision)
+        collision := c.(*ecs.Collision)
 
         if input.Compass & NORTH != 0 && !collision.IsJumping {
           collision.ImpulseY = -collision.JumpImpulse
@@ -103,7 +103,7 @@ func (system InputSystem) Loop() {
 
       s, err := system.Hub.World.GetComponent(entity, ecs.SpriteComponent)
       if err == nil {
-        sprite := (*s).(*ecs.Sprite)
+        sprite := s.(*ecs.Sprite)
 
         if input.Compass & EAST != 0 && input.Compass & WEST != 0 {
           sprite.Flip = false

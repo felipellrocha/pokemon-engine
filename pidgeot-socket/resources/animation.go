@@ -21,11 +21,11 @@ func (system AnimationSystem) Loop() {
     s, _ := system.Hub.World.GetComponent(entity, ecs.SpriteComponent)
     c, cerr := system.Hub.World.GetComponent(entity, ecs.CollisionComponent)
 
-    animation := (*a).(*ecs.Animation)
-    sprite := (*s).(*ecs.Sprite)
+    animation := a.(*ecs.Animation)
+    sprite := s.(*ecs.Sprite)
 
     if cerr == nil {
-      collision := (*c).(*ecs.Collision)
+      collision := c.(*ecs.Collision)
 
       if collision.ImpulseY < 0 {
         // jumping
@@ -54,7 +54,7 @@ func (system AnimationSystem) Loop() {
       system.Hub.broadcast <- system.Hub.World.GetComponentMessage(entity, s)
 
       if cerr == nil {
-        collision := (*c).(*ecs.Collision)
+        collision := c.(*ecs.Collision)
 
         collision.W = keyframe.W
         collision.H = keyframe.H

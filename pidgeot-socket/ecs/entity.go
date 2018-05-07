@@ -97,16 +97,16 @@ func (m *Manager) GetComponentMessages(eid EID, components ...Component) []byte 
 	return buffer.Bytes()
 }
 
-func (m *Manager) GetComponentMessage(eid EID, component *Component) []byte {
+func (m *Manager) GetComponentMessage(eid EID, component Component) []byte {
 	buffer := new(bytes.Buffer)
 
-	if err := binary.Write(buffer, binary.LittleEndian, uint16((*component).ID())); err != nil {
+	if err := binary.Write(buffer, binary.LittleEndian, uint16(component.ID())); err != nil {
 		fmt.Println("error!", err)
 	}
 	if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil {
 		fmt.Println("error!", err)
 	}
-	if err := binary.Write(buffer, binary.LittleEndian, (*component).ToBinary()); err != nil {
+	if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil {
 		fmt.Println("error!", err)
 	}
 
