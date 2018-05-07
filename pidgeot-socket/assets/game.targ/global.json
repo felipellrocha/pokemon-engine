@@ -7,13 +7,13 @@
   "selectedMap": 0,
   "entities": "player {\n    SpriteComponent { texture=1, }\n    DimensionComponent { }\n    PositionComponent { }\n    RenderComponent { }\n    AnimationComponent {\n        idle=0,\n        running=1,\n        jumping=2,\n        falling=3,\n    }\n    CollisionComponent {\n        withGravity=true,\n        isStatic=false,\n    }\n}\n\nenemy {\n    SpriteComponent { texture=2, }\n    PositionComponent { }\n    DimensionComponent { }\n    RenderComponent { }\n    AnimationComponent {\n        idle=4,\n        running=4,\n        jumping=4,\n        falling=4,\n    }\n    CollisionComponent {\n        withGravity=true,\n        isStatic=false,\n    }\n    AIComponent{script={\n        Sequence{children={\n            Walk{impulse=-1}\n        }}\n    }}\n}\n\nwall {\n    PositionComponent { }\n    DimensionComponent { }\n    CollisionComponent {\n        isStatic=true,\n        withGravity=false,\n    }\n}\n\nsky {\n    PositionComponent { }\n    SpriteComponent { w=112, h=304, texture=6}\n    DimensionComponent { w=112, h=304, }\n    RenderComponent { shouldTileX=true, }\n}\n\ncloud {\n    PositionComponent { }\n    SpriteComponent { w=544, h=236, texture=3, }\n    DimensionComponent { w=544, h=236, }\n    RenderComponent { shouldTileX=true, }\n}\n\nsea {\n    PositionComponent { }\n    SpriteComponent { w=112, h=96, texture=5, }\n    DimensionComponent { w=112, h=96, }\n    RenderComponent { shouldTileX=true, }\n}",
   "selectedObject": 1,
-  "selectedAction": "paint",
+  "selectedAction": "put",
   "selectedTerrainType": "6-tile",
   "selectedTile": [
     0,
-    882
+    143
   ],
-  "selectedLayer": 2,
+  "selectedLayer": 5,
   "selectedAnimation": 3,
   "selectedFrame": 6,
   "selectingShape": false,
@@ -205,8 +205,8 @@
     }
   ],
   "selectedShape": {
-    "columns": 1,
-    "rows": 1
+    "columns": 4,
+    "rows": 7
   },
-  "initialTileIndex": 882
+  "initialTileIndex": 143
 }

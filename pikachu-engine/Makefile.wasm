@@ -32,10 +32,10 @@ CXX_FLAGS = \
 	-s "BINARYEN_METHOD='native-wasm'" \
   -s ASSERTIONS=1 \
 	-s TOTAL_MEMORY=256MB \
-	-D DRAW_COLLISION \
   -g4
 	#-s SOCKET_DEBUG=1
 	#-s SAFE_HEAP=1
+	# -D DRAW_COLLISION
 	#--profiling-funcs
   #-O2
 	#--emit-symbol-map
