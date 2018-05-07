@@ -145,18 +145,15 @@ func NewHub() *Hub {
         position := &ecs.Position{
           X: currentMap.Grid.X(j) * app.Tile.Width,
           Y: currentMap.Grid.Y(j) * app.Tile.Height,
+          NextX: currentMap.Grid.X(j) * app.Tile.Width,
+          NextY: currentMap.Grid.Y(j) * app.Tile.Height,
         }
 
         render := &ecs.Render{
           Layer: i,
         }
 
-        //fmt.Println(entity, position, sprite)
-
         hub.World.AddComponents(entity, render, sprite, position)
-        p_p, _ := hub.World.GetComponent(entity, ecs.PositionComponent)
-        p := p_p.(*ecs.Position)
-        fmt.Println(p)
       }
     }
   }

@@ -26,28 +26,19 @@ func (m *Manager) NewEntity() EID {
 }
 
 func (m *Manager) GetAllRenderableComponents() []byte {
-	buffer := new(bytes.Buffer)
+  buffer := new(bytes.Buffer)
 
-	for cid, cidThing := range m.Components {
-		for eid, component := range cidThing {
-			if component.IsRenderable() {
-				if err := binary.Write(buffer, binary.LittleEndian, uint16(cid)); err != nil {
-					fmt.Println("error!", err)
-				}
-				if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil {
-					fmt.Println("error!", err)
-				}
-				if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil {
-					fmt.Println("error!", err)
-				}
-				if cid == 2 {
-					fmt.Printf("eid: %d \t cid: %d\t:%p:\t%+v\n", eid, cid, &component)
-				}
-			}
-		}
-	}
+  for cid, entities := range m.Components {
+    for eid, component := range entities {
+      if component.IsRenderable() {
+        if err := binary.Write(buffer, binary.LittleEndian, uint16(cid)); err != nil { fmt.Println("error!", err) }
+        if err := binary.Write(buffer, binary.LittleEndian, uint32(eid)); err != nil { fmt.Println("error!", err) }
+        if err := binary.Write(buffer, binary.LittleEndian, component.ToBinary()); err != nil { fmt.Println("error!", err) }
+      }
+    }
+  }
 
-	return buffer.Bytes()
+  return buffer.Bytes()
 }
 
 func (m *Manager) DeleteEntity(eid EID) []byte {
@@ -128,7 +119,7 @@ func (m *Manager) GetComponent(eid EID, cid CID) (Component, error) {
 }
 
 func (m *Manager) AddComponents(eid EID, components ...Component) {
-	//fmt.Printf("%d: ", eid)
+	//fmt.Printf("%p\n", m)
 	for i, _ := range components {
 		// this manual way of grabbing the component fixes a nasty bug:
 		// http://bryce.is/writing/code/jekyll/update/2015/11/01/3-go-gotchas.html
@@ -141,9 +132,7 @@ func (m *Manager) AddComponents(eid EID, components ...Component) {
 			m.Components[cid] = make(map[EID]Component)
 		}
 
-		if cid == 2 {
-			fmt.Printf("eid: %d \t cid: %d\t:\t%+v\n", eid, cid, component)
-		}
+    //if cid == 2 {	fmt.Printf("eid: %d \t cid: %d\t:\t%+v\n", eid, cid, component)	}
 		m.Components[cid][eid] = component
 	}
 	//fmt.Printf("\n")
